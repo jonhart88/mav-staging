@@ -866,98 +866,128 @@ body.lb-lock { overflow: hidden; }
 
 /* ===========================================================================
    THE CONFIGURATOR
-   Two columns: the options you scroll, and a summary that does not move. On a
-   phone there is one column and the summary becomes a bar across the bottom,
-   because the price is the thing you want in view while you are choosing.
+
+   The window, split: the truck on the left and the questions on the right,
+   both filling the height under the nav. There is no page heading and no
+   shell -- a configurator that opens on a paragraph is a configurator you
+   have to scroll to use.
    =========================================================================== */
 .cfg {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  gap: var(--gap-col);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  /* An auto row sizes to its tallest child and lets it spill past the
+     container's height, which is how the stage ended up 3,500px tall chasing
+     the rail. minmax(0, 1fr) makes the row the height of the box and lets
+     both columns shrink inside it. */
+  grid-template-rows: minmax(0, 1fr);
+  /* The nav is fixed, and this is not a .band, so it gets no padding from
+     .no-hero and would otherwise start underneath it. */
+  margin-top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  background: var(--paper);
 }
 
-/* --- the truck ----------------------------------------------------------
-   Sticky, because the point of a configurator is watching the thing you are
-   buying while you change it. It sits below the fixed nav and is capped to
-   the viewport so the thumbnails underneath never fall off the bottom. */
+/* --- the truck ---------------------------------------------------------- */
 .cfg-stage {
-  position: sticky;
-  top: calc(var(--nav-h) + 12px);
-  min-width: 0;
-  /* Pinned, so it has to fit the window: the picture gives up height to keep
-     the switcher and the disclaimer under it on screen. */
-  max-height: calc(100vh - var(--nav-h) - 24px);
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 18px var(--gut) 20px;
 }
 .cfg-frame {
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  aspect-ratio: 3 / 2;
-  /* Not pure white: the Apex is a white truck on a white sweep, and against
-     a white page its roofline disappears. */
-  background: var(--paper-2);
-  border-radius: var(--radius);
-  overflow: hidden;
 }
 .cfg-frame img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
+  /* The photographs are a truck on a white sweep with its own floor shadow,
+     so they are let run as large as the box allows and the page supplies
+     nothing behind them. */
   object-fit: contain;
   opacity: 1;
   transition: opacity .18s ease;
 }
 .cfg-frame.is-swapping img { opacity: 0; }
 
-.cfg-views { display: flex; gap: 8px; margin-top: 10px; flex: none; }
-.cfg-view {
-  flex: 0 0 104px; padding: 0; cursor: pointer;
-  background: var(--paper-2); border: 1px solid var(--line);
-  border-radius: 6px; overflow: hidden; line-height: 0;
+/* --- arrows and dots ---------------------------------------------------- */
+.cfg-nav {
+  flex: none;
+  display: flex; align-items: center; justify-content: center; gap: 18px;
+  margin-top: 4px;
 }
-/* A declared ratio as well as the width/height attributes: the button keeps
-   its shape before the picture arrives and if it never does. */
-.cfg-view img { width: 100%; height: auto; display: block; aspect-ratio: 3 / 2; object-fit: cover; }
-.cfg-view:hover { border-color: var(--muted-d); }
-.cfg-view.is-on { border-color: var(--ink); }
-.cfg-view span {
-  display: block; padding: 5px 8px 6px; line-height: 1.2;
-  font-size: 10px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted); text-align: left;
+.cfg-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; padding: 0;
+  background: none; border: none; border-radius: 50%;
+  color: var(--ink); cursor: pointer;
 }
-.cfg-view.is-on span { color: var(--ink); }
+.cfg-arrow:hover { background: var(--paper-2); }
+.cfg-arrow svg {
+  width: 20px; height: 20px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.cfg-dots { display: flex; align-items: center; gap: 9px; }
+.cfg-dot {
+  width: 8px; height: 8px; padding: 0; cursor: pointer;
+  background: var(--line); border: none; border-radius: 50%;
+  transition: background .15s ease;
+}
+.cfg-dot:hover { background: var(--muted-d); }
+.cfg-dot.is-on { background: var(--ink); }
 
-/* Said plainly and up front, because the photographs are of a finished truck
-   and not of the configuration on screen. */
 .cfg-disclaimer {
   flex: none;
-  margin: 12px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted);
+  margin: 10px 0 0; max-width: 62ch;
+  font-size: 11.5px; line-height: 1.5; color: var(--muted);
 }
 
 /* --- the questions ------------------------------------------------------ */
-.cfg-rail { min-width: 0; }
+.cfg-rail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-left: 1px solid var(--line);
+}
+.cfg-rail-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 30px 32px 24px;
+  /* No gutter down the side of the page. The rail still scrolls -- with the
+     wheel, a trackpad, the keyboard or a touch drag -- it just does not draw
+     a bar to say so. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cfg-rail-body::-webkit-scrollbar { width: 0; height: 0; }
+
+.cfg-head { margin-bottom: 26px; }
+.cfg-head h1 {
+  margin: 0; font-size: 31px; font-weight: 700; letter-spacing: -.02em;
+  line-height: 1.1;
+}
+.cfg-head p { margin: 5px 0 0; font-size: 14px; color: var(--muted); }
 
 /* --- a question and its answers ----------------------------------------- */
-.cfg-sec { border-top: 1px solid var(--line); padding: 26px 0 4px; }
-.cfg-sec:first-child { border-top: none; padding-top: 8px; }
-.cfg { margin-top: var(--gap-col); }
+.cfg-sec { border-top: 1px solid var(--line); padding: 24px 0 4px; }
+.cfg-sec:first-child { border-top: none; padding-top: 0; }
 .cfg-sec h2 {
-  margin: 0 0 3px; font-size: 13px; font-weight: 700;
+  margin: 0 0 3px; font-size: 12px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--ink);
 }
-.cfg-sec .cfg-note { margin: 0 0 15px; font-size: 14px; color: var(--muted); }
-.cfg-list { display: grid; gap: 9px; }
-/* One column, always. The rail is 400px and a pair of cards will not sit in
-   it -- they used to, when the options had the whole page. The class is still
-   passed by the engine for lists that read as pairs; it just no longer splits
-   them. */
+.cfg-sec .cfg-note { margin: 0 0 14px; font-size: 13px; color: var(--muted); }
+.cfg-list { display: grid; gap: 8px; }
+/* One column: the rail is 440px and a pair of cards will not sit in it. */
 .cfg-list.cfg-two { grid-template-columns: 1fr; }
 
 .cfg-card {
   display: flex; align-items: center; gap: 13px;
-  padding: 14px 16px; text-align: left;
+  padding: 13px 15px; text-align: left;
   width: 100%; font: inherit; color: inherit;
   background: var(--paper); border: 1px solid var(--line);
   border-radius: var(--radius); cursor: pointer;
@@ -967,81 +997,96 @@ body.lb-lock { overflow: hidden; }
 .cfg-card.is-on::after {
   content: ""; flex: none; width: 16px; height: 16px; border-radius: 50%;
   background: var(--accent);
-  /* The tick as a path rather than an icon font or two crossed gradients,
-     which is what this was and which read as an arrow. */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.6 8.4l2.9 2.9 5.9-6.1' fill='none' stroke='%23fff' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-size: 11px 11px;
   background-position: center;
   background-repeat: no-repeat;
 }
-/* Locked: standard equipment, or an option this package already carries. It
-   is shown because the customer is getting it, and not clickable because
-   there is nothing to decide. */
+/* Locked: standard equipment, or an option this package already carries. */
 .cfg-card.is-locked { cursor: default; background: var(--paper-2); border-color: var(--line); }
 .cfg-card.is-locked:hover { border-color: var(--line); }
 .cfg-card[disabled] { opacity: .4; cursor: not-allowed; }
 .cfg-card[disabled]:hover { border-color: var(--line); }
 
 .cfg-body { flex: 1; min-width: 0; }
-.cfg-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.3; }
-.cfg-sub { display: block; margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--muted); }
-.cfg-price { flex: none; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.cfg-name { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.3; }
+.cfg-sub { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+.cfg-price { flex: none; font-size: 13.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .cfg-card.is-on .cfg-price { color: var(--ink); }
 .cfg-swatch {
-  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  flex: none; width: 28px; height: 28px; border-radius: 50%;
   border: 1px solid rgba(0,0,0,.18); box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
 }
 
 /* --- what you are getting ----------------------------------------------- */
-.cfg-incl { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; margin-top: 4px; }
+.cfg-incl { display: grid; gap: 14px; margin-top: 4px; }
 .cfg-incl h3 {
-  margin: 0 0 6px; font-size: 11px; font-weight: 700;
+  margin: 0 0 5px; font-size: 10.5px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
 }
 .cfg-incl ul { margin: 0; padding: 0; list-style: none; }
-.cfg-incl li { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.cfg-incl li { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
 
 /* --- the summary -------------------------------------------------------- */
-.cfg-sum {
-  margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line);
-}
+.cfg-sum { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
 .cfg-sum h2 {
-  margin: 0 0 14px; font-size: 12px; font-weight: 700;
+  margin: 0 0 12px; font-size: 11px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
 }
-.cfg-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 14px; }
+.cfg-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 13.5px; }
 .cfg-row .k { color: var(--muted); }
 .cfg-row .v { font-weight: 600; text-align: right; }
-.cfg-row.cfg-sub-row .k, .cfg-row.cfg-sub-row .v { color: var(--muted); font-weight: 400; font-size: 13px; }
+.cfg-row.cfg-sub-row .k, .cfg-row.cfg-sub-row .v { color: var(--muted); font-weight: 400; font-size: 12.5px; }
 .cfg-total {
   display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
   margin-top: 12px; padding-top: 14px; border-top: 1.5px solid var(--ink);
 }
 .cfg-total .k { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .cfg-total .v { font-size: 27px; font-weight: 700; letter-spacing: -.01em; }
-.cfg-fine { margin: 10px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
-/* The running total, pinned to the bottom of the rail: on a page this long
-   the price must not be something you scroll back up to find. */
+.cfg-fine { margin: 10px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--muted); }
+
+/* --- the price, always on screen ---------------------------------------- */
 .cfg-bar {
-  position: sticky; bottom: 0; z-index: 30;
+  flex: none;
   display: flex; align-items: center; gap: 14px;
-  margin-top: 18px; padding: 14px 0;
+  padding: 15px 32px;
   background: var(--paper);
-  border-top: 1.5px solid var(--ink);
+  border-top: 1px solid var(--line);
 }
 .cfg-bar .cfg-bar-fig { flex: 1; min-width: 0; }
-.cfg-bar .k {
-  display: block; font-size: 10px; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-}
 .cfg-bar .v {
   display: block; font-size: 25px; font-weight: 700; letter-spacing: -.01em;
   line-height: 1.15;
 }
-.cfg-bar .cfg-bar-note { display: block; font-size: 11px; color: var(--muted); }
+.cfg-bar .cfg-bar-note { display: block; margin-top: 1px; font-size: 11px; color: var(--muted); }
 .cfg-bar .btn { flex: none; }
 
-/* --- the breakdown on the reserve page ---------------------------------- */
+.cfg-loading { padding: 80px var(--gut); color: var(--muted); }
+
+@media (max-width: 1040px) {
+  /* One column: the truck on top, the questions under it, and the page
+     itself does the scrolling. Nothing is a fixed height any more -- a
+     100vh split on a phone leaves a letterbox to answer questions through. */
+  .cfg { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
+  .cfg-stage { padding: 10px var(--gut) 14px; }
+  .cfg-frame { flex: none; aspect-ratio: 3 / 2; }
+  .cfg-rail { border-left: none; border-top: 1px solid var(--line); }
+  .cfg-rail-body { overflow: visible; padding: 24px var(--gut) 24px; }
+  .cfg-head h1 { font-size: 26px; }
+  /* The bar leaves the rail and spans the window, so the total is in view
+     while you scroll the options. */
+  .cfg-bar {
+    position: fixed; inset: auto 0 0 0; z-index: 40;
+    padding: 11px var(--gut);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, .1);
+  }
+  .cfg-bar .v { font-size: 21px; }
+  .cfg-sum { padding-bottom: 78px; }
+}
+@media (max-width: 620px) {
+  .cfg-incl { grid-template-columns: 1fr; }
+}
+
 .cfg-bill { max-width: 620px; margin: 26px auto 0; text-align: left; }
 .cfg-bill h3 {
   margin: 20px 0 4px; font-size: 11px; font-weight: 700;

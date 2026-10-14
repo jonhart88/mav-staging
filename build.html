@@ -24,9 +24,16 @@
      $99,495 -- so this one holds no figures of its own.
 
      It computes nothing but addition. Prices here are before tax, title
-     and license, the same basis the printed pricing sheet quotes on and
-     the same disclaimer beneath every figure -- so there is no estimate
-     of anybody's county on this page to go stale or be wrong.
+     and license, the same basis the printed pricing sheet quotes on, said
+     on the total itself -- so there is no estimate of anybody's county on
+     this page to go stale or be wrong.
+
+     The page has no heading and no shell on purpose. A configurator that
+     opens on a title and a paragraph is one you have to scroll before you
+     can use it, so the truck starts at the top of the window and runs the
+     width of it. What the heading said now sits where it is useful: the
+     name of the build at the top of the rail, the pricing basis under the
+     total, the photo caveat under the picture.
 
      The photographs are of a finished truck, one set per package, and
      nothing but the package changes them: picking Star White does not
@@ -70,63 +77,68 @@
 
 <main>
 
-  <section class="band band-first">
-    <div class="shell">
-      <p class="eyebrow">Start a build</p>
-      <h1 class="panel-title panel-title-sm">Spec your truck</h1>
-      <p class="panel-sub panel-sub-left">
-        Pick the chassis, the trim and the package. Every price here is read live from the
-        build catalog we quote from &mdash; so what this page says, your written quote says.
-        Prices are plus sales tax, title and license, the same as our printed sheet.
+  <!-- No heading, no lede, no shell. The configurator IS the page and it
+       starts at the top of the window: a title and a paragraph above it only
+       push the truck down the screen, which is the one thing a configurator
+       cannot afford. What the heading used to say now sits where it is
+       useful -- the pricing basis on the total, the photo caveat under the
+       picture. -->
+  <div class="cfg" id="cfg" hidden>
+
+    <div class="cfg-stage">
+      <div class="cfg-frame" id="cfgFrame">
+        <img id="cfgImg" alt="" fetchpriority="high">
+      </div>
+
+      <div class="cfg-nav">
+        <button type="button" class="cfg-arrow" data-step="-1" aria-label="Previous view">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="cfg-dots" id="cfgDots"></div>
+        <button type="button" class="cfg-arrow" data-step="1" aria-label="Next view">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <p class="cfg-disclaimer">
+        Photographs are of a finished MAV, not of your configuration. They change with the
+        package, but not yet with your color, bumper or options.
       </p>
+    </div>
 
-      <!-- Nothing is drawn until the catalog arrives, and nothing is hardcoded
-           here: the options, the prices and the equipment lists are all built
-           from /api/configurator/catalog. Hardcoding them is exactly how the
-           first configurator came to advertise a price four months out of date. -->
-      <p class="panel-sub panel-sub-left" id="cfgLoading">Loading the build catalog&hellip;</p>
-
-      <div class="cfg" id="cfg" hidden>
-
-        <!-- The truck. Three views, switched underneath, and the whole stage
-             stays put while the rail beside it scrolls. -->
-        <div class="cfg-stage">
-          <div class="cfg-frame" id="cfgFrame">
-            <img id="cfgImg" alt="" fetchpriority="high">
-          </div>
-          <div class="cfg-views" id="cfgViews"></div>
-          <p class="cfg-disclaimer">
-            <strong>The photographs are of a finished MAV, not of your configuration.</strong>
-            They change with the package, but not yet with your color, bumper or options
-            &mdash; we&rsquo;re shooting those now. Your written quote lists exactly what
-            you&rsquo;ve picked.
-          </p>
+    <div class="cfg-rail">
+      <div class="cfg-rail-body">
+        <div class="cfg-head">
+          <h1 id="cfgTitle">MAV Summit</h1>
+          <p id="cfgSubtitle">2027 Ford F-450 Crew Cab</p>
         </div>
 
-        <!-- The questions, and the running total pinned to the foot of them. -->
-        <div class="cfg-rail">
-          <div id="cfgOpts"></div>
+        <div id="cfgOpts"></div>
 
-          <div class="cfg-sum">
-            <h2>Your build</h2>
-            <div id="cfgRows"></div>
-            <p class="cfg-fine" id="cfgFine"></p>
-          </div>
-
-          <div class="cfg-bar">
-            <span class="cfg-bar-fig">
-              <span class="k">Total</span>
-              <span class="v" id="cfgTotal">&mdash;</span>
-              <span class="cfg-bar-note">Plus sales tax, title &amp; license</span>
-            </span>
-            <button type="button" class="btn btn-primary" id="cfgGo">Continue</button>
-          </div>
+        <div class="cfg-sum">
+          <h2>Your build</h2>
+          <div id="cfgRows"></div>
+          <p class="cfg-fine" id="cfgFine"></p>
         </div>
       </div>
 
-      <!-- If the catalog cannot be reached there is no configurator, and a
-           broken page must not be a dead end: it becomes the phone number. -->
-      <div class="panel panel-dark panel-center" id="cfgFail" hidden>
+      <div class="cfg-bar">
+        <span class="cfg-bar-fig">
+          <span class="v" id="cfgTotal">&mdash;</span>
+          <span class="cfg-bar-note">Plus sales tax, title &amp; license</span>
+        </span>
+        <button type="button" class="btn btn-primary" id="cfgGo">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="cfg-loading" id="cfgLoading">Loading the build catalog&hellip;</p>
+
+  <!-- If the catalog cannot be reached there is no configurator, and a
+       broken page must not be a dead end: it becomes the phone number. -->
+  <section class="band band-first" id="cfgFail" hidden>
+    <div class="shell">
+      <div class="panel panel-dark panel-center">
         <h2 class="panel-title panel-title-sm">The configurator is not loading</h2>
         <p class="panel-sub">
           Something on our end is not answering. Call and we&rsquo;ll spec it with you directly
@@ -347,7 +359,9 @@
 
     var elFrame = document.getElementById("cfgFrame");
     var elImg = document.getElementById("cfgImg");
-    var elViews = document.getElementById("cfgViews");
+    var elDots = document.getElementById("cfgDots");
+    var elTitle = document.getElementById("cfgTitle");
+    var elSubtitle = document.getElementById("cfgSubtitle");
 
     // ----------------------------------------------------------------------
     // THE PHOTOGRAPHS
@@ -525,19 +539,21 @@
         shown = want;
       }
 
-      var thumbs = "";
+      var dots = "";
       for (var k = 0; k < set.length; k++) {
-        thumbs +=
-          '<button type="button" class="cfg-view' + (k === view ? " is-on" : "") + '"' +
-          ' data-view="' + k + '" aria-pressed="' + (k === view ? "true" : "false") + '">' +
-          // NOT loading="lazy". These are 7KB each, they are the switcher
-          // rather than content, and lazily they deadlock: below the fold
-          // they do not load, unloaded they have no height, and with no
-          // height they can never come into view to be loaded.
-          '<img src="' + set[k].src.replace(/\.jpg$/, "-t.jpg") + '" alt="" width="320" height="213">' +
-          "<span>" + esc(set[k].view) + "</span></button>";
+        dots +=
+          '<button type="button" class="cfg-dot' + (k === view ? " is-on" : "") + '"' +
+          ' data-view="' + k + '" aria-label="' + esc(set[k].view) + ' view"' +
+          ' aria-pressed="' + (k === view ? "true" : "false") + '"></button>';
       }
-      elViews.innerHTML = thumbs;
+      elDots.innerHTML = dots;
+    }
+
+    /** The rail's own heading: what you are configuring, not what page it is. */
+    function renderHead() {
+      elTitle.textContent = "MAV " + (pick.tier || "");
+      elSubtitle.textContent =
+        "2027 Ford F-450 Crew Cab" + (pick.trim ? " " + pick.trim.name : "");
     }
 
     /** The other two views, fetched before they are asked for. */
@@ -548,6 +564,7 @@
 
     function render() {
       renderStage();
+      renderHead();
       var out = "";
       var i;
 
@@ -704,11 +721,22 @@
       render();
     }
 
-    elViews.addEventListener("click", function (e) {
-      var btn = e.target.closest ? e.target.closest(".cfg-view") : null;
+    elDots.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest(".cfg-dot") : null;
       if (!btn) return;
       view = parseInt(btn.dataset.view, 10) || 0;
       renderStage();
+    });
+
+    // The arrows wrap, because three views in a ring is what the dots imply
+    // and a dead arrow at either end is a worse answer than coming round.
+    var arrows = document.querySelectorAll(".cfg-arrow");
+    Array.prototype.forEach.call(arrows, function (btn) {
+      btn.addEventListener("click", function () {
+        var n = (PHOTOS[pick.tier] || []).length || 1;
+        view = (view + parseInt(btn.dataset.step, 10) + n) % n;
+        renderStage();
+      });
     });
 
     elOpts.addEventListener("click", function (e) {
