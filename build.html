@@ -530,7 +530,11 @@
         thumbs +=
           '<button type="button" class="cfg-view' + (k === view ? " is-on" : "") + '"' +
           ' data-view="' + k + '" aria-pressed="' + (k === view ? "true" : "false") + '">' +
-          '<img src="' + set[k].src.replace(/\.jpg$/, "-t.jpg") + '" alt="" loading="lazy">' +
+          // NOT loading="lazy". These are 7KB each, they are the switcher
+          // rather than content, and lazily they deadlock: below the fold
+          // they do not load, unloaded they have no height, and with no
+          // height they can never come into view to be loaded.
+          '<img src="' + set[k].src.replace(/\.jpg$/, "-t.jpg") + '" alt="" width="320" height="213">' +
           "<span>" + esc(set[k].view) + "</span></button>";
       }
       elViews.innerHTML = thumbs;

@@ -917,7 +917,9 @@ body.lb-lock { overflow: hidden; }
   background: var(--paper-2); border: 1px solid var(--line);
   border-radius: 6px; overflow: hidden; line-height: 0;
 }
-.cfg-view img { width: 100%; height: auto; display: block; }
+/* A declared ratio as well as the width/height attributes: the button keeps
+   its shape before the picture arrives and if it never does. */
+.cfg-view img { width: 100%; height: auto; display: block; aspect-ratio: 3 / 2; object-fit: cover; }
 .cfg-view:hover { border-color: var(--muted-d); }
 .cfg-view.is-on { border-color: var(--ink); }
 .cfg-view span {
