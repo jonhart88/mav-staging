@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Tab icon: orange mark on a black tile. It reads at 16px where a hairline
+     mark on clear ground does not, and it looks the same whatever colour the
+     tab strip is. PNGs are the fallback for browsers without SVG favicons. -->
+<link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48.png">
+<title>Gallery — MAV Conversions</title>
+<meta name="description" content="Photography of MAV Conversions builds: custom Ford F-450 conversions hand-finished in San Diego County.">
+
+<!-- GALLERY
+     A mosaic rather than a grid of equal thumbnails: tiles span one or two
+     columns and one or two rows, and grid-auto-flow:dense back-fills the holes,
+     so the wall interlocks instead of marching in rows. Nothing is positioned by
+     hand -- add or remove a figure and the puzzle re-packs itself.
+
+     Sizes are a class per tile: m-big (2x2), m-wide (2x1), m-tall (1x2), plain
+     (1x1). Mix them roughly one big to two wide to two tall and it stays lively.
+
+     The wall is built at runtime from media/gallery/manifest.json -- there is
+     no markup per photo. To add or drop pictures, regenerate the manifest and
+     the matching files in media/gallery/view/; nothing in this file changes.
+
+     These are all MAV's own builds. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="no-hero">
+
+<nav class="nav solid" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="MAV Conversions home">
+      <img class="nav-badge" src="media/badge-white.png" alt="">
+      <img class="nav-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#lineup">The Lineup</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="tel:+17606912588" class="btn btn-ghost nav-call">(760) 691-2588</a>
+      <a href="build.html" class="btn btn-primary">Start a Build</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Lightbox: one instance, reused for every photo. -->
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div class="lb-stage">
+    <div class="lb-spinner" id="lbSpinner"></div>
+    <img class="lb-img" id="lbImg" alt="">
+  </div>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
+<main>
+
+  <section class="band band-first">
+    <div class="shell">
+      <div class="panel panel-dark">
+        <p class="eyebrow on-dark">Gallery</p>
+        <h1 class="panel-title panel-title-sm">Never built twice</h1>
+        <p class="panel-sub panel-sub-left">
+          No two MAVs leave the floor the same. Paint, wheels, lighting, racks &mdash; every truck here
+          was specced by the person who ordered it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-last">
+    <div class="shell">
+      <div class="mosaic" id="mosaic" aria-live="polite"></div>
+      <p class="gallery-count" id="galleryCount"></p>
+    </div>
+  </section>
+
+  <section class="band band-last">
+    <div class="shell">
+      <div class="panel panel-center">
+        <h2 class="panel-title panel-title-sm">Yours could be next</h2>
+        <p class="panel-sub">Tell us how you&rsquo;ll use it and we&rsquo;ll spec it with you.</p>
+        <div class="actions actions-center">
+          <a href="build.html" class="btn btn-primary">Start a build</a>
+          <a href="tel:+17606912588" class="btn btn-outline">(760) 691-2588</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img class="footer-badge" src="media/badge-white.png" alt="">
+          <img class="footer-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+        </div>
+        <p>Custom lifted Ford F-450 luxury truck conversions, built in San Diego County.</p>
+        <p style="margin-top:14px">855 N Broadway<br>Escondido, CA 92025</p>
+        <p style="margin-top:14px"><a href="tel:+17606912588">(760) 691-2588</a></p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a href="index.html#lineup">Summit</a></li>
+          <li><a href="index.html#lineup">Apex</a></li>
+          <li><a href="build.html">Start a build</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#process">Process</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy-policy.html">Privacy policy</a></li>
+          <li><a href="sms-terms.html">SMS terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>&copy; 2026 MAV Conversions. Built in San Diego County.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add("js");
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  toggle.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { links.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
+  });
+
+  // ---- Gallery: build the mosaic from the generated manifest ----
+  // One encode per photo (1400px long edge) serves both the mosaic tile and
+  // the lightbox. A separate thumbnail set would be sharper on the big tiles,
+  // but two files per photo overruns the 511 the host carries in one version.
+  var VIEW = "media/gallery/view/";
+  var mosaic = document.getElementById("mosaic");
+  var countEl = document.getElementById("galleryCount");
+  var photos = [];
+
+  // Give the wall variety without hand-placing: portraits sometimes stand tall,
+  // wide landscapes sometimes run wide, and a big feature tile every so often.
+  function spanFor(item, i) {
+    if (item.span) return " " + item.span;   // hand-placed feature tiles
+    var r = item.w / item.h;
+    if (i % 12 === 5 && r > 1.2) return " m-big";
+    if (r < 0.85 && i % 5 === 2) return " m-tall";
+    if (r > 1.5 && i % 6 === 4) return " m-wide";
+    return "";
+  }
+
+  fetch("media/gallery/manifest.json")
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (items) {
+      photos = items || [];
+      if (!photos.length) { countEl.textContent = ""; return; }
+      var html = "";
+      for (var i = 0; i < photos.length; i++) {
+        var p = photos[i];
+        var span = spanFor(p, i);
+        var src = VIEW + p.id + ".webp";
+        html += '<figure class="tile' + span + '" data-i="' + i + '">'
+          + '<img src="' + src + '" width="' + p.w + '" height="' + p.h + '"'
+          + ' loading="lazy" decoding="async" alt="MAV Conversions build photo ' + (i + 1) + '">'
+          + '</figure>';
+      }
+      mosaic.innerHTML = html;
+      countEl.textContent = photos.length + " photographs";
+      // The wall only now has height, so a Back can finally land where it left.
+      if (window.restoreScroll) window.restoreScroll();
+    });
+
+  // ---- Lightbox ----
+  var lb = document.getElementById("lightbox");
+  var lbImg = document.getElementById("lbImg");
+  var lbSpinner = document.getElementById("lbSpinner");
+  var lbCount = document.getElementById("lbCount");
+  var cur = -1;
+
+  function preload(i) { if (i >= 0 && i < photos.length) { var im = new Image(); im.src = VIEW + photos[i].id + ".webp"; } }
+  function show(i) {
+    if (i < 0) i = photos.length - 1;
+    if (i >= photos.length) i = 0;
+    cur = i;
+    lbImg.classList.remove("ready");
+    lbSpinner.style.display = "";
+    // Attach onload BEFORE setting src so a cached image can't finish loading
+    // before the handler exists; the .complete check covers the cached case
+    // where the load event may not fire at all.
+    lbImg.onload = function () { lbImg.classList.add("ready"); lbSpinner.style.display = "none"; };
+    lbImg.src = VIEW + photos[i].id + ".webp";
+    if (lbImg.complete) lbImg.onload();
+    lbCount.textContent = (i + 1) + " / " + photos.length;
+    preload(i + 1); preload(i - 1);
+  }
+  function openLb(i) {
+    lb.hidden = false;
+    document.body.classList.add("lb-lock");
+    void lb.offsetWidth;            // force reflow so the fade runs without depending on rAF
+    lb.classList.add("open");
+    show(i);
+  }
+  function closeLb() { lb.classList.remove("open"); document.body.classList.remove("lb-lock"); setTimeout(function () { lb.hidden = true; lbImg.src = ""; }, 280); }
+
+  mosaic.addEventListener("click", function (e) {
+    var fig = e.target.closest(".tile"); if (!fig) return;
+    openLb(+fig.getAttribute("data-i"));
+  });
+  document.getElementById("lbPrev").addEventListener("click", function () { show(cur - 1); });
+  document.getElementById("lbNext").addEventListener("click", function () { show(cur + 1); });
+  document.getElementById("lbClose").addEventListener("click", closeLb);
+  lb.addEventListener("click", function (e) { if (e.target === lb || e.target.classList.contains("lb-stage")) closeLb(); });
+  document.addEventListener("keydown", function (e) {
+    if (lb.hidden) return;
+    if (e.key === "Escape") closeLb();
+    else if (e.key === "ArrowLeft") show(cur - 1);
+    else if (e.key === "ArrowRight") show(cur + 1);
+  });
+  // Swipe on touch.
+  var sx = 0;
+  lb.addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  // A nav link pointing at the page you are already on is a reload, and
+  // browsers restore your scroll position across a reload -- so clicking
+  // GALLERY dropped you back where you were (often the footer) instead of at
+  // the top. Scroll instead. Matching on the raw href attribute rather than
+  // the resolved URL, because how the host maps these paths is its business.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('a[href="gallery.html"]'), function (a) {
+      a.addEventListener("click", function (e) {
+        // Leave modified clicks alone so "open in a new tab" still works.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        // Drop any #section left in the URL, or a later refresh jumps back down.
+        if (location.hash) {
+          history.replaceState(null, "", location.pathname + location.search);
+        }
+        var jump = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: jump ? "auto" : "smooth" });
+      });
+    });
+
+  // Scroll position: a fresh click lands at the top, Back and Forward put you
+  // back where you were. The browser's own restoration cannot do the second
+  // part, because the gallery builds its tiles from JSON after load -- by the
+  // time that wall exists the browser has already restored into a page that
+  // was still empty, and the position is lost. So restoration is turned off
+  // and the position is kept by hand, per page, for this tab only. The same
+  // block is on every page so the whole site behaves one way.
+  var SCROLL_KEY = "mav:scroll:" + location.pathname + location.search;
+  // Was this a link click or a Back? performance.navigation claims to answer
+  // that, but inside the host's iframe it is not dependable -- a plain click on
+  // Start a Build could come back as a history move and restore the old
+  // position. So the answer is written down at the moment of the click instead,
+  // and the reading below only falls back to performance when there is no note.
+  var forward = false;
+  try {
+    forward = sessionStorage.getItem("mav:forward") === "1";
+    if (forward) sessionStorage.removeItem("mav:forward");
+  } catch (err) {}
+  var isBack = !forward && (function () {
+    var nav = window.performance && performance.getEntriesByType
+      && performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type) return nav.type === "back_forward";
+    var old = window.performance && performance.navigation;
+    return !!old && old.type === 2;
+  })();
+  // Bubble phase on purpose, so this runs AFTER the handlers on the links
+  // themselves and can see whether one of them cancelled the click. The
+  // same-page links (the logo here, GALLERY on the gallery) scroll instead of
+  // navigating; recording those as a move would leave a flag behind that makes
+  // the next Back land at the top instead of where you were.
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented) return;
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    // A bare #section or a tel:/mailto:/external link is not a move of ours.
+    if (!href || href.charAt(0) === "#" || /^[a-z]+:/i.test(href)) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    try { sessionStorage.setItem("mav:forward", "1"); } catch (err) {}
+  });
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  function rememberScroll() {
+    try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)); } catch (err) {}
+  }
+  // pagehide covers both leaving the page and it going into the back/forward
+  // cache; visibilitychange catches a tab closed without either firing.
+  window.addEventListener("pagehide", rememberScroll);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) rememberScroll();
+  });
+
+  // Exposed because the gallery has to call it again once its tiles exist:
+  // before that the page has no height to scroll into.
+  // If you start scrolling while the page is still loading, you win -- the
+  // load handler below must not yank you back. Listening for input rather than
+  // the scroll event, because our own scrollTo fires that too.
+  var userMoved = false;
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, function () { userMoved = true; }, { passive: true });
+  });
+
+  window.restoreScroll = function () {
+    if (location.hash || userMoved) return;   // a #section link, or you, asked
+    if (!isBack) { window.scrollTo(0, 0); return; }
+    var y = 0;
+    try { y = parseInt(sessionStorage.getItem(SCROLL_KEY), 10) || 0; } catch (err) {}
+    window.scrollTo(0, y);
+  };
+  window.restoreScroll();
+  window.addEventListener("load", window.restoreScroll);
+  // A page served from the back/forward cache never re-runs the script above.
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) { isBack = true; window.restoreScroll(); }
+  });
+</script>
+</body>
+</html>

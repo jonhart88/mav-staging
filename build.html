@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Tab icon: orange mark on a black tile. It reads at 16px where a hairline
+     mark on clear ground does not, and it looks the same whatever colour the
+     tab strip is. PNGs are the fallback for browsers without SVG favicons. -->
+<link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48.png">
+<title>Start a Build — MAV Conversions</title>
+<meta name="description" content="The MAV online configurator is coming soon. In the meantime, call us and we will spec your Ford F-450 build with you directly.">
+
+<!-- INTERIM PAGE.
+     Every Start a Build and Configure link on the site points here until the
+     configurator is finished. The job of this page is a phone call: say plainly
+     that the configurator is not ready, give the number, and then give a
+     serious buyer enough detail on each build to want to make that call.
+
+     The spec lists are the real ones, taken from the Apex build order written
+     for Carlos Leyva on 05/11/2026 -- except the tires. That order says
+     Michelin X Force 365/80/20, because tires get substituted when a size is
+     short. The Goodyear G275 is the standard fit -- 365/80R20 on the Apex,
+     335/80R20 on the Summit -- and Michelin is the fallback. The website
+     lists the standard, so an individual build order naming a different tire
+     is not a mistake in either document. Three items on that sheet were priced as
+     add-ons rather than included, so they sit under Available options here
+     instead: the 68 gallon tank, the sound deadening package and the PPF
+     color change. Summit is the same truck with 2"/2" of Liquid Spring
+     instead of 4"/4", and with the PSC hydraulic steering moved to an option.
+
+     Extra photography drops into the gallery at the bottom -- see
+     media/README.txt for the slots. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="no-hero">
+
+<nav class="nav solid" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="MAV Conversions home">
+      <img class="nav-badge" src="media/badge-white.png" alt="">
+      <img class="nav-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#lineup">The Lineup</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="tel:+17606912588" class="btn btn-primary">(760) 691-2588</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- The ask, first and unmissable. -->
+  <section class="band band-first">
+    <div class="shell">
+      <div class="panel panel-dark panel-center">
+        <p class="eyebrow on-dark">Start a build</p>
+        <h1 class="panel-title panel-title-sm">The configurator is coming soon</h1>
+        <p class="panel-sub">
+          We&rsquo;re building it properly &mdash; every option photographed in studio, so you can
+          see exactly what you&rsquo;re ordering.
+        </p>
+        <p class="panel-sub">
+          Until it&rsquo;s ready, the fastest way to spec a truck is a call. Tell us how you&rsquo;ll
+          use it and we&rsquo;ll build the spec with you.
+        </p>
+        <div class="actions actions-center">
+          <a href="tel:+17606912588" class="btn btn-primary btn-lg">(760) 691-2588</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detail, for the buyer who wants to arrive at that call informed. -->
+  <section class="band" id="builds">
+    <div class="shell">
+      <div class="pair">
+
+        <article class="panel tier">
+          <div class="tier-photo">
+            <img src="media/summit.jpg" alt="MAV Summit build" loading="lazy">
+          </div>
+          <div class="tier-body">
+            <div class="tier-head">
+              <h2 class="tier-name">Summit</h2>
+              <p class="tier-size">41&quot; tires</p>
+            </div>
+            <p class="tier-line">The tow package. Forty-one inch Goodyears, LiquidSpring smart hydraulic suspension front and rear, and a big-brake kit &mdash; built to put a boat where the ramp runs out.</p>
+            <div class="spec-set">
+              <p class="spec-head">Suspension &amp; steering</p>
+              <ul class="specs">
+                <li>Liquid Spring Hydraulic Smart Suspension &mdash; 2&quot; front / 2&quot; rear w/ Tru Earth</li>
+                <li>Liquid Spring front HD sway bar</li>
+              </ul>
+              <p class="spec-head">Bumpers, boards &amp; recovery</p>
+              <ul class="specs">
+                <li>HD front bumper &mdash; gloss black</li>
+                <li>HD custom rear bumper &mdash; gloss black</li>
+                <li>AMP XL power running boards</li>
+                <li>WARN front winch 16.5 Ti synthetic</li>
+                <li>HD radiator skid plate &mdash; powder coated black</li>
+              </ul>
+              <p class="spec-head">Wheels &amp; tires</p>
+              <ul class="specs">
+                <li>4x two-piece aluminum military grade 20x11 wheels &mdash; powder coated 30/40 black satin</li>
+                <li>4x Goodyear G275 335/80R20 &mdash; 41&quot;</li>
+              </ul>
+              <p class="spec-head">Lighting</p>
+              <ul class="specs">
+                <li>Baja Designs Onyx 30&quot; straight light bar</li>
+                <li>Baja Designs 2x XL Sport front bumper lights</li>
+                <li>Baja Designs 2x XL80 front bumper lights</li>
+                <li>Baja Designs 2x Squadron flush mounts, rear</li>
+                <li>Baja HQ billet brake light with Baja Designs lighting</li>
+              </ul>
+              <p class="spec-head">Powertrain &amp; calibration</p>
+              <ul class="specs">
+                <li>Tru Speed speed-correct module for increased tire size</li>
+              </ul>
+              <p class="spec-head">Trim &amp; finish</p>
+              <ul class="specs">
+                <li>Ford factory Blackout package</li>
+                <li>Front custom fender flares &mdash; body color</li>
+              </ul>
+              <p class="spec-head">Available options</p>
+              <ul class="specs specs-option">
+                <li>PSC hydraulic steering system</li>
+                <li>68 gallon fuel tank replacement w/ module to correct miles to empty</li>
+                <li>Sound deadening package</li>
+                <li>PPF color change</li>
+              </ul>
+            </div>
+            <div class="tier-foot">
+              <p class="tier-price"><small>Starts at</small><strong>$183,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+              <a href="tel:+17606912588" class="btn btn-primary">Call to spec</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel tier">
+          <div class="tier-photo">
+            <img src="media/apex.jpg" alt="MAV Apex build" loading="lazy">
+          </div>
+          <div class="tier-body">
+            <div class="tier-head">
+              <h2 class="tier-name">Apex</h2>
+              <p class="tier-size">44&quot; tires</p>
+            </div>
+            <p class="tier-line">Forty-four inch Goodyears, four-inch LiquidSpring smart hydraulic suspension, big-bore steering and the big-brake kit &mdash; everything the Summit is, standing taller.</p>
+            <div class="spec-set">
+              <p class="spec-head">Suspension &amp; steering</p>
+              <ul class="specs">
+                <li>Liquid Spring Hydraulic Smart Suspension &mdash; 4&quot; front / 4&quot; rear w/ Tru Earth</li>
+                <li>Liquid Spring front HD sway bar</li>
+                <li>PSC hydraulic steering system</li>
+              </ul>
+              <p class="spec-head">Bumpers, boards &amp; recovery</p>
+              <ul class="specs">
+                <li>HD front bumper &mdash; gloss black</li>
+                <li>HD custom rear bumper &mdash; gloss black</li>
+                <li>AMP XL power running boards</li>
+                <li>WARN front winch 16.5 Ti synthetic</li>
+                <li>HD radiator skid plate &mdash; powder coated black</li>
+              </ul>
+              <p class="spec-head">Wheels &amp; tires</p>
+              <ul class="specs">
+                <li>4x two-piece aluminum military grade 20x11 wheels &mdash; powder coated 30/40 black satin</li>
+                <li>4x Goodyear G275 365/80R20 &mdash; 44&quot;</li>
+              </ul>
+              <p class="spec-head">Lighting</p>
+              <ul class="specs">
+                <li>Baja Designs Onyx 30&quot; straight light bar</li>
+                <li>Baja Designs 2x XL Sport front bumper lights</li>
+                <li>Baja Designs 2x XL80 front bumper lights</li>
+                <li>Baja Designs 2x Squadron flush mounts, rear</li>
+                <li>Baja HQ billet brake light with Baja Designs lighting</li>
+              </ul>
+              <p class="spec-head">Powertrain &amp; calibration</p>
+              <ul class="specs">
+                <li>Tru Speed speed-correct module for increased tire size</li>
+              </ul>
+              <p class="spec-head">Trim &amp; finish</p>
+              <ul class="specs">
+                <li>Ford factory Blackout package</li>
+                <li>Front custom fender flares &mdash; body color</li>
+              </ul>
+              <p class="spec-head">Available options</p>
+              <ul class="specs specs-option">
+                <li>68 gallon fuel tank replacement w/ module to correct miles to empty</li>
+                <li>Sound deadening package</li>
+                <li>PPF color change</li>
+              </ul>
+            </div>
+            <div class="tier-foot">
+              <p class="tier-price"><small>Starts at</small><strong>$199,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+              <a href="tel:+17606912588" class="btn btn-primary">Call to spec</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Both builds start here, so it is worth saying once rather than twice. -->
+  <section class="band">
+    <div class="shell">
+      <div class="panel">
+        <p class="eyebrow">Every build</p>
+        <h2 class="panel-title panel-title-sm">What both trucks start with</h2>
+        <div class="steps">
+          <div class="step">
+            <p class="step-n">Base</p>
+            <h3>New Ford F-450</h3>
+            <p>Sourced through our 11+ commercial Ford dealer partners. Trim and color are yours to choose, subject to Ford availability.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">Build</p>
+            <h3>Six to eight weeks</h3>
+            <p>Hand-finished at our 16,000 sq ft facility in San Diego County. The build never leaves our floor.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">Terms</p>
+            <h3>30% to start</h3>
+            <p>30% of the conversion on signing, the truck when it reaches us, the balance and tax on delivery.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">Delivery</p>
+            <h3>US &amp; Canada</h3>
+            <p>Transport to your door, or fly in and drive it home from the shop.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three of ours, pulled from the same set as the gallery page so this
+       strip never falls back to stock. Full wall is at gallery.html. -->
+  <section class="band" id="gallery">
+    <div class="shell">
+      <div class="gallery">
+        <div class="gallery-item"><img src="media/gallery/view/g256.webp" alt="A finished MAV build" loading="lazy"></div>
+        <div class="gallery-item"><img src="media/gallery/view/g003.webp" alt="A finished MAV build" loading="lazy"></div>
+        <div class="gallery-item"><img src="media/gallery/view/g102.webp" alt="A finished MAV build" loading="lazy"></div>
+      </div>
+      <p class="actions actions-center" style="margin-top:28px">
+        <a href="gallery.html" class="btn btn-outline">Gallery</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="band band-last">
+    <div class="shell">
+      <div class="panel panel-center">
+        <h2 class="panel-title panel-title-sm">Ready when you are</h2>
+        <p class="panel-sub">Call and we&rsquo;ll spec it with you. No configurator required.</p>
+        <div class="actions actions-center">
+          <a href="tel:+17606912588" class="btn btn-primary btn-lg">(760) 691-2588</a>
+          <a href="index.html#lineup" class="btn btn-outline">Back to the lineup</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img class="footer-badge" src="media/badge-white.png" alt="">
+          <img class="footer-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+        </div>
+        <p>Custom lifted Ford F-450 luxury truck conversions, built in San Diego County.</p>
+        <p style="margin-top:14px">855 N Broadway<br>Escondido, CA 92025</p>
+        <p style="margin-top:14px"><a href="tel:+17606912588">(760) 691-2588</a></p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a href="index.html#lineup">Summit</a></li>
+          <li><a href="index.html#lineup">Apex</a></li>
+          <li><a href="build.html">Start a build</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#process">Process</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy-policy.html">Privacy policy</a></li>
+          <li><a href="sms-terms.html">SMS terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>&copy; 2026 MAV Conversions. Built in San Diego County.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add("js");
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  toggle.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { links.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
+  });
+
+  // A nav link pointing at the page you are already on is a reload, and
+  // browsers restore your scroll position across a reload -- so clicking
+  // START A BUILD dropped you back where you were (often the footer) instead of at
+  // the top. Scroll instead. Matching on the raw href attribute rather than
+  // the resolved URL, because how the host maps these paths is its business.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('a[href="build.html"]'), function (a) {
+      a.addEventListener("click", function (e) {
+        // Leave modified clicks alone so "open in a new tab" still works.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        // Drop any #section left in the URL, or a later refresh jumps back down.
+        if (location.hash) {
+          history.replaceState(null, "", location.pathname + location.search);
+        }
+        var jump = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: jump ? "auto" : "smooth" });
+      });
+    });
+
+  // Scroll position: a fresh click lands at the top, Back and Forward put you
+  // back where you were. The browser's own restoration cannot do the second
+  // part, because the gallery builds its tiles from JSON after load -- by the
+  // time that wall exists the browser has already restored into a page that
+  // was still empty, and the position is lost. So restoration is turned off
+  // and the position is kept by hand, per page, for this tab only. The same
+  // block is on every page so the whole site behaves one way.
+  var SCROLL_KEY = "mav:scroll:" + location.pathname + location.search;
+  // Was this a link click or a Back? performance.navigation claims to answer
+  // that, but inside the host's iframe it is not dependable -- a plain click on
+  // Start a Build could come back as a history move and restore the old
+  // position. So the answer is written down at the moment of the click instead,
+  // and the reading below only falls back to performance when there is no note.
+  var forward = false;
+  try {
+    forward = sessionStorage.getItem("mav:forward") === "1";
+    if (forward) sessionStorage.removeItem("mav:forward");
+  } catch (err) {}
+  var isBack = !forward && (function () {
+    var nav = window.performance && performance.getEntriesByType
+      && performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type) return nav.type === "back_forward";
+    var old = window.performance && performance.navigation;
+    return !!old && old.type === 2;
+  })();
+  // Bubble phase on purpose, so this runs AFTER the handlers on the links
+  // themselves and can see whether one of them cancelled the click. The
+  // same-page links (the logo here, GALLERY on the gallery) scroll instead of
+  // navigating; recording those as a move would leave a flag behind that makes
+  // the next Back land at the top instead of where you were.
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented) return;
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    // A bare #section or a tel:/mailto:/external link is not a move of ours.
+    if (!href || href.charAt(0) === "#" || /^[a-z]+:/i.test(href)) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    try { sessionStorage.setItem("mav:forward", "1"); } catch (err) {}
+  });
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  function rememberScroll() {
+    try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)); } catch (err) {}
+  }
+  // pagehide covers both leaving the page and it going into the back/forward
+  // cache; visibilitychange catches a tab closed without either firing.
+  window.addEventListener("pagehide", rememberScroll);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) rememberScroll();
+  });
+
+  // Exposed because the gallery has to call it again once its tiles exist:
+  // before that the page has no height to scroll into.
+  // If you start scrolling while the page is still loading, you win -- the
+  // load handler below must not yank you back. Listening for input rather than
+  // the scroll event, because our own scrollTo fires that too.
+  var userMoved = false;
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, function () { userMoved = true; }, { passive: true });
+  });
+
+  window.restoreScroll = function () {
+    if (location.hash || userMoved) return;   // a #section link, or you, asked
+    if (!isBack) { window.scrollTo(0, 0); return; }
+    var y = 0;
+    try { y = parseInt(sessionStorage.getItem(SCROLL_KEY), 10) || 0; } catch (err) {}
+    window.scrollTo(0, y);
+  };
+  window.restoreScroll();
+  window.addEventListener("load", window.restoreScroll);
+  // A page served from the back/forward cache never re-runs the script above.
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) { isBack = true; window.restoreScroll(); }
+  });
+</script>
+</body>
+</html>

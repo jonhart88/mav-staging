@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Tab icon: orange mark on a black tile. It reads at 16px where a hairline
+     mark on clear ground does not, and it looks the same whatever colour the
+     tab strip is. PNGs are the fallback for browsers without SVG favicons. -->
+<link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48.png">
+<title>MAV Conversions — Custom Ford F-450 Truck Conversions</title>
+<meta name="description" content="MAV Conversions builds custom lifted Ford F-450 luxury truck conversions in San Diego County. Two tiers, hand-finished, delivered across the U.S. and Canada.">
+
+<!-- PHOTOGRAPHY
+     Every image lives in /media under a fixed name: drop a new file over the
+     old one and the site updates, no HTML edits. In use: hero-1/2/3.jpg (the
+     rotating hero), summit.jpg, apex.jpg, about-trio.jpg, film.jpg + film.mp4.
+     The gallery page is separate -- it builds itself from
+     media/gallery/manifest.json. All of it is MAV's own trucks now; the last
+     stock placeholders are gone. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="MAV Conversions home">
+      <img class="nav-badge" src="media/badge-white.png" alt="">
+      <img class="nav-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#lineup">The Lineup</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+17606912588" class="btn btn-ghost nav-call">(760) 691-2588</a>
+      <a href="build.html" class="btn btn-primary">Start a Build</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero: the photograph, and nothing on top of it. -->
+<header class="hero">
+  <!-- --py is each frame's vertical framing. It is a variable rather than a
+       plain object-position because the phone pans the horizontal across the
+       truck, and the keyframes have to hold the vertical where it was set. -->
+  <div class="hero-media" id="heroMedia">
+    <img class="is-on" src="media/hero-1.jpg?v=2" style="--py:98%"
+         alt="A MAV-converted Ford F-450" fetchpriority="high">
+    <img src="media/hero-2.jpg?v=1" style="--py:77%"
+         alt="A MAV Summit build" loading="lazy">
+    <img src="media/hero-3.jpg?v=1" style="--py:90%"
+         alt="A MAV Apex build" loading="lazy">
+  </div>
+  <!-- Manual controls, so you are never waiting out the timer to see a frame.
+       Hidden until JS is up: without it there is only one visible frame. -->
+  <button class="hero-arrow hero-prev" id="heroPrev" type="button" aria-label="Previous photo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <button class="hero-arrow hero-next" id="heroNext" type="button" aria-label="Next photo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+  <div class="hero-dots" id="heroDots" aria-hidden="true"></div>
+  <span class="scroll-cue" aria-hidden="true">Scroll</span>
+</header>
+
+<main>
+
+  <!-- Manifesto + stats, carried over from v1 and reset in our own type: what
+       MAV stands for, then the four numbers that answer "what is it". -->
+  <section class="manifesto">
+    <div class="manifesto-inner">
+      <p class="manifesto-eyebrow">What MAV stands for</p>
+      <h1 class="manifesto-text">Mountain Assault Vehicle</h1>
+      <p class="manifesto-sub"><span>F-450/550 Super Single conversions</span>
+        &middot; <span>Built in San Diego</span>
+        &middot; <span>Made for everywhere else</span></p>
+    </div>
+    <div class="manifesto-stats">
+      <div>
+        <p class="stat-big">44&quot;</p>
+        <p class="stat-big-label">Maximum tire</p>
+      </div>
+      <div>
+        <p class="stat-big">33K</p>
+        <p class="stat-big-label">Max towing (lbs gooseneck)</p>
+      </div>
+      <div>
+        <p class="stat-big">6&ndash;8<sup>*</sup></p>
+        <p class="stat-big-label">Week build</p>
+      </div>
+      <div>
+        <p class="stat-big">100%</p>
+        <p class="stat-big-label">Custom to order</p>
+      </div>
+    </div>
+    <p class="stats-note">
+      *Build time begins once your truck arrives at our shop. Total lead time from order to delivery
+      also depends on Ford&rsquo;s nationwide availability of your selected trim and color.
+    </p>
+  </section>
+
+  <!-- Lineup: one tall box per series -- photograph and specs in the same
+       container, rather than a card and a separate spec panel. -->
+  <section class="band" id="lineup">
+    <div class="shell">
+      <div class="pair">
+
+        <article class="panel tier reveal">
+          <!-- Photo set for this truck. The studio shot stays first; the rest
+               are that same truck from the location shoot. -->
+          <div class="tier-shots" data-tier="summit">
+            <div class="tier-photo">
+              <img class="tier-main" src="media/summit.jpg" alt="MAV Summit build" loading="lazy">
+                <button class="tier-arrow tier-prev" type="button" aria-label="Previous photo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+              </button>
+              <button class="tier-arrow tier-next" type="button" aria-label="Next photo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <span class="tier-count" aria-hidden="true"></span>
+            </div>
+            <div class="tier-strip" role="tablist" aria-label="MAV Summit build photos"></div>
+          </div>
+          <div class="tier-body">
+          <!-- Tire size rides with the name rather than waiting in the spec
+               list: it is the difference between the two trucks that a buyer
+               can picture without reading anything else. -->
+          <div class="tier-head">
+            <h2 class="tier-name">Summit</h2>
+            <p class="tier-size">41&quot; tires</p>
+          </div>
+          <p class="tier-line">The tow package. Forty-one inch Goodyears, LiquidSpring smart hydraulic suspension front and rear, and a big-brake kit &mdash; built to put a boat where the ramp runs out.</p>
+          <!-- The numbers a buyer with a boat behind them actually asks for,
+               straight off the show flyer. Max tow is the same 33,000 on both
+               on purpose: GCWR minus curb gives 33,370 and 33,330, but the
+               show print carries Ford's own gooseneck rating for the chassis
+               and the website should not quote a different one. Curb weight
+               is what actually separates the trucks, and it is why the Apex
+               payload is 40 lb lighter. -->
+          <div class="tier-figures">
+              <div><strong>33,000 lb</strong><span>Max tow</span></div>
+              <div><strong>3,870 lb</strong><span>Payload</span></div>
+              <div><strong>10,130 lb</strong><span>Curb weight</span></div>
+              <div><strong>14,000 lb</strong><span>GVWR</span></div>
+          </div>
+          <p class="tier-figures-note">Max tow is Ford&rsquo;s gooseneck rating for the chassis. Payload is the practical limit &mdash; a heavy trailer&rsquo;s pin weight reaches it first.</p>
+          <ul class="specs">
+            <li>LiquidSpring smart hydraulic suspension, 2&quot; front and rear, plus sway bar</li>
+            <li>SSBC Beast big-brake kit, front and rear</li>
+            <li>41&quot; Goodyear G275 on 20&times;11 two-piece military grade wheels, 8,000 lb rated</li>
+            <li>HD front bumper with radiator skid, HD rear bumper powder coated</li>
+            <li>WARN 16.5-Sti synthetic winch</li>
+            <li>Baja Designs LED lighting package</li>
+            <li>Wide-body fender flares, painted to body</li>
+            <li>Spray-in bed liner, AMP XL power running boards</li>
+            <li>Chrome-delete and blackout trim</li>
+            <li>TRU-SPEED calibration, 4-wheel alignment</li>
+            <li>MAV Badge and Appearance Package</li>
+          </ul>
+          <div class="tier-foot">
+            <p class="tier-price"><small>Starts at</small><strong>$183,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+            <a href="build.html" class="btn btn-primary">Configure</a>
+          </div>
+          </div>
+        </article>
+
+        <article class="panel tier reveal">
+          <!-- Photo set for this truck. The studio shot stays first; the rest
+               are that same truck from the location shoot. -->
+          <div class="tier-shots" data-tier="apex">
+            <div class="tier-photo">
+              <img class="tier-main" src="media/apex.jpg" alt="MAV Apex build" loading="lazy">
+                <button class="tier-arrow tier-prev" type="button" aria-label="Previous photo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+              </button>
+              <button class="tier-arrow tier-next" type="button" aria-label="Next photo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <span class="tier-count" aria-hidden="true"></span>
+            </div>
+            <div class="tier-strip" role="tablist" aria-label="MAV Apex build photos"></div>
+          </div>
+          <div class="tier-body">
+          <div class="tier-head">
+            <h2 class="tier-name">Apex</h2>
+            <p class="tier-size">44&quot; tires</p>
+          </div>
+          <p class="tier-line">Forty-four inch Goodyears, four-inch LiquidSpring smart hydraulic suspension, big-bore steering and the big-brake kit &mdash; everything the Summit is, standing taller.</p>
+          <!-- The numbers a buyer with a boat behind them actually asks for,
+               straight off the show flyer. Max tow is the same 33,000 on both
+               on purpose: GCWR minus curb gives 33,370 and 33,330, but the
+               show print carries Ford's own gooseneck rating for the chassis
+               and the website should not quote a different one. Curb weight
+               is what actually separates the trucks, and it is why the Apex
+               payload is 40 lb lighter. -->
+          <div class="tier-figures">
+              <div><strong>33,000 lb</strong><span>Max tow</span></div>
+              <div><strong>3,830 lb</strong><span>Payload</span></div>
+              <div><strong>10,170 lb</strong><span>Curb weight</span></div>
+              <div><strong>14,000 lb</strong><span>GVWR</span></div>
+          </div>
+          <p class="tier-figures-note">Max tow is Ford&rsquo;s gooseneck rating for the chassis. Payload is the practical limit &mdash; a heavy trailer&rsquo;s pin weight reaches it first.</p>
+          <ul class="specs">
+            <li>LiquidSpring smart hydraulic suspension, 4&quot; front and rear, plus sway bar</li>
+            <li>PSC Big Bore XD hydro-assist steering</li>
+            <li>SSBC Beast big-brake kit, front and rear</li>
+            <li>44&quot; Goodyear G275 on 20&times;11 two-piece military grade wheels, 8,000 lb rated</li>
+            <li>HD front bumper with radiator skid, HD rear bumper powder coated</li>
+            <li>WARN 16.5-Sti synthetic winch</li>
+            <li>Baja Designs LED lighting package</li>
+            <li>Wide-body fender flares, painted to body</li>
+            <li>Spray-in bed liner, AMP XL power running boards</li>
+            <li>Chrome-delete and blackout trim</li>
+            <li>TRU-SPEED calibration, 4-wheel alignment</li>
+            <li>MAV Badge and Appearance Package</li>
+          </ul>
+          <div class="tier-foot">
+            <p class="tier-price"><small>Starts at</small><strong>$199,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+            <a href="build.html" class="btn btn-primary">Configure</a>
+          </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Film -->
+  <section class="band" id="film">
+    <div class="shell">
+      <div class="photo-card photo-card-wide reveal">
+        <!-- No autoplay attribute: the film starts when it is scrolled to, not
+             when the page loads, which is also what keeps a 12MB download off
+             the critical path. It starts muted because no browser will play
+             audio at a visitor who has not asked for it -- the speaker lifts
+             that, and clicking the card does the same. poster= is a frame of
+             the clip itself, so the band is never empty. -->
+        <video id="filmVideo" src="media/film.mp4" poster="media/film.jpg"
+               muted loop playsinline preload="metadata"
+               aria-label="The MAV Conversions F-450 film"></video>
+        <div class="film-controls">
+          <button class="film-btn" id="filmPlay" type="button" aria-label="Play the film">
+            <svg class="i-pause" width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6.5" y="5" width="3.6" height="14" rx="1.1"/>
+              <rect x="13.9" y="5" width="3.6" height="14" rx="1.1"/>
+            </svg>
+            <svg class="i-play" width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5.2v13.6a.8.8 0 0 0 1.22.68l10.7-6.8a.8.8 0 0 0 0-1.36L9.22 4.52A.8.8 0 0 0 8 5.2z"/>
+            </svg>
+          </button>
+          <button class="film-btn" id="filmSound" type="button"
+                  aria-pressed="false" aria-label="Turn sound on">
+            <svg class="i-off" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/>
+            </svg>
+            <svg class="i-on" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>
+            </svg>
+          </button>
+          <button class="film-btn" id="filmFull" type="button" aria-label="Full screen">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+              <path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="band" id="process">
+    <div class="shell">
+      <div class="panel reveal">
+        <p class="eyebrow">The process</p>
+        <h2 class="panel-title panel-title-sm">From order to your driveway</h2>
+        <p class="panel-sub panel-sub-left">Six to eight weeks once your truck reaches our facility. Total time depends on Ford&rsquo;s nationwide availability of your trim and color.</p>
+
+        <!-- The money milestones here are the CRM's payment plan, not a
+             separate marketing version of it: 30% of the conversion on
+             signing, the truck when it lands, the rest on delivery. See
+             mav-crm/src/lib/payments.ts, which is the one place that decides
+             it. A page that disagrees with the quote the customer is sent is
+             worse than a page that says nothing. -->
+        <div class="steps">
+          <div class="step">
+            <p class="step-n">01</p>
+            <h3>Spec it</h3>
+            <p>We size the build to what you tow and where you take it. You get a written quote the same week.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">02</p>
+            <h3>Reserve</h3>
+            <p>A 30% deposit signs the agreement and starts the hunt for your truck, through our 11+ commercial Ford dealer partners. The deposit is 30% of the conversion only &mdash; you put nothing down on the truck until we have found it.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">03</p>
+            <h3>Build</h3>
+            <p>You pay for the truck when it arrives at our shop, and that is when the build starts. Suspension, steering, brakes, rolling stock, bumpers, paint &mdash; you get photos as it comes together.</p>
+          </div>
+          <div class="step">
+            <p class="step-n">04</p>
+            <h3>Delivery</h3>
+            <p>Final quality check, then the rest of what you owe &mdash; including sales tax &mdash; is due as the truck goes out. Picked up in Escondido or delivered to your door, anywhere in the country.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About: text one side, photograph the other, inside one panel. -->
+  <section class="band" id="about">
+    <div class="shell">
+      <div class="panel panel-split reveal">
+        <div class="panel-copy">
+          <p class="eyebrow">About MAV</p>
+          <h2 class="panel-title panel-title-sm">Built in San Diego. Built to last.</h2>
+          <p class="panel-sub panel-sub-left">
+            MAV Conversions builds its own trucks, in our own 16,000 sq ft facility in San Diego County.
+            We are not a broker, and we do not farm the work out. We source the chassis, do the fabrication,
+            hand-finish every truck and road test it ourselves, so no two are the same and the build never
+            leaves our floor. Start to finish, you are dealing with the people who build your truck.
+          </p>
+          <div class="stats">
+            <div class="stat"><strong>16,000</strong><span>sq ft facility</span></div>
+            <div class="stat"><strong>6&ndash;8</strong><span>week build</span></div>
+            <div class="stat"><strong>US &amp; Canada</strong><span>delivery</span></div>
+          </div>
+        </div>
+        <div class="panel-media">
+          <!-- Frame pulled from the F-450 spot and cropped below the
+               videographer's watermark. 1.62:1 to match this box, and the
+               trucks sit at 44% so a shorter box crops grass, not tires. -->
+          <img src="media/about-trio.jpg" style="object-position:50% 44%"
+               alt="Three finished MAV F-450 builds parked in a field" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="band" id="contact">
+    <div class="shell">
+      <div class="panel panel-dark panel-center reveal">
+        <h2 class="panel-title panel-title-sm">Tell us how you&rsquo;ll use it. We&rsquo;ll spec it for you.</h2>
+        <p class="panel-sub">Every MAV starts with a conversation. Call and talk it through, or leave the outline here and we&rsquo;ll call you.</p>
+
+        <!-- The carrier review for business texting wants one opt-in it can
+             look at: a phone field with the consent language directly beneath
+             it. The checkbox is unticked by default and the form submits
+             either way -- consent must be a choice, not the price of asking a
+             question. The CRM records which it was against the lead. -->
+        <form class="lead-form" id="leadForm" novalidate>
+          <div class="lead-row">
+            <label>Name
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label>Phone
+              <input type="tel" name="phone" autocomplete="tel" inputmode="tel">
+            </label>
+          </div>
+          <label>Email
+            <input type="email" name="email" autocomplete="email">
+          </label>
+          <label>What will you tow, and where do you take it?
+            <textarea name="message" rows="3" required></textarea>
+          </label>
+          <!-- Hidden from people, tempting to bots. The server drops anything
+               that fills it in. -->
+          <div class="lead-trap" aria-hidden="true">
+            <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <label class="lead-consent">
+            <input type="checkbox" name="smsConsent" value="yes">
+            <span>I agree to receive text messages from MAV Conversions about my inquiry.
+              Consent is not a condition of any purchase or service &mdash; if you prefer not to
+              receive texts, leave this unchecked and we will contact you another way. Message
+              frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for
+              help. <a href="privacy-policy.html">Privacy Policy</a> &middot;
+              <a href="sms-terms.html">SMS Terms</a>.</span>
+          </label>
+          <div class="actions actions-center">
+            <button type="submit" class="btn btn-primary" id="leadSend">Send it over</button>
+            <a href="tel:+17606912588" class="btn btn-ghost">Call (760) 691-2588</a>
+          </div>
+          <p class="lead-status" id="leadStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img class="footer-badge" src="media/badge-white.png" alt="">
+          <img class="footer-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+        </div>
+        <p>Custom lifted Ford F-450 luxury truck conversions, built in San Diego County.</p>
+        <p style="margin-top:14px">855 N Broadway<br>Escondido, CA 92025</p>
+        <p style="margin-top:14px"><a href="tel:+17606912588">(760) 691-2588</a></p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a href="#lineup">Summit</a></li>
+          <li><a href="#lineup">Apex</a></li>
+          <li><a href="build.html">Configure</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy-policy.html">Privacy policy</a></li>
+          <li><a href="sms-terms.html">SMS terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>&copy; 2026 MAV Conversions. Built in San Diego County.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add("js");
+
+  var nav = document.getElementById("nav");
+  var onScroll = function () { nav.classList.toggle("solid", window.scrollY > 40); };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  toggle.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { links.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
+  });
+
+  // Rotating hero. Cross-fade rather than slide: the frames are all the same
+  // truck line-up on the same backdrop, and sliding them would read as a
+  // carousel of unrelated things. Stops entirely for prefers-reduced-motion,
+  // and pauses while the tab is hidden so it is not burning a repaint a
+  // second in a background window.
+  (function () {
+    var media = document.getElementById("heroMedia");
+    if (!media) return;
+    var frames = media.querySelectorAll("img");
+    var prev = document.getElementById("heroPrev");
+    var next = document.getElementById("heroNext");
+    var dotWrap = document.getElementById("heroDots");
+    if (frames.length < 2) { return; }
+
+    var i = 0, timer = null;
+    var dots = [];
+    for (var d = 0; d < frames.length; d++) {
+      var dot = document.createElement("span");
+      dot.className = "hero-dot" + (d ? "" : " is-on");
+      dotWrap.appendChild(dot);
+      dots.push(dot);
+    }
+    var show = function (n) {
+      frames[i].classList.remove("is-on"); dots[i].classList.remove("is-on");
+      i = (n + frames.length) % frames.length;
+      frames[i].classList.add("is-on"); dots[i].classList.add("is-on");
+    };
+
+    // On a portrait phone the frame is a quarter of the photo's width, so a
+    // still crop shows about a third of the truck. Rather than shrink the
+    // picture to fit, the visible window travels across it and the frame
+    // changes when it reaches the far side -- the truck stays full-bleed and
+    // you see all of it. CSS drives the travel; this only has to know when a
+    // pass has finished, which is what the animationend below is for.
+    var panQ = window.matchMedia("(max-width: 760px) and (orientation: portrait)");
+    var motionQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var panning = function () { return panQ.matches && !motionQ.matches; };
+
+    // The timer is the only part reduced-motion turns off -- the arrows are a
+    // control the visitor asked for, not motion we decided to add.
+    var auto = !motionQ.matches;
+    var start = function () {
+      if (!auto || timer) return;
+      // While panning, the pass itself is the clock. A second timer running
+      // alongside it would cut frames short halfway across the truck.
+      if (panning()) return;
+      timer = setInterval(function () { show(i + 1); }, 6000);
+    };
+    var stop = function () { clearInterval(timer); timer = null; };
+    // A pass ending is the cue to move on. Bound to every frame, because the
+    // one that is panning is whichever currently carries .is-on.
+    Array.prototype.forEach.call(frames, function (f) {
+      f.addEventListener("animationend", function (e) {
+        if (e.animationName === "hero-pan" && panning() && f.classList.contains("is-on")) {
+          show(i + 1);
+        }
+      });
+    });
+    // Turning the phone swaps which of the two is in charge.
+    var onModeChange = function () { stop(); start(); };
+    if (panQ.addEventListener) panQ.addEventListener("change", onModeChange);
+    else if (panQ.addListener) panQ.addListener(onModeChange);
+    // Any manual move restarts the clock, so a frame you just picked gets its
+    // full six seconds instead of whatever was left on the tick.
+    var nudge = function (n) { return function () { stop(); show(n()); start(); }; };
+    prev.addEventListener("click", nudge(function () { return i - 1; }));
+    next.addEventListener("click", nudge(function () { return i + 1; }));
+    media.parentNode.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { nudge(function () { return i - 1; })(); }
+      if (e.key === "ArrowRight") { nudge(function () { return i + 1; })(); }
+    });
+    document.addEventListener("visibilitychange", function () {
+      document.hidden ? stop() : start();
+    });
+    media.parentNode.classList.add("has-arrows");
+    start();
+  })();
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { entry.target.classList.add("in"); io.unobserve(entry.target); }
+    });
+  }, { rootMargin: "0px 0px -12% 0px" });
+  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+
+  // The film. Three things going on here:
+  //   - it plays when it is scrolled into view and stops when it leaves, so it
+  //     is never running behind your back or burning battery off-screen;
+  //   - pausing it by hand OUTRANKS that. Scrolling away and back does not
+  //     restart something the visitor deliberately stopped, which is the bug
+  //     every scroll-triggered video has;
+  //   - sound starts off, because no browser will autoplay audio, and the
+  //     speaker or a click on the card lifts it.
+  var film = document.getElementById("filmVideo");
+  var playBtn = document.getElementById("filmPlay");
+  var soundBtn = document.getElementById("filmSound");
+  var fullBtn = document.getElementById("filmFull");
+
+  if (film && playBtn && soundBtn) {
+    var pausedByHand = false;
+    var stillMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var syncPlayBtn = function () {
+      playBtn.classList.toggle("is-playing", !film.paused);
+      playBtn.setAttribute("aria-label", film.paused ? "Play the film" : "Pause the film");
+    };
+    film.addEventListener("play", syncPlayBtn);
+    film.addEventListener("pause", syncPlayBtn);
+    syncPlayBtn();
+
+    playBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (film.paused) { pausedByHand = false; film.play().catch(function () {}); }
+      else { pausedByHand = true; film.pause(); }
+    });
+
+    var setSound = function (on) {
+      film.muted = !on;
+      soundBtn.setAttribute("aria-pressed", String(on));
+      soundBtn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
+    };
+    soundBtn.addEventListener("click", function (e) { e.stopPropagation(); setSound(film.muted); });
+    film.closest(".photo-card").addEventListener("click", function () { setSound(film.muted); });
+
+    // Full screen. Three different APIs, in order of how current they are.
+    // The iPhone needs the last one: Safari on iOS will not take an arbitrary
+    // element full screen, but it will take a <video>, and that is the case
+    // that matters most here -- a phone is where a band this size is most
+    // worth escaping. Hidden if the browser offers none of them.
+    if (fullBtn) {
+      var card = film.closest(".photo-card");
+      var canFull = !!(card.requestFullscreen || card.webkitRequestFullscreen
+                       || film.webkitEnterFullscreen);
+      if (!canFull) { fullBtn.hidden = true; }
+      fullBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var exit = document.fullscreenElement || document.webkitFullscreenElement;
+        if (exit) {
+          (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+          return;
+        }
+        // Going full screen is a clear "I want to watch this", so it plays --
+        // but the sound stays wherever the visitor left it rather than
+        // surprising a quiet room.
+        if (film.paused) { pausedByHand = false; film.play().catch(function () {}); }
+        if (card.requestFullscreen) { card.requestFullscreen().catch(function () {}); }
+        else if (card.webkitRequestFullscreen) { card.webkitRequestFullscreen(); }
+        else if (film.webkitEnterFullscreen) { film.webkitEnterFullscreen(); }
+      });
+    }
+
+    // Start buffering while it is still two screens away, so arriving at the
+    // band does not mean arriving at a spinner. Until this fires the browser
+    // has fetched metadata and the poster, and nothing else.
+    // Deliberately no .load() here: raising preload is enough to start the
+    // fetch, and load() RESETS the element. Land on the page already scrolled
+    // to the film -- a reload part-way down, or a link to #film -- and both
+    // observers fire together; load() would then wipe the play() that the
+    // other one just issued and leave a still frame sitting there.
+    var warm = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { film.preload = "auto"; warm.disconnect(); }
+      });
+    }, { rootMargin: "200% 0px" });
+    warm.observe(film);
+
+    // Leaving the screen pauses it, but never sets pausedByHand: that flag is
+    // the visitor's word, and only the visitor gets to change it.
+    var watch = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (!pausedByHand && !stillMotion) { film.play().catch(function () {}); }
+        } else if (!film.paused) {
+          film.pause();
+        }
+      });
+    }, { threshold: 0.35 });
+    watch.observe(film);
+  }
+
+  // A nav link pointing at the page you are already on is a reload, and
+  // browsers restore your scroll position across a reload -- so clicking
+  // the logo dropped you back where you were (often the footer) instead of at
+  // the top. Scroll instead. Matching on the raw href attribute rather than
+  // the resolved URL, because how the host maps these paths is its business.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('a[href="index.html"]'), function (a) {
+      a.addEventListener("click", function (e) {
+        // Leave modified clicks alone so "open in a new tab" still works.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        // Drop any #section left in the URL, or a later refresh jumps back down.
+        if (location.hash) {
+          history.replaceState(null, "", location.pathname + location.search);
+        }
+        var jump = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: jump ? "auto" : "smooth" });
+      });
+    });
+
+  // Scroll position: a fresh click lands at the top, Back and Forward put you
+  // back where you were. The browser's own restoration cannot do the second
+  // part, because the gallery builds its tiles from JSON after load -- by the
+  // time that wall exists the browser has already restored into a page that
+  // was still empty, and the position is lost. So restoration is turned off
+  // and the position is kept by hand, per page, for this tab only. The same
+  // block is on every page so the whole site behaves one way.
+  var SCROLL_KEY = "mav:scroll:" + location.pathname + location.search;
+  // Was this a link click or a Back? performance.navigation claims to answer
+  // that, but inside the host's iframe it is not dependable -- a plain click on
+  // Start a Build could come back as a history move and restore the old
+  // position. So the answer is written down at the moment of the click instead,
+  // and the reading below only falls back to performance when there is no note.
+  var forward = false;
+  try {
+    forward = sessionStorage.getItem("mav:forward") === "1";
+    if (forward) sessionStorage.removeItem("mav:forward");
+  } catch (err) {}
+  var isBack = !forward && (function () {
+    var nav = window.performance && performance.getEntriesByType
+      && performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type) return nav.type === "back_forward";
+    var old = window.performance && performance.navigation;
+    return !!old && old.type === 2;
+  })();
+  // Bubble phase on purpose, so this runs AFTER the handlers on the links
+  // themselves and can see whether one of them cancelled the click. The
+  // same-page links (the logo here, GALLERY on the gallery) scroll instead of
+  // navigating; recording those as a move would leave a flag behind that makes
+  // the next Back land at the top instead of where you were.
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented) return;
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    // A bare #section or a tel:/mailto:/external link is not a move of ours.
+    if (!href || href.charAt(0) === "#" || /^[a-z]+:/i.test(href)) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    try { sessionStorage.setItem("mav:forward", "1"); } catch (err) {}
+  });
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  function rememberScroll() {
+    try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)); } catch (err) {}
+  }
+  // pagehide covers both leaving the page and it going into the back/forward
+  // cache; visibilitychange catches a tab closed without either firing.
+  window.addEventListener("pagehide", rememberScroll);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) rememberScroll();
+  });
+
+  // Exposed because the gallery has to call it again once its tiles exist:
+  // before that the page has no height to scroll into.
+  // If you start scrolling while the page is still loading, you win -- the
+  // load handler below must not yank you back. Listening for input rather than
+  // the scroll event, because our own scrollTo fires that too.
+  var userMoved = false;
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, function () { userMoved = true; }, { passive: true });
+  });
+
+  window.restoreScroll = function () {
+    if (location.hash || userMoved) return;   // a #section link, or you, asked
+    if (!isBack) { window.scrollTo(0, 0); return; }
+    var y = 0;
+    try { y = parseInt(sessionStorage.getItem(SCROLL_KEY), 10) || 0; } catch (err) {}
+    window.scrollTo(0, y);
+  };
+  window.restoreScroll();
+  window.addEventListener("load", window.restoreScroll);
+  // A page served from the back/forward cache never re-runs the script above.
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) { isBack = true; window.restoreScroll(); }
+  });
+
+  // ---- Tier photo sets ----
+  // The studio shoot, 56 frames: 1-28 are the white truck (Apex, badged APEX
+  // on the bedside), 29-56 the black one (Summit). Ids keep the source
+  // numbering -- m017 is MavConversions-17.jpg -- so a question about any
+  // picture on the page can be traced back to the file it came from.
+  //
+  // Every shot was delivered twice, on a gray backdrop and again cut out on
+  // white; the white copies (2, 4, 6, 8, 30, 32, 34, 36, 46) are dropped so
+  // the strip does not show the same truck twice in a row. Each one pairs
+  // with the odd frame before it, which is how they were identified.
+  //
+  // The frame already on the page stays first. apex.jpg is m005 and
+  // summit.jpg is m033, so those two are left out of the lists below rather
+  // than shown twice; the versions in the markup are cropped a touch wider.
+  var TIER_SHOTS = {
+    summit: ["m029", "m031", "m035", "m037", "m038", "m039", "m040", "m041",
+              "m042", "m043", "m044", "m045", "m047", "m048", "m049", "m050",
+              "m051", "m052", "m053", "m054", "m055", "m056"],
+    apex:   ["m001", "m003", "m007", "m009", "m010", "m011", "m012", "m013",
+              "m014", "m015", "m016", "m017", "m018", "m019", "m020", "m021",
+              "m022", "m023", "m024", "m025", "m026", "m027", "m028"]
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tier-shots"), function (box) {
+    var key = box.getAttribute("data-tier");
+    var extra = TIER_SHOTS[key] || [];
+    var main = box.querySelector(".tier-main");
+    var strip = box.querySelector(".tier-strip");
+    var count = box.querySelector(".tier-count");
+    var prev = box.querySelector(".tier-prev");
+    var next = box.querySelector(".tier-next");
+    if (!main || !strip) return;
+
+    // The studio shot is already in the markup, so it stays the first entry and
+    // its thumb reuses that same file -- already downloaded, nothing extra.
+    var shots = [{ full: main.getAttribute("src"), thumb: main.getAttribute("src"),
+                   alt: main.getAttribute("alt") }];
+    extra.forEach(function (id, i) {
+      shots.push({
+        full: "media/gallery/view/" + id + ".webp",
+        thumb: "media/gallery/thumb/" + id + ".webp",
+        alt: main.getAttribute("alt") + ", photo " + (i + 2)
+      });
+    });
+    if (shots.length < 2) return;
+
+    var at = 0;
+    shots.forEach(function (shot, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+      b.setAttribute("aria-label", "Photo " + (i + 1) + " of " + shots.length);
+      var im = document.createElement("img");
+      im.src = shot.thumb; im.alt = ""; im.loading = "lazy"; im.decoding = "async";
+      b.appendChild(im);
+      b.addEventListener("click", function () { show(i); });
+      strip.appendChild(b);
+    });
+    var tabs = strip.querySelectorAll("button");
+
+    function show(i) {
+      at = (i + shots.length) % shots.length;
+      main.src = shots[at].full;
+      main.alt = shots[at].alt;
+      for (var t = 0; t < tabs.length; t++) {
+        tabs[t].setAttribute("aria-selected", t === at ? "true" : "false");
+      }
+      count.textContent = (at + 1) + " / " + shots.length;
+      // Keep the active thumb in view without scrolling the page itself.
+      // Measured from the strip's own box rather than with offsetLeft: nothing
+      // between the button and <body> is positioned, so offsetLeft returns the
+      // distance from the page edge. The left-hand card's figure was small
+      // enough to clamp to 0 and looked right; the right-hand card scrolled its
+      // own selection out of view, which is why only one of the two appeared to
+      // highlight. getBoundingClientRect does not care what the offset parent is.
+      var b = tabs[at];
+      var bb = b.getBoundingClientRect(), sb = strip.getBoundingClientRect();
+      var left = strip.scrollLeft + (bb.left - sb.left) - (sb.width - bb.width) / 2;
+      strip.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+    }
+
+    prev.addEventListener("click", function () { show(at - 1); });
+    next.addEventListener("click", function () { show(at + 1); });
+    // Swipe the main photo on touch.
+    var sx = null;
+    main.addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
+    main.addEventListener("touchend", function (e) {
+      if (sx === null) return;
+      var dx = e.changedTouches[0].clientX - sx; sx = null;
+      if (Math.abs(dx) > 45) show(at + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    count.textContent = "1 / " + shots.length;
+  });
+
+  // ---- Contact form ----
+  // Posts to the CRM, which records the consent checkbox against the lead as
+  // a dated audit entry. Kept deliberately plain: no library, no redirect, and
+  // the phone link beside it still works if any of this fails.
+  (function () {
+    var form = document.getElementById("leadForm");
+    if (!form) return;
+    var status = document.getElementById("leadStatus");
+    var send = document.getElementById("leadSend");
+    var ENDPOINT = "https://mav-crm-production.up.railway.app/api/chat/inquiry";
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(form);
+      var name = (d.get("name") || "").toString().trim();
+      var message = (d.get("message") || "").toString().trim();
+      var phone = (d.get("phone") || "").toString().trim();
+      var email = (d.get("email") || "").toString().trim();
+      if (!name || !message) {
+        status.textContent = "Please add your name and a line about the build.";
+        status.className = "lead-status is-bad"; return;
+      }
+      if (!phone && !email) {
+        status.textContent = "Leave a phone number or an email so we can reach you.";
+        status.className = "lead-status is-bad"; return;
+      }
+      send.disabled = true;
+      status.textContent = "Sending…";
+      status.className = "lead-status";
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name, phone: phone, email: email, message: message,
+          smsConsent: d.get("smsConsent") === "yes",
+          company: (d.get("company") || "").toString()
+        })
+      }).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        form.reset();
+        status.textContent = "Got it — we’ll call you shortly.";
+        status.className = "lead-status is-good";
+      }).catch(function () {
+        status.textContent = "That did not go through. Please call (760) 691-2588 and we will pick it up there.";
+        status.className = "lead-status is-bad";
+      }).then(function () { send.disabled = false; });
+    });
+  })();
+</script>
+</body>
+</html>

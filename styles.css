@@ -1,0 +1,865 @@
+/* MAV Conversions — v2.
+   Premium restraint: the truck is the loudest thing on the page. Type stays
+   quiet, space is generous, and orange appears rarely enough to still mean
+   something when it does. */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+:root {
+  --ink:      #0b0d10;   /* near-black, not pure: pure black flattens photography */
+  --ink-2:    #15181d;
+  --paper:    #ffffff;
+  --paper-2:  #f4f5f7;
+  --muted:    #6b7280;
+  --muted-d:  #9aa1ab;   /* muted, on dark */
+  --line:     #e3e6ea;
+  --line-d:   rgba(255,255,255,0.14);
+  --accent:   #ff6b35;
+
+  --radius: 8px;
+  /* Spacing scales with the viewport so it stays proportionate rather than
+     looking cramped on a large monitor and cavernous on a phone. Both are
+     calibrated to land on the values approved at 1440px -- 40px and 23px --
+     and both are bounded: below the floor the page starts to feel airless, and
+     above the ceiling the gaps grow faster than the content does.
+       --gap      vertical rhythm, and the row gap when boxes stack
+       --gap-col  between two boxes standing side by side, deliberately
+                  tighter so a pair reads as a pair */
+  --gap: clamp(20px, 2.78vw, 56px);
+  --gap-col: clamp(14px, 1.6vw, 32px);
+  /* Height of the fixed bar: 18px padding either side of a 62px badge. Pages
+     without a hero clear it by this plus a normal gap, so the first panel sits
+     the same distance below the bar as every panel does below the one above. */
+  --nav-h: 99px;
+
+  --shell: 1240px;
+  --gut: clamp(16px, 2.6vw, 40px);
+
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Anchor links stop this far down instead of at the very top, so a jump to
+     Lineup or Process leaves the top of that box just below the fixed bar
+     rather than tucked behind it. The half-gap is the band's own padding, which
+     is already above the panel. */
+  scroll-padding-top: calc(var(--nav-h) + var(--gap) / 2);
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+.shell { max-width: var(--shell); margin: 0 auto; padding-inline: var(--gut); }
+/* Content runs to the gutter rather than stopping at a fixed column, so a wide
+   monitor gains panel instead of empty page. The nav and footer follow the same
+   gutter, or the logo would sit visibly inboard of the panel edge below it. */
+.band .shell, .footer .shell { max-width: none; }
+
+/* ---------- Type ---------- */
+/* Display sizes are fluid so the hero never wraps awkwardly between a phone and
+   a wide desktop. Tight tracking at large sizes is most of what reads as
+   considered rather than shouty. */
+.display {
+  font-size: clamp(2.6rem, 7vw, 5.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+.eyebrow.on-dark { color: var(--muted-d); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border-radius: 6px;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+  border: 1px solid transparent; cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #e85a25; }
+.btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
+.btn-ghost:hover { background: #fff; color: var(--ink); border-color: #fff; }
+.btn-dark { background: var(--ink); color: #fff; }
+.btn-dark:hover { background: var(--ink-2); }
+.btn-outline { border-color: var(--ink); color: var(--ink); }
+.btn-outline:hover { background: var(--ink); color: #fff; }
+/* White on a gray panel, the way Tesla pairs a filled button with a plain one. */
+.btn-light { background: #fff; color: var(--ink); border-color: #fff; }
+.btn-light:hover { background: #eceef1; border-color: #eceef1; }
+
+/* Focus ring, designed rather than left to the browser. Chrome draws a hard
+   black-and-white rectangle around whatever was last clicked, which is what put
+   a box around the logo. Keeping a visible ring matters for anyone navigating by
+   keyboard, so this replaces it rather than removing it -- and it only shows for
+   keyboard focus, not after a mouse click. */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 100;
+  transition: background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav-inner {
+  max-width: none; margin: 0 auto; padding: 18px var(--gut);
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-badge { height: 62px; width: auto; transition: filter .3s ease; }
+.nav-wordmark { height: 26px; width: auto; transition: filter .3s ease; }
+/* The gap is small because each link now carries its own padding for the hover
+   pill; text-to-text still measures ~30px. The buttons keep the wider break. */
+.nav-links { display: flex; align-items: center; gap: 5px; }
+.nav-links .btn { margin-left: 16px; }
+.nav-links a {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff; opacity: .92; transition: opacity .2s ease, color .3s ease;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+/* Hover on the section links: a soft rounded block behind the word, the way
+   Tesla's bar behaves. It reads as a target you can hit rather than a color
+   change you have to notice. Buttons are excluded -- they already have hover
+   states of their own, and a pill behind a button would double up. */
+.nav-links a:not(.btn) {
+  padding: 9px 11px; border-radius: 6px;
+  transition: opacity .2s ease, color .3s ease, background-color .18s ease;
+}
+.nav-links a:not(.btn):hover { opacity: 1; background: rgba(255,255,255,.16); }
+.nav-links a:not(.btn):active { background: rgba(255,255,255,.26); }
+.nav .btn { padding: 11px 22px; font-size: 13px; }
+/* The number button is deliberately not orange: one orange call to action per
+   view, and Start a Build is it. Ghost styling reads as secondary and inverts
+   with the bar -- white over the photograph, dark once the bar goes solid. The
+   number alone carries the meaning, so there is no "Call" to widen it. */
+.nav-call { font-weight: 600; letter-spacing: .01em; }
+/* Over photography the bar should disappear; over content it has to be legible. */
+.nav.solid { background: rgba(255,255,255,0.94); backdrop-filter: blur(14px); border-bottom-color: var(--line); }
+.nav.solid .nav-links a { color: var(--ink); text-shadow: none; }
+/* Once the bar is white the pill has to darken instead of lighten. */
+.nav.solid .nav-links a:not(.btn):hover { background: rgba(11,13,16,.07); }
+.nav.solid .nav-links a:not(.btn):active { background: rgba(11,13,16,.12); }
+.nav.solid .nav-badge, .nav.solid .nav-wordmark { filter: invert(1); }
+.nav.solid .btn-ghost { border-color: var(--ink); color: var(--ink); }
+.nav.solid .btn-ghost:hover { background: var(--ink); color: #fff; }
+.nav-toggle { display: none; background: none; border: 0; color: #fff; padding: 6px; cursor: pointer; }
+.nav.solid .nav-toggle { color: var(--ink); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; min-height: 100svh; color: #fff; }
+.hero-media { position: absolute; inset: 0; z-index: -2; }
+.hero-media img { position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity 1.1s ease;
+  /* Horizontal framing is 50% on a wide screen; the phone animates it. The
+     vertical comes from each frame's own --py, set in the markup. */
+  object-position: 50% var(--py, 50%); }
+.hero-media img.is-on { opacity: 1; }
+/* On a portrait phone the window onto the photo is about a quarter of its
+   width, so a fixed crop shows roughly a third of the truck. Instead of
+   shrinking the picture into the frame, the frame travels across the picture:
+   full-bleed the whole time, and you end up having seen all of it. The script
+   advances to the next frame when a pass finishes. 92% rather than 100% at the
+   end, because the last stretch of these photos is empty backdrop. */
+@keyframes hero-pan {
+  from { object-position: 8% var(--py, 50%); }
+  to   { object-position: 92% var(--py, 50%); }
+}
+@media (max-width: 760px) and (orientation: portrait) {
+  .hero-media img.is-on { animation: hero-pan 12.5s linear both; }
+}
+/* Without JS the first frame still shows rather than a blank hero. */
+html:not(.js) .hero-media img:first-child { opacity: 1; }
+/* Manual hero controls. Same pill as the gallery lightbox so the two readings
+   of "step through photos" look like one control, and only shown once the
+   script has wired them up. */
+.hero-arrow, .hero-dots { display: none; }
+.hero.has-arrows .hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 52px; height: 52px; border: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.10); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease; backdrop-filter: blur(6px);
+}
+.hero.has-arrows .hero-arrow:hover { background: var(--accent); }
+.hero-prev { left: max(12px, 2vw); }
+.hero-next { right: max(12px, 2vw); }
+.hero.has-arrows .hero-dots {
+  position: absolute; z-index: 3; left: 50%; transform: translateX(-50%);
+  bottom: 64px; display: flex; gap: 8px;
+}
+.hero-dot {
+  width: 7px; height: 7px; border-radius: 999px;
+  background: rgba(255,255,255,0.34); transition: background .3s ease;
+}
+.hero-dot.is-on { background: #fff; }
+@media (max-width: 700px) {
+  .hero.has-arrows .hero-arrow { width: 42px; height: 42px; }
+  .hero.has-arrows .hero-dots { bottom: 56px; }
+}
+/* Two stacked gradients: the lower one anchors the headline, the upper one keeps
+   the nav readable over a bright sky. */
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(11,13,16,.46) 0%, rgba(11,13,16,.12) 18%, rgba(11,13,16,0) 34%),
+    linear-gradient(to top, rgba(11,13,16,.30) 0%, rgba(11,13,16,0) 16%);
+}
+.scroll-cue {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.6); display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-cue::after { content: ""; width: 1px; height: 40px; background: linear-gradient(rgba(255,255,255,.6), transparent); }
+
+/* ---------- Manifesto + stats ---------- */
+/* v1's section, rebuilt in v2's type. Same structure, same navy and orange --
+   Black rather than v1's #181d2b navy, so it matches the contact panel and the
+   footer and the page carries one dark instead of two. The condensed, skewed
+   display face is not carried over: the point of v2 is one typeface doing the
+   work, so this is Inter at weight 700. */
+.manifesto {
+  background: var(--ink); color: #fff; text-align: center;
+  /* The manifesto is not a .band, so it contributes no half-gap of its own.
+     Without this the space below it is half what it is between every other
+     pair of blocks. */
+  margin-bottom: calc(var(--gap) / 2);
+}
+.manifesto-inner { padding: clamp(34px, 3.8vw, 54px) var(--gut) clamp(20px, 2.2vw, 30px); }
+.manifesto-eyebrow {
+  color: var(--accent);
+  font-size: 12px; font-weight: 700; letter-spacing: .28em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.manifesto-text {
+  font-size: clamp(1.7rem, 4.4vw, 3.5rem);
+  font-weight: 700; line-height: 1.02;
+  text-transform: uppercase;
+  /* Uppercase needs the tracking opened back up; at -.03em the capitals close
+     together and the three words read as one. */
+  letter-spacing: -.005em;
+}
+.manifesto-sub {
+  margin-top: 16px;
+  color: rgba(255,255,255,.5);
+  font-size: 13px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
+}
+/* Three phrases now, not two, and .3em of tracking is most of the width. Each
+   phrase holds together so a wrap lands on a separator rather than mid-phrase,
+   and the tracking closes up on narrow screens so it is two tidy lines instead
+   of four ragged ones. */
+.manifesto-sub span { white-space: nowrap; }
+@media (max-width: 760px) {
+  .manifesto-sub { font-size: 12px; letter-spacing: .16em; }
+}
+@media (max-width: 400px) {
+  .manifesto-sub { letter-spacing: .1em; }
+}
+@media (max-width: 340px) {
+  /* Below this the longest phrase cannot hold a line on its own, so stop
+     forcing it and take a mid-phrase break over an overflow. */
+  .manifesto-sub span { white-space: normal; }
+}
+.manifesto-stats {
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: clamp(24px, 2.6vw, 34px) var(--gut) 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 3vw, 40px);
+}
+.stat-big {
+  font-size: clamp(1.75rem, 3.1vw, 2.6rem); font-weight: 700; line-height: 1;
+  color: var(--accent); letter-spacing: -.02em;
+}
+.stat-big sup { font-size: .45em; vertical-align: super; }
+.stat-big-label {
+  margin-top: 10px;
+  color: rgba(255,255,255,.7);
+  font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+}
+/* Wide enough to run to two lines rather than four. At 74ch it was stacking up
+   and the footnote was costing more height than the numbers above it. */
+.stats-note {
+  max-width: none; margin: clamp(20px, 2.2vw, 30px) auto 0;
+  padding: 0 var(--gut) clamp(28px, 3vw, 42px);
+  font-size: 13px; line-height: 1.65; color: rgba(255,255,255,.45);
+}
+@media (max-width: 760px) {
+  .manifesto-stats { grid-template-columns: repeat(2, 1fr); row-gap: 30px; }
+}
+
+/* ---------- Panels ---------- *//* ---------- Panels ---------- *//* ---------- Panels ---------- */
+/* The organizing idea, borrowed from Tesla: content sits inside a rounded
+   panel rather than floating on the page. It gives every block an edge, so
+   sections read as distinct objects instead of one long scroll of text, and it
+   means a photograph and a paragraph can share a container without either
+   looking stranded. */
+/* One gap everywhere. Half of this on each side of a band adds up to the same
+   figure the grid uses between two panels side by side, so the space below a
+   block matches the space beside it -- at double it, the vertical gaps read as
+   loose next to the tight gutter between the tier boxes. */
+.band { padding-block: calc(var(--gap) / 2); }
+
+.panel {
+  background: var(--paper-2);
+  border-radius: var(--radius);
+  padding: clamp(30px, 4vw, 64px);
+}
+.panel-dark { background: var(--ink); color: #fff; }
+.panel-center { text-align: center; }
+.panel-title {
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  line-height: 1.06; letter-spacing: -0.035em; font-weight: 600;
+  max-width: 22ch;
+}
+.panel-center .panel-title { margin-inline: auto; }
+.panel-title-sm { font-size: clamp(1.6rem, 2.9vw, 2.4rem); }
+.eyebrow + .panel-title { margin-top: 14px; }
+.panel-sub {
+  margin: 20px auto 0; max-width: 56ch;
+  font-size: clamp(1rem, 1.35vw, 1.12rem); color: var(--muted);
+}
+.panel-sub-left { margin-inline: 0; }
+.panel-dark .panel-sub { color: var(--muted-d); }
+.panel-h3 { margin-top: 12px; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; max-width: 34ch; }
+
+.actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.actions-center { justify-content: center; }
+
+/* Two panels or cards side by side, collapsing to one column when narrow. */
+/* Column gap stays at the tighter 23px: two build boxes read as a pair when
+   the space between them is narrower than the space above and below. Row gap
+   still follows --gap, for when they stack on a narrow screen. */
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); column-gap: var(--gap-col); row-gap: var(--gap); }
+
+/* Text one side, photograph the other. Same treatment as the tier boxes: the
+   panel keeps no padding of its own, so the picture reaches the top, bottom and
+   outer edge of the box and is clipped by its radius. The padding moves to the
+   text column, and the photo column stretches to whatever height the copy sets
+   rather than holding a fixed ratio. */
+.panel-split {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0; align-items: stretch;
+  padding: 0; overflow: hidden;
+}
+.panel-copy {
+  padding: clamp(30px, 4vw, 64px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.panel-media { min-height: 320px; }
+.panel-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Tier boxes ---------- */
+/* One container per series. The photograph sits inside the panel rather than
+   being a separate card above it, so a buyer reads the truck and its specs as
+   one object. */
+/* The panel supplies no padding of its own: the photograph runs the full width
+   of the box, corner to corner, and the padding moves to the body beneath it. */
+.tier { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.tier-photo { position: relative; aspect-ratio: 16 / 10; }
+.tier-body { padding: clamp(26px, 3vw, 44px); display: flex; flex-direction: column; flex: 1; }
+.tier-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.tier:hover .tier-photo img { transform: scale(1.03); }
+.tier-tag {
+  position: absolute; top: clamp(14px, 1.6vw, 20px); left: clamp(14px, 1.6vw, 20px);
+  background: rgba(11,13,16,.72); backdrop-filter: blur(6px); color: #fff;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+  padding: 7px 12px; border-radius: 4px;
+}
+/* ---------- Tier photo set ---------- */
+/* Each truck carries its own shots from the location shoot: the studio frame
+   stays first, a filmstrip underneath steps through the rest. The strip is a
+   plain horizontal scroller rather than a carousel -- on a phone a thumb drag
+   is the obvious gesture, and it degrades to nothing if the script is blocked. */
+.tier-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 38px; height: 38px; border: 0; border-radius: 999px; padding: 0;
+  background: rgba(11,13,16,.55); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .25s ease, background .2s ease;
+  backdrop-filter: blur(6px);
+}
+.tier-photo:hover .tier-arrow, .tier-arrow:focus-visible { opacity: 1; }
+.tier-arrow:hover { background: var(--accent); }
+.tier-prev { left: 12px; }
+.tier-next { right: 12px; }
+/* No hover on touch, so the arrows would never appear -- show them there. */
+@media (hover: none) {
+  .tier-arrow { opacity: 1; }
+}
+.tier-count {
+  position: absolute; z-index: 3; right: 12px; bottom: 12px;
+  background: rgba(11,13,16,.6); backdrop-filter: blur(6px); color: #fff;
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  padding: 5px 9px; border-radius: 999px;
+}
+.tier-strip {
+  display: flex; gap: 6px; padding: 6px; overflow-x: auto;
+  background: var(--ink);
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.tier-strip::-webkit-scrollbar { height: 6px; }
+.tier-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 999px; }
+.tier-strip button {
+  flex: 0 0 auto; width: 74px; height: 50px; padding: 0; border: 0; cursor: pointer;
+  border-radius: 3px; overflow: hidden; background: none; line-height: 0;
+  opacity: .5; outline: 2px solid transparent; outline-offset: -2px;
+  transition: opacity .2s ease, outline-color .2s ease;
+}
+.tier-strip button img { width: 100%; height: 100%; object-fit: cover; }
+.tier-strip button:hover { opacity: .85; }
+.tier-strip button[aria-selected="true"] { opacity: 1; outline-color: var(--accent); }
+/* The card's hover zoom is on .tier-photo img, which would catch the thumbs
+   too and make the strip twitch as the pointer crosses the card. */
+.tier-strip button img { transition: none; }
+.tier:hover .tier-strip button img { transform: none; }
+@media (max-width: 700px) {
+  .tier-strip button { width: 64px; height: 44px; }
+}
+/* Name and tire size share a baseline, so the number reads as part of the
+   headline rather than as the first line of the spec list. It wraps to its
+   own line on a narrow card instead of squeezing the name. */
+.tier-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+/* Tow, payload and GVWR, lifted off the show flyer. Three numbers in a row
+   under the sentence: the questions a buyer with a trailer asks before they
+   read a single line of the spec list. */
+.tier-figures {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin: 22px 0 4px; padding: 16px 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.tier-figures strong { display: block; font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; }
+.tier-figures span {
+  display: block; margin-top: 3px;
+  font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
+}
+/* Four across is too tight once the card narrows; two by two reads better
+   than four columns of wrapped labels. */
+@media (max-width: 1100px) {
+  .tier-figures { grid-template-columns: repeat(2, 1fr); gap: 16px 14px; }
+}
+/* Both trucks print the same 33,000, which is Ford's rating rather than a
+   weight calculation -- so say which it is. GCWR minus curb gives 33,370 and
+   33,330, but the towing guide is blunt that payload binds long before any of
+   those: a 33,000 lb trailer's pin puts the truck over GVWR empty. */
+.tier-figures-note {
+  margin: 10px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--muted);
+}
+.tier-name { font-size: clamp(1.7rem, 2.6vw, 2.3rem); letter-spacing: -.03em; font-weight: 600; line-height: 1.08; }
+/* Orange, like the spec bullets and the step numbers -- a mark, not a button.
+   Big enough to be the second thing read after the name. */
+.tier-size {
+  font-size: clamp(1rem, 1.15vw, 1.15rem); font-weight: 700;
+  color: var(--accent); letter-spacing: -.01em; white-space: nowrap;
+}
+.tier-line { margin-top: 10px; color: var(--muted); max-width: 46ch; }
+.tier-foot {
+  margin-top: auto; padding-top: clamp(24px, 2.6vw, 34px);
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
+  border-top: 1px solid var(--line);
+}
+.tier-price small { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.tier-price strong { font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; }
+/* What the number is, under the number. The pricing sheet quotes a total per
+   Ford trim and the lowest is the Lariat, so "starts at" has to say which
+   chassis it starts from -- and that the figure is before tax, license and
+   freight, which that sheet also calls out. */
+.tier-price em {
+  display: block; margin-top: 5px; font-style: normal;
+  font-size: 11.5px; line-height: 1.4; color: var(--muted);
+}
+
+/* ---------- Photo card (film band) ---------- */
+.photo-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius);
+  /* A 21:9 letterbox is 147px tall on a 375px phone -- a sliver with a
+     two-line headline sitting in it. Below the tablets it opens up to the
+     shape of the footage itself, which is also the only ratio that shows the
+     film uncropped. */
+  aspect-ratio: 21 / 9;
+  display: flex; align-items: flex-end;
+  color: #fff; isolation: isolate;
+}
+.photo-card img, .photo-card video {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+/* The dark wash at the foot of the card was there to carry a headline. With
+   no text over the footage it only dims the picture, so it goes -- the
+   controls sit top right and bring their own backing. */
+.photo-card:hover img { transform: scale(1.03); }
+/* Film controls: pause and sound, sitting opposite the tag. They read as
+   controls rather than decoration, and they hold 42px at every viewport -- a
+   button that grows with the page starts looking like a logo, and 42 is about
+   the smallest comfortable thumb target. */
+.film-controls {
+  position: absolute; z-index: 2;
+  top: clamp(18px, 2vw, 28px); right: clamp(20px, 2.4vw, 34px);
+  display: flex; gap: 10px;
+}
+.film-btn {
+  width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid rgba(255,255,255,.35);
+  background: rgba(11,13,16,.45); backdrop-filter: blur(6px);
+  color: #fff; cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.film-btn:hover { background: rgba(11,13,16,.72); border-color: rgba(255,255,255,.7); }
+/* These show what is happening now, not what pressing would do: bars while it
+   runs, a triangle while it is stopped. */
+.film-btn .i-pause { display: none; }
+.film-btn.is-playing .i-pause { display: block; }
+.film-btn.is-playing .i-play { display: none; }
+.film-btn .i-on { display: none; }
+.film-btn[aria-pressed="true"] .i-off { display: none; }
+.film-btn[aria-pressed="true"] .i-on { display: block; }
+/* The card is a click target too, so it should say so. */
+.photo-card:has(.film-controls) { cursor: pointer; }
+
+/* Full screen. The card is what goes full screen rather than the bare <video>,
+   so the controls travel with it -- otherwise the browser's own chrome takes
+   over and the pause and sound buttons disappear. The card is normally a 21:9
+   crop of the footage; full screen it has to drop that and letterbox instead,
+   because cropping a film to the shape of a monitor is how you lose the top of
+   the truck. iOS is the exception: Safari hands a <video> to its own player,
+   which is fine and is what people there expect. */
+.photo-card:fullscreen,
+.photo-card:-webkit-full-screen {
+  aspect-ratio: auto; width: 100vw; height: 100vh;
+  border-radius: 0; background: #000;
+}
+.photo-card:fullscreen video,
+.photo-card:-webkit-full-screen video { object-fit: contain; }
+.photo-card:fullscreen::backdrop { background: #000; }
+/* Nudged in from the corner: full screen often means a notch or a rounded
+   display corner sitting exactly where the buttons were. */
+.photo-card:fullscreen .film-controls { top: max(24px, 4vh); right: max(24px, 3vw); }
+
+@media (max-width: 700px) { .photo-card { aspect-ratio: 16 / 9; } }
+
+/* ---------- Specs ---------- */
+.specs { list-style: none; margin-top: 22px; display: grid; gap: 10px; }
+.specs li { display: flex; gap: 12px; font-size: 15px; color: #3d434c; }
+.specs li::before { content: ""; flex: none; width: 5px; height: 5px; margin-top: 10px; background: var(--accent); border-radius: 50%; }
+
+/* Grouped specs, on the build page. Twenty parts in one column is a list
+   nobody finishes; the same twenty under six headings is a truck you can
+   picture. The headings borrow the eyebrow's treatment at a smaller size. */
+.spec-set { margin-top: 22px; }
+.spec-head {
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 700; color: var(--muted);
+  margin-top: 26px;
+}
+.spec-set > .spec-head:first-child { margin-top: 0; }
+.spec-head + .specs { margin-top: 12px; }
+/* Options are not part of the price, so they do not get the orange dot that
+   means "this is on the truck" -- a hollow ring instead, and gray type. */
+.specs-option li { color: var(--muted); }
+.specs-option li::before { background: none; box-shadow: inset 0 0 0 1.5px var(--muted); }
+
+/* ---------- Process ---------- */
+/* Four steps, so the column count has to divide into four: auto-fit was
+   handing back three on any screen between roughly 830 and 1140 and leaving
+   Deliver stranded on a row of its own. Four, then two, then one. */
+.steps { margin-top: clamp(34px, 4vw, 56px); display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 44px); }
+@media (max-width: 1120px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .steps { grid-template-columns: 1fr; } }
+.step { padding-top: 24px; border-top: 1px solid var(--line); }
+/* Two classes, not one: .step-n sits on a <p>, so the .step p rule below it
+   was winning on specificity and the numbers were rendering as gray body text
+   instead of the orange they were written to be. */
+.step .step-n { font-size: 13px; letter-spacing: .15em; color: var(--accent); font-weight: 700; line-height: 1.3; }
+/* The four step names are the scannable part of this section, so they carry
+   real weight rather than sitting a notch above the body text. */
+.step h3 { margin-top: 14px; font-size: 1.32rem; font-weight: 700; letter-spacing: -.02em; }
+/* Body a size up and a weight up, and a darker gray to match: at 14.5px in the
+   lighter gray it read as a caption under the names rather than as the
+   explanation people actually need. */
+.step p { margin-top: 12px; font-size: 15.5px; line-height: 1.65; font-weight: 500; color: #565e6a; }
+
+/* ---------- Stats ---------- */
+.stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 3.4vw, 48px); margin-top: 34px; }
+.stat strong { display: block; font-size: 1.75rem; font-weight: 600; letter-spacing: -.025em; }
+.stat span { font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- Footer ---------- */
+/* Like the manifesto, the footer is not a .band, so it has to supply its own
+   half of the gap or it sits closer to the last panel than the panels sit to
+   each other. */
+.footer {
+  background: var(--ink); color: #fff;
+  margin-top: calc(var(--gap) / 2);
+  padding-block: clamp(56px, 7vw, 92px) 40px;
+}
+.footer-grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: clamp(28px, 4vw, 56px); }
+/* Same lock-up as the header: badge then wordmark, so the mark reads the same
+   at the top and bottom of the page. */
+.footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.footer-badge { height: 62px; width: auto; }
+.footer-wordmark { height: 26px; width: auto; }
+.footer p, .footer li, .footer a { font-size: 14px; color: var(--muted-d); }
+.footer h4 { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #fff; margin-bottom: 16px; font-weight: 600; }
+.footer ul { list-style: none; display: grid; gap: 10px; }
+.footer a:hover { color: #fff; }
+.footer-base {
+  margin-top: clamp(44px, 6vw, 72px); padding-top: 26px; border-top: 1px solid var(--line-d);
+  display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 13px; color: var(--muted-d);
+}
+
+/* ---------- Reveal on scroll ---------- */
+/* Opt-in through the js class so the page stays fully readable if scripting
+   fails or is blocked. */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-media img.is-on { animation: none; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .photo-card:hover img { transform: none; }
+}
+
+/* ---------- Mobile ---------- */
+/* The bar hands over to the drawer at 960, not 860. Seven items and two
+   buttons need about 905px of room; below that the desktop row kept its
+   layout and simply ran off the right-hand edge, so on anything between 860
+   and 905 -- a half-width laptop window, a tablet in landscape -- Start a
+   Build was cut in half by the edge of the screen. */
+@media (max-width: 960px) {
+  .nav-links {
+    position: fixed; inset: 0 0 auto 0; padding: 92px var(--gut) 34px;
+    background: rgba(11,13,16,.97); backdrop-filter: blur(16px);
+    flex-direction: column; align-items: flex-start; gap: 22px;
+    transform: translateY(-102%); transition: transform .34s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-links.open { transform: none; }
+  .nav-links a, .nav.solid .nav-links a { color: #fff; font-size: 17px; text-shadow: none; }
+  /* In the drawer the links are already a stacked list with its own rhythm, so
+     the pill padding would fight the 22px gap. Drop it and tint the text. */
+  .nav-links a:not(.btn) { padding: 0; border-radius: 0; }
+  .nav-links a:not(.btn):hover, .nav-links a:not(.btn):active,
+  .nav.solid .nav-links a:not(.btn):hover, .nav.solid .nav-links a:not(.btn):active {
+    background: none; color: var(--accent);
+  }
+  .nav-links .btn { margin-left: 0; }
+  .nav-badge { height: 46px; }
+  .nav-wordmark { height: 19px; }
+  :root { --nav-h: 83px; }   /* shorter badge, shorter bar */
+  .nav-toggle { display: block; }
+}
+
+/* The footer keeps its four columns down to the phone; it has nothing to do
+   with whether the bar has collapsed. */
+@media (max-width: 860px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  /* The lock-up is a fixed 294px wide -- 74px of badge, 10px of gap and 210px
+     of wordmark. Half a phone's width is about 160px, so in a two-column grid
+     it ran straight through the Lineup column and printed over it. It gets the
+     whole row instead; the three link columns still pair up underneath. */
+  .footer-grid > div:first-child { grid-column: 1 / -1; }
+}
+/* Narrow enough that even a full-width row cannot hold 294px of lock-up. */
+@media (max-width: 380px) {
+  .footer-badge { height: 48px; }
+  .footer-wordmark { height: 20px; }
+}
+
+/* ---------- Pages without a hero ---------- */
+/* The bar is fixed and always solid on these, so the first band has to clear it
+   -- by the bar's height plus one gap, rather than a guessed viewport height
+   that left 9px on a desktop and 21px on a phone. */
+.no-hero .band-first { padding-top: calc(var(--nav-h) + var(--gap)); }
+.no-hero .band-last { padding-bottom: clamp(56px, 7vw, 104px); }
+
+.btn-lg { padding: 18px 38px; font-size: 15.5px; }
+.panel-note { margin-top: 18px; font-size: 13.5px; color: var(--muted-d); }
+
+/* ---------- Contact form ---------- */
+/* Sits in a centered dark panel, but the fields themselves read left: a
+   centered label over a full-width input is hard to scan. */
+.lead-form { max-width: 620px; margin: 30px auto 0; text-align: left; }
+.lead-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.lead-form label {
+  display: block; margin-bottom: 14px;
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted-d); font-weight: 600;
+}
+.lead-form input[type="text"], .lead-form input[type="tel"],
+.lead-form input[type="email"], .lead-form textarea {
+  display: block; width: 100%; margin-top: 7px; padding: 12px 14px;
+  font: inherit; font-size: 15px; letter-spacing: normal; text-transform: none;
+  color: #fff; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+}
+.lead-form textarea { resize: vertical; min-height: 84px; }
+.lead-form input:focus, .lead-form textarea:focus {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+  background: rgba(255,255,255,.1); border-color: transparent;
+}
+/* The honeypot: off-screen rather than display:none, which some bots skip. */
+.lead-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* The consent line is the one piece of this form the carrier review reads, so
+   it stays full size and in sentence case rather than shrinking into the
+   small print it legally must not be. */
+.lead-consent {
+  display: flex; gap: 11px; align-items: flex-start;
+  margin: 4px 0 22px;
+  font-size: 13px; line-height: 1.55; letter-spacing: normal;
+  text-transform: none; font-weight: 400; color: var(--muted-d);
+}
+.lead-consent input { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); }
+.lead-consent a { color: #fff; text-decoration: underline; }
+.lead-status { margin-top: 16px; font-size: 14px; min-height: 1.2em; text-align: center; color: var(--muted-d); }
+.lead-status.is-good { color: #fff; }
+.lead-status.is-bad { color: var(--accent); }
+@media (max-width: 560px) {
+  .lead-row { grid-template-columns: 1fr; gap: 0; }
+}
+.panel:not(.panel-dark) .panel-note { color: var(--muted); }
+.panel-sub + .panel-sub { margin-top: 14px; }
+
+/* ---------- Gallery ---------- */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); column-gap: var(--gap-col); row-gap: var(--gap); }
+.gallery-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3; background: var(--paper-2); }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.gallery-item:hover img { transform: scale(1.03); }
+
+/* ---------- Gallery mosaic ---------- */
+/* Tiles span one or two columns and one or two rows; dense back-fills whatever
+   hole that leaves, so the wall interlocks like a puzzle instead of marching in
+   even rows. Nothing is placed by hand -- adding or removing a figure re-packs
+   the whole thing. Row height is fluid, so a tall tile on a phone is not the
+   same absolute height as on a monitor. */
+/* Row height is worked out from the column width rather than set to a size of
+   its own, so a single tile is the same shape on every screen. On a fixed row
+   height the columns keep growing while the rows stop at their ceiling, and
+   the tiles flatten out: 1.76:1 on a 1440 laptop, 2.07:1 on a 1920 monitor,
+   2.3:1 at 900. The figure below is the column width times 9/16, which is the
+   proportion the wall was approved at.
+     column = (page - both gutters - the gaps between columns) / columns
+   100vw counts the scrollbar, so rows land about two pixels tall of true
+   square -- far less than the drift it replaces. */
+.mosaic {
+  --m-gap: calc(var(--gap-col) / 2);   /* half the usual gutter: the mosaic is
+                                          one object, not a row of cards */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: calc((100vw - 2 * var(--gut) - 3 * var(--m-gap)) / 4 * 0.5625);
+  grid-auto-flow: dense;
+  gap: var(--m-gap);
+}
+.tile {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--paper-2);
+  margin: 0;
+}
+.tile img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.tile:hover img { transform: scale(1.04); }
+.m-wide { grid-column: span 2; }
+.m-tall { grid-row: span 2; }
+.m-big  { grid-column: span 2; grid-row: span 2; }
+
+@media (max-width: 1100px) {
+  .mosaic {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: calc((100vw - 2 * var(--gut) - 2 * var(--m-gap)) / 3 * 0.5625);
+  }
+}
+@media (max-width: 720px) {
+  /* Two columns. The 2x2 tile keeps both of its rows here now -- it used to
+     lose one because the old fixed row height made it 360px tall on a phone,
+     and rows that follow the column width are less than a third of that. */
+  .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: calc((100vw - 2 * var(--gut) - 1 * var(--m-gap)) / 2 * 0.5625);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile:hover img { transform: none; }
+}
+.tile { cursor: pointer; }
+.tile img { background: var(--paper-2); }
+/* ---------- Lightbox ---------- */
+/* Full-size viewer, opened from any mosaic tile. Loads the high-res webp on
+   demand and preloads the neighbours so arrowing through is instant. */
+.lb {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(8, 10, 12, 0.97);
+  opacity: 0; visibility: hidden; transition: opacity .28s ease, visibility .28s;
+}
+.lb.open { opacity: 1; visibility: visible; }
+.lb-stage { position: relative; width: 92vw; height: 86vh; display: flex; align-items: center; justify-content: center; }
+.lb-img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain; border-radius: var(--radius);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  opacity: 0; transition: opacity .25s ease;
+}
+.lb-img.ready { opacity: 1; }
+.lb-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px; border: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.08); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease, color .2s ease; backdrop-filter: blur(6px);
+}
+.lb-btn:hover { background: var(--accent); }
+.lb-prev { left: max(10px, 2vw); }
+.lb-next { right: max(10px, 2vw); }
+.lb-close {
+  position: absolute; top: max(14px, 2vh); right: max(14px, 2vw);
+  width: 46px; height: 46px; border: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.08); color: #fff; font-size: 22px; line-height: 1; cursor: pointer;
+  transition: background .2s ease; backdrop-filter: blur(6px);
+}
+.lb-close:hover { background: var(--accent); }
+.lb-count {
+  position: absolute; bottom: max(14px, 2.4vh); left: 50%; transform: translateX(-50%);
+  color: var(--muted-d); font-size: 13px; letter-spacing: .04em;
+  background: rgba(0,0,0,0.35); padding: 6px 14px; border-radius: 999px;
+}
+.lb-spinner {
+  position: absolute; width: 34px; height: 34px; border-radius: 999px;
+  border: 3px solid rgba(255,255,255,0.2); border-top-color: var(--accent);
+  animation: lb-spin .8s linear infinite;
+}
+@keyframes lb-spin { to { transform: rotate(360deg); } }
+body.lb-lock { overflow: hidden; }
+.gallery-count { margin-top: 6px; color: var(--muted-d); font-size: 13.5px; letter-spacing: .04em; }
+@media (max-width: 720px) {
+  .lb-btn { width: 44px; height: 44px; }
+  .lb-stage { width: 96vw; height: 82vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb, .lb-img { transition: none; }
+  .lb-spinner { animation: none; }
+}

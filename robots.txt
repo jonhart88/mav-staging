@@ -1,0 +1,4 @@
+# Staging. Nothing here should ever be indexed -- it is a copy of
+# mavconversions.com with work in progress on top of it.
+User-agent: *
+Disallow: /
