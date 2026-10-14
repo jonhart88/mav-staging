@@ -87,7 +87,7 @@
           <div class="step">
             <p class="step-n">02</p>
             <h3>You get it in writing</h3>
-            <p>A real quote, figured at your county&rsquo;s tax rate, with every line itemized. No deposit asked for to see it.</p>
+            <p>A real quote with every line itemized, and tax and license figured for your county. No deposit asked for to see it.</p>
           </div>
           <div class="step">
             <p class="step-n">03</p>
@@ -296,8 +296,9 @@
         html += row(esc(build.addOns[i].name), "+" + money(build.addOns[i].cents), "cfg-sub-row");
       }
       html += row("Delivery", esc(build.delivery));
-      html += '<div class="cfg-total"><span class="k">Estimated total</span><span class="v">' +
+      html += '<div class="cfg-total"><span class="k">Total</span><span class="v">' +
               money(build.total) + "</span></div>";
+      html += '<p class="cfg-fine">Plus sales tax, title and license.</p>';
       document.getElementById("cfSpec").innerHTML = html;
     }
 

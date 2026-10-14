@@ -170,7 +170,7 @@
             <li>MAV Badge and Appearance Package</li>
           </ul>
           <div class="tier-foot">
-            <p class="tier-price" data-tier-price="summit"><small>Starts at</small><strong>$199,054</strong><em>New 2027 Ford F-450 Lariat chassis, with California sales tax, license and fees included</em></p>
+            <p class="tier-price" data-tier-price="summit"><small>Starts at</small><strong>$183,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus sales tax, title &amp; license</em></p>
             <a href="build.html" class="btn btn-primary">Configure</a>
           </div>
           </div>
@@ -227,7 +227,7 @@
             <li>MAV Badge and Appearance Package</li>
           </ul>
           <div class="tier-foot">
-            <p class="tier-price" data-tier-price="apex"><small>Starts at</small><strong>$215,640</strong><em>New 2027 Ford F-450 Lariat chassis, with California sales tax, license and fees included</em></p>
+            <p class="tier-price" data-tier-price="apex"><small>Starts at</small><strong>$199,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus sales tax, title &amp; license</em></p>
             <a href="build.html" class="btn btn-primary">Configure</a>
           </div>
           </div>
@@ -892,16 +892,13 @@
   // THE LINEUP'S "STARTS AT" FIGURES
   //
   // Same catalog the configurator reads, so the two pages cannot quote
-  // different prices for the same truck. This page carried $183,300, which is
-  // the pricing sheet's PRE-TAX total -- correct as far as it went, and the
-  // wrong basis to advertise on since 1 October. The all-in figure is
-  // $199,054: the same truck, with the tax and fees inside it.
+  // different prices for the same truck.
   //
-  // "Starts at" means the cheapest honest configuration -- the lowest trim, a
-  // no-cost color, collected from us -- figured the same way the configurator
-  // figures it. The numbers in the HTML are the same ones as of the last
-  // edit, so a page that cannot reach the catalog still shows a price rather
-  // than a gap.
+  // "Starts at" means the cheapest honest configuration: the lowest trim, a
+  // no-cost color, before tax -- which is what the printed pricing sheet
+  // quotes and what the caption beneath says. The numbers in the HTML are the
+  // same ones as of the last edit, so a page that cannot reach the catalog
+  // still shows a price rather than a gap.
   // =========================================================================
   (function () {
     var slots = document.querySelectorAll("[data-tier-price]");
@@ -922,12 +919,7 @@
             upcharge = cat.colors[i].upchargeCents;
           }
         }
-        var sell = trim.msrpCents + (upcharge || 0) + cat.fees.sourcingFeeCents;
-        // Mirrors vehicleFees() in mav-crm/src/lib/configuratorCatalog.ts and
-        // the copy in build.html. Three places, one formula; if it moves,
-        // move all three.
-        var vehicle = sell + Math.round((sell * (cat.fees.shopRateBps + cat.fees.licenseBps)) / 10000)
-                    + cat.fees.docFeeCents;
+        var vehicle = trim.msrpCents + (upcharge || 0) + cat.fees.sourcingFeeCents;
 
         Array.prototype.forEach.call(slots, function (slot) {
           var want = slot.getAttribute("data-tier-price");
@@ -935,7 +927,7 @@
             var t = cat.tiers[j];
             if (t.tier.toLowerCase() !== want || t.platinum !== trim.platinum) continue;
             var el = slot.querySelector("strong");
-            if (el) el.textContent = "$" + Math.round((vehicle + t.allInCents) / 100).toLocaleString("en-US");
+            if (el) el.textContent = "$" + Math.round((vehicle + t.priceCents) / 100).toLocaleString("en-US");
             return;
           }
         });

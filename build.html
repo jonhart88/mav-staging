@@ -23,9 +23,10 @@
      still advertising Summit at $98,500 four months after the catalog said
      $99,495 -- so this one holds no figures of its own.
 
-     The two numbers it does compute, it computes from rates the catalog
-     hands it: tax, license and fees on the Ford. See vehicleFees() in the
-     engine at the bottom and in mav-crm/src/lib/configuratorCatalog.ts.
+     It computes nothing but addition. Prices here are before tax, title
+     and license, the same basis the printed pricing sheet quotes on and
+     the same disclaimer beneath every figure -- so there is no estimate
+     of anybody's county on this page to go stale or be wrong.
 
      If the catalog cannot be reached the configurator does not render at
      all and the page becomes the phone number, which is what it was
@@ -69,6 +70,7 @@
       <p class="panel-sub panel-sub-left">
         Pick the chassis, the trim and the package. Every price here is read live from the
         build catalog we quote from &mdash; so what this page says, your written quote says.
+        Prices are plus sales tax, title and license, the same as our printed sheet.
       </p>
 
       <!-- Nothing is drawn until the catalog arrives, and nothing is hardcoded
@@ -323,18 +325,6 @@
       return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // -----------------------------------------------------------------------
-    // Tax, license and fees on the Ford.
-    //
-    // Mirrors vehicleFees() in mav-crm/src/lib/configuratorCatalog.ts, and the
-    // rates come from the catalog rather than being repeated here so there is
-    // only one place to change them. If that function changes, change this.
-    // -----------------------------------------------------------------------
-    function vehicleFees(sellCents) {
-      var f = cat.fees;
-      return Math.round((sellCents * (f.shopRateBps + f.licenseBps)) / 10000) + f.docFeeCents;
-    }
-
     /** Which of the four packages this tier means for the chosen trim. */
     function pkg() {
       if (!pick.tier || !pick.trim) return null;
@@ -359,7 +349,6 @@
         (pick.trim ? pick.trim.msrpCents : 0) +
         (pick.color ? pick.color.upchargeCents : 0) +
         cat.fees.sourcingFeeCents;
-      var fees = vehicleFees(truckSell);
       var addOnCents = 0;
       var chosen = [];
       for (var i = 0; i < cat.addOns.length; i++) {
@@ -374,13 +363,12 @@
       var deliveryCents = pick.delivery && pick.delivery.cents ? pick.delivery.cents : 0;
       return {
         truckSell: truckSell,
-        fees: fees,
-        vehicleAllIn: truckSell + fees,
-        buildAllIn: p ? p.allInCents : 0,
+        vehicleAllIn: truckSell,
+        buildAllIn: p ? p.priceCents : 0,
         addOnCents: addOnCents,
         addOns: chosen,
         deliveryCents: deliveryCents,
-        total: truckSell + fees + (p ? p.allInCents : 0) + addOnCents + deliveryCents
+        total: truckSell + (p ? p.priceCents : 0) + addOnCents + deliveryCents
       };
     }
 
@@ -394,13 +382,10 @@
           '<span class="v">' + v + "</span></div>";
       }
       if (pick.trim) {
-        row(
-          esc("2027 F-450 " + pick.trim.name),
-          money(t.vehicleAllIn)
-        );
-        row(esc(pick.color ? pick.color.name : "") + " &middot; sourcing, tax, license &amp; fees", money(t.fees - 0), true);
+        row(esc("2027 F-450 " + pick.trim.name) + " &mdash; Ford MSRP", money(t.vehicleAllIn));
+        if (pick.color) row(esc(pick.color.name), pick.color.upchargeCents ? "included above" : "no cost", true);
       }
-      if (pick.tier) row(esc(pick.tier) + " package, incl. sales tax", money(t.buildAllIn));
+      if (pick.tier) row(esc(pick.tier) + " conversion", money(t.buildAllIn));
       for (var i = 0; i < t.addOns.length; i++) {
         row(esc(t.addOns[i].name), "+" + money(t.addOns[i].addOnPriceCents), true);
       }
@@ -413,8 +398,8 @@
       elRows.innerHTML = rows;
       elTotal.textContent = money(t.total);
       elFine.innerHTML =
-        "Includes California sales tax, license and registration, estimated at Escondido rates. " +
-        "Your written quote is figured at your own county&rsquo;s rate." +
+        "Plus sales tax, title and license. Ford MSRP is confirmed against the factory " +
+        "order when you place it; conversion pricing is ours and is held for your build." +
         (pick.delivery && pick.delivery.cents === null ? " Shipping is quoted to your ZIP." : "");
       elGo.disabled = !pkg();
     }
@@ -515,12 +500,12 @@
           card({
             k: "tier", v: ti.tier, name: ti.tier,
             sub: ti.tier === "Summit" ? "2&Prime; lift &middot; 41&Prime; tires" : "4&Prime; lift &middot; 44&Prime; tires &middot; hydraulic steering",
-            price: money(ti.allInCents),
+            price: money(ti.priceCents),
             on: pick.tier === ti.tier
           })
         );
       }
-      out += section("Build package", "Our price, with California sales tax on the build included.", cards, true);
+      out += section("Build package", "Our conversion price. Ford&rsquo;s chassis is the line above.", cards, true);
 
       // --- what is included ------------------------------------------------
       var p = pkg();
@@ -635,10 +620,10 @@
       }
       lines.push("Delivery: " + pick.delivery.name);
       lines.push("");
-      lines.push("Vehicle, with sourcing, tax, license and fees: " + money(t.vehicleAllIn));
-      lines.push("Build, including sales tax: " + money(t.buildAllIn));
+      lines.push("Ford MSRP: " + money(t.vehicleAllIn));
+      lines.push("Conversion: " + money(t.buildAllIn));
       if (t.addOnCents) lines.push("Options: " + money(t.addOnCents));
-      lines.push("Estimated total: " + money(t.total));
+      lines.push("Total: " + money(t.total) + " plus sales tax, title and license");
 
       try {
         sessionStorage.setItem(

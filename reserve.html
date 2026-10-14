@@ -64,7 +64,7 @@
         <h1 class="panel-title panel-title-sm" id="rvTitle">Let&rsquo;s get it quoted</h1>
         <p class="panel-sub" id="rvLede">
           Here is what you spec&rsquo;d. Leave us a way to reach you and we&rsquo;ll put it in writing
-          &mdash; a real quote, figured at your own county&rsquo;s tax rate, usually the same week.
+          &mdash; a real quote, with tax and license figured for your county, usually the same week.
         </p>
 
         <div class="cfg-bill" id="rvBill"></div>
@@ -343,21 +343,21 @@
     }
 
     var html = "<h3>The truck</h3>";
-    html += row("2027 Ford F-450 Crew Cab " + esc(build.trim), money(build.vehicleAllIn));
-    html += row(esc(build.color) + " &middot; sourcing, tax, license &amp; fees included", "", "cfg-sub-row");
+    html += row("2027 Ford F-450 Crew Cab " + esc(build.trim) + " &mdash; Ford MSRP", money(build.vehicleAllIn));
+    html += row(esc(build.color), "", "cfg-sub-row");
     html += "<h3>The build</h3>";
-    html += row(esc(build.tier) + " package, incl. California sales tax", money(build.buildAllIn));
+    html += row(esc(build.tier) + " conversion", money(build.buildAllIn));
     for (var i = 0; i < (build.addOns || []).length; i++) {
       html += row(esc(build.addOns[i].name), "+" + money(build.addOns[i].cents), "cfg-sub-row");
     }
     html += row("Delivery &mdash; " + esc(build.delivery), build.delivery.indexOf("Pick up") === 0 ? "Included" : "Quoted");
     html +=
-      '<div class="cfg-total"><span class="k">Estimated total</span>' +
+      '<div class="cfg-total"><span class="k">Total</span>' +
       '<span class="v">' + money(build.total) + "</span></div>";
     html +=
-      '<p class="cfg-fine">An estimate, not a quote. Sales tax and registration are figured here at ' +
-      "Escondido rates; your written quote uses your own county&rsquo;s. Shipping, if you want it, " +
-      "is quoted to your ZIP.</p>";
+      '<p class="cfg-fine"><strong>Plus sales tax, title and license.</strong> Ford MSRP is ' +
+      "confirmed against the factory order at the time you place it; conversion pricing is ours " +
+      "and is held for your build. Shipping, if you want it, is quoted to your ZIP.</p>";
     elBill.innerHTML = html;
 
     // -----------------------------------------------------------------------
