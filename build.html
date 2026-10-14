@@ -28,6 +28,13 @@
      the same disclaimer beneath every figure -- so there is no estimate
      of anybody's county on this page to go stale or be wrong.
 
+     The photographs are of a finished truck, one set per package, and
+     nothing but the package changes them: picking Star White does not
+     repaint the Summit in the picture. That is said on the page itself,
+     under the stage, rather than left for a customer to notice. When the
+     per-color and per-bumper shots exist, PHOTOS in the engine is where
+     they go.
+
      If the catalog cannot be reached the configurator does not render at
      all and the page becomes the phone number, which is what it was
      before this existed. A broken form is worse than a clear ask. -->
@@ -80,18 +87,41 @@
       <p class="panel-sub panel-sub-left" id="cfgLoading">Loading the build catalog&hellip;</p>
 
       <div class="cfg" id="cfg" hidden>
-        <div class="cfg-opts" id="cfgOpts"></div>
 
-        <aside class="cfg-sum" id="cfgSum">
-          <h2>Your build</h2>
-          <div id="cfgRows"></div>
-          <div class="cfg-total">
-            <span class="k">Total</span>
-            <span class="v" id="cfgTotal">&mdash;</span>
+        <!-- The truck. Three views, switched underneath, and the whole stage
+             stays put while the rail beside it scrolls. -->
+        <div class="cfg-stage">
+          <div class="cfg-frame" id="cfgFrame">
+            <img id="cfgImg" alt="" fetchpriority="high">
           </div>
-          <p class="cfg-fine" id="cfgFine"></p>
-          <button type="button" class="btn btn-primary" id="cfgGo">Continue</button>
-        </aside>
+          <div class="cfg-views" id="cfgViews"></div>
+          <p class="cfg-disclaimer">
+            <strong>The photographs are of a finished MAV, not of your configuration.</strong>
+            They change with the package, but not yet with your color, bumper or options
+            &mdash; we&rsquo;re shooting those now. Your written quote lists exactly what
+            you&rsquo;ve picked.
+          </p>
+        </div>
+
+        <!-- The questions, and the running total pinned to the foot of them. -->
+        <div class="cfg-rail">
+          <div id="cfgOpts"></div>
+
+          <div class="cfg-sum">
+            <h2>Your build</h2>
+            <div id="cfgRows"></div>
+            <p class="cfg-fine" id="cfgFine"></p>
+          </div>
+
+          <div class="cfg-bar">
+            <span class="cfg-bar-fig">
+              <span class="k">Total</span>
+              <span class="v" id="cfgTotal">&mdash;</span>
+              <span class="cfg-bar-note">Plus sales tax, title &amp; license</span>
+            </span>
+            <button type="button" class="btn btn-primary" id="cfgGo">Continue</button>
+          </div>
+        </div>
       </div>
 
       <!-- If the catalog cannot be reached there is no configurator, and a
@@ -315,8 +345,39 @@
     var elGo = document.getElementById("cfgGo");
     var ENDPOINT = "https://mav-crm-production.up.railway.app/api/configurator/catalog";
 
+    var elFrame = document.getElementById("cfgFrame");
+    var elImg = document.getElementById("cfgImg");
+    var elViews = document.getElementById("cfgViews");
+
+    // ----------------------------------------------------------------------
+    // THE PHOTOGRAPHS
+    //
+    // Three views of a finished truck, one set per package -- a black Summit
+    // and a white Apex, both shot on the studio sweep. They live here and not
+    // in the catalog because they are website assets: the CRM knows what a
+    // package costs and what is in it, not what it was photographed against.
+    //
+    // Order is Jon's: front three-quarter, side, rear three-quarter.
+    // ----------------------------------------------------------------------
+    var PHOTOS = {
+      Summit: [
+        { view: "Front", src: "media/configurator/summit-front.jpg" },
+        { view: "Side", src: "media/configurator/summit-side.jpg" },
+        { view: "Rear", src: "media/configurator/summit-rear.jpg" }
+      ],
+      Apex: [
+        { view: "Front", src: "media/configurator/apex-front.jpg" },
+        { view: "Side", src: "media/configurator/apex-side.jpg" },
+        { view: "Rear", src: "media/configurator/apex-rear.jpg" }
+      ]
+    };
+
     var cat = null;
     var pick = { platform: null, trim: null, color: null, tier: null, delivery: null, addOns: {} };
+    // Which of the three the stage is showing. Kept across a package change:
+    // someone looking at the back of a Summit wants the back of the Apex.
+    var view = 0;
+    var shown = "";
 
     function money(cents) {
       return "$" + Math.round(cents / 100).toLocaleString("en-US");
@@ -444,7 +505,45 @@
       );
     }
 
+    /** The stage: the chosen package's photographs, and the switcher. */
+    function renderStage() {
+      var set = PHOTOS[pick.tier] || PHOTOS.Summit;
+      if (view >= set.length) view = 0;
+
+      var want = set[view].src;
+      if (want !== shown) {
+        // Fade through rather than blinking: the two photographs are the same
+        // truck from the same angle, and a hard cut reads as a glitch.
+        elFrame.classList.add("is-swapping");
+        var next = new Image();
+        next.onload = next.onerror = function () {
+          elImg.src = want;
+          elImg.alt = "MAV " + pick.tier + ", " + set[view].view.toLowerCase() + " view";
+          elFrame.classList.remove("is-swapping");
+        };
+        next.src = want;
+        shown = want;
+      }
+
+      var thumbs = "";
+      for (var k = 0; k < set.length; k++) {
+        thumbs +=
+          '<button type="button" class="cfg-view' + (k === view ? " is-on" : "") + '"' +
+          ' data-view="' + k + '" aria-pressed="' + (k === view ? "true" : "false") + '">' +
+          '<img src="' + set[k].src.replace(/\.jpg$/, "-t.jpg") + '" alt="" loading="lazy">' +
+          "<span>" + esc(set[k].view) + "</span></button>";
+      }
+      elViews.innerHTML = thumbs;
+    }
+
+    /** The other two views, fetched before they are asked for. */
+    function preload() {
+      var set = PHOTOS[pick.tier] || [];
+      for (var k = 0; k < set.length; k++) new Image().src = set[k].src;
+    }
+
     function render() {
+      renderStage();
       var out = "";
       var i;
 
@@ -579,7 +678,10 @@
         for (i = 0; i < cat.delivery.length; i++) if (cat.delivery[i].id === v) pick.delivery = cat.delivery[i];
       }
       if (k === "addon") pick.addOns[v] = !pick.addOns[v];
-      if (k === "tier") pick.tier = v;
+      if (k === "tier") {
+        pick.tier = v;
+        preload();
+      }
       if (k === "color") {
         for (i = 0; i < cat.colors.length; i++) if (cat.colors[i].id === v) pick.color = cat.colors[i];
       }
@@ -597,6 +699,13 @@
       }
       render();
     }
+
+    elViews.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest(".cfg-view") : null;
+      if (!btn) return;
+      view = parseInt(btn.dataset.view, 10) || 0;
+      renderStage();
+    });
 
     elOpts.addEventListener("click", function (e) {
       var btn = e.target.closest ? e.target.closest(".cfg-card") : null;
@@ -675,6 +784,7 @@
         elLoading.hidden = true;
         elCfg.hidden = false;
         render();
+        preload();
       })
       .catch(function () {
         elLoading.hidden = true;

@@ -870,13 +870,72 @@ body.lb-lock { overflow: hidden; }
    phone there is one column and the summary becomes a bar across the bottom,
    because the price is the thing you want in view while you are choosing.
    =========================================================================== */
-.cfg { display: grid; grid-template-columns: 1fr 360px; gap: var(--gap-col); align-items: start; }
-.cfg-opts { min-width: 0; }
-.cfg-sum {
-  position: sticky; top: calc(var(--nav-h) + 16px);
-  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 22px 22px 18px;
+.cfg {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: var(--gap-col);
+  align-items: start;
 }
+
+/* --- the truck ----------------------------------------------------------
+   Sticky, because the point of a configurator is watching the thing you are
+   buying while you change it. It sits below the fixed nav and is capped to
+   the viewport so the thumbnails underneath never fall off the bottom. */
+.cfg-stage {
+  position: sticky;
+  top: calc(var(--nav-h) + 12px);
+  min-width: 0;
+  /* Pinned, so it has to fit the window: the picture gives up height to keep
+     the switcher and the disclaimer under it on screen. */
+  max-height: calc(100vh - var(--nav-h) - 24px);
+  display: flex;
+  flex-direction: column;
+}
+.cfg-frame {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  aspect-ratio: 3 / 2;
+  /* Not pure white: the Apex is a white truck on a white sweep, and against
+     a white page its roofline disappears. */
+  background: var(--paper-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.cfg-frame img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity .18s ease;
+}
+.cfg-frame.is-swapping img { opacity: 0; }
+
+.cfg-views { display: flex; gap: 8px; margin-top: 10px; flex: none; }
+.cfg-view {
+  flex: 0 0 104px; padding: 0; cursor: pointer;
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: 6px; overflow: hidden; line-height: 0;
+}
+.cfg-view img { width: 100%; height: auto; display: block; }
+.cfg-view:hover { border-color: var(--muted-d); }
+.cfg-view.is-on { border-color: var(--ink); }
+.cfg-view span {
+  display: block; padding: 5px 8px 6px; line-height: 1.2;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); text-align: left;
+}
+.cfg-view.is-on span { color: var(--ink); }
+
+/* Said plainly and up front, because the photographs are of a finished truck
+   and not of the configuration on screen. */
+.cfg-disclaimer {
+  flex: none;
+  margin: 12px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted);
+}
+
+/* --- the questions ------------------------------------------------------ */
+.cfg-rail { min-width: 0; }
 
 /* --- a question and its answers ----------------------------------------- */
 .cfg-sec { border-top: 1px solid var(--line); padding: 26px 0 4px; }
@@ -888,7 +947,11 @@ body.lb-lock { overflow: hidden; }
 }
 .cfg-sec .cfg-note { margin: 0 0 15px; font-size: 14px; color: var(--muted); }
 .cfg-list { display: grid; gap: 9px; }
-.cfg-list.cfg-two { grid-template-columns: 1fr 1fr; }
+/* One column, always. The rail is 400px and a pair of cards will not sit in
+   it -- they used to, when the options had the whole page. The class is still
+   passed by the engine for lists that read as pairs; it just no longer splits
+   them. */
+.cfg-list.cfg-two { grid-template-columns: 1fr; }
 
 .cfg-card {
   display: flex; align-items: center; gap: 13px;
@@ -937,6 +1000,9 @@ body.lb-lock { overflow: hidden; }
 .cfg-incl li { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
 
 /* --- the summary -------------------------------------------------------- */
+.cfg-sum {
+  margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line);
+}
 .cfg-sum h2 {
   margin: 0 0 14px; font-size: 12px; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
@@ -952,7 +1018,26 @@ body.lb-lock { overflow: hidden; }
 .cfg-total .k { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .cfg-total .v { font-size: 27px; font-weight: 700; letter-spacing: -.01em; }
 .cfg-fine { margin: 10px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
-.cfg-sum .btn { width: 100%; margin-top: 16px; }
+/* The running total, pinned to the bottom of the rail: on a page this long
+   the price must not be something you scroll back up to find. */
+.cfg-bar {
+  position: sticky; bottom: 0; z-index: 30;
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 18px; padding: 14px 0;
+  background: var(--paper);
+  border-top: 1.5px solid var(--ink);
+}
+.cfg-bar .cfg-bar-fig { flex: 1; min-width: 0; }
+.cfg-bar .k {
+  display: block; font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.cfg-bar .v {
+  display: block; font-size: 25px; font-weight: 700; letter-spacing: -.01em;
+  line-height: 1.15;
+}
+.cfg-bar .cfg-bar-note { display: block; font-size: 11px; color: var(--muted); }
+.cfg-bar .btn { flex: none; }
 
 /* --- the breakdown on the reserve page ---------------------------------- */
 .cfg-bill { max-width: 620px; margin: 26px auto 0; text-align: left; }
@@ -967,25 +1052,24 @@ body.lb-lock { overflow: hidden; }
 .cfg-bill .cfg-total .k, .cfg-bill .cfg-total .v { color: #fff; }
 .cfg-bill .cfg-fine { color: var(--muted-d); }
 
-@media (max-width: 1000px) {
+@media (max-width: 1040px) {
+  /* One column: the truck on top, the questions under it. The stage stops
+     being sticky -- a picture pinned to the top of a phone screen leaves a
+     letterbox to answer questions through. */
   .cfg { grid-template-columns: 1fr; }
-  /* The price belongs in view while you choose, so on a narrow screen the
-     summary leaves the column and becomes a bar at the bottom of the window.
-     Only the total and the button come along -- the itemised rows are on the
-     next page, and a tall bar would eat the options it is meant to serve. */
-  .cfg-sum {
-    position: fixed; inset: auto 0 0 0; top: auto; z-index: 40;
-    border: none; border-top: 1px solid var(--line);
-    border-radius: 0; padding: 12px var(--gut);
-    display: flex; align-items: center; gap: 14px;
-    box-shadow: 0 -6px 24px rgba(0,0,0,.1);
+  .cfg-stage { position: static; max-height: none; display: block; }
+  .cfg-frame { aspect-ratio: 3 / 2; }
+  .cfg-rail { margin-top: 6px; }
+  /* The bar leaves the rail and spans the window, so the total is in view
+     on a phone the same way it is on a desktop. */
+  .cfg-bar {
+    position: fixed; inset: auto 0 0 0; margin: 0;
+    padding: 11px var(--gut); border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, .1);
   }
-  .cfg-sum h2, .cfg-sum .cfg-row, .cfg-sum .cfg-fine { display: none; }
-  .cfg-sum .cfg-total { flex: 1; margin: 0; padding: 0; border-top: none; }
-  .cfg-sum .cfg-total .v { font-size: 21px; }
-  .cfg-sum .btn { width: auto; margin: 0; flex: none; }
+  .cfg-bar .v { font-size: 21px; }
   /* Clear the bar, so the last option is reachable. */
-  .cfg-opts { padding-bottom: 86px; }
+  .cfg-sum { padding-bottom: 78px; }
 }
 @media (max-width: 620px) {
   .cfg-list.cfg-two { grid-template-columns: 1fr; }
