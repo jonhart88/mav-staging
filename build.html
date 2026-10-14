@@ -49,7 +49,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body class="no-hero">
 
@@ -582,7 +582,9 @@
       // name, set the way the name is set everywhere else. alt keeps the
       // heading reading "MAV Summit" to a screen reader.
       elTitle.innerHTML =
-        '<img class="cfg-mark" src="media/badge-white.png" alt="MAV"> ' +
+        // width/height so a browser with no stylesheet draws it small
+      // rather than stretching 6,041px of badge across the rail.
+      '<img class="cfg-mark" src="media/badge-white.png" alt="MAV"' + ' width="56" height="47"> ' +
         esc(pick.tier || "");
       elSubtitle.textContent =
         "2027 Ford F-450 Crew Cab" + (pick.trim ? " " + pick.trim.name : "");

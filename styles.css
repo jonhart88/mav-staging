@@ -982,7 +982,11 @@ body.lb-lock { overflow: hidden; }
 .cfg-card[data-k="tier"] .cfg-name {
   text-transform: uppercase; letter-spacing: .045em;
 }
-/* The badge standing in for the word MAV. Only a white version exists, and
+/* NOTE: every page links this as styles.css?v=N. Change this file and
+   bump that number, or browsers keep the old one -- which is how a badge
+   with no rule to size it became 368px of invisible white space.
+
+   The badge standing in for the word MAV. Only a white version exists, and
    the nav already solves that the same way -- invert it. Sized against the
    heading rather than fixed, so the two move together, and nudged down a
    hair because the mark's optical centre sits above its box's. */
