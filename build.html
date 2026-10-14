@@ -378,7 +378,7 @@
     // a refresh re-fetches the page but not necessarily its images, so one
     // package came back correct and the other did not, which looks like a
     // bug in the page rather than a stale file. A new URL cannot be stale.
-    var PHOTO_V = "?v=2";
+    var PHOTO_V = "?v=3";
 
     var PHOTOS = {
       Summit: [
@@ -828,6 +828,12 @@
         pick.delivery = cat.delivery[0];
         elLoading.hidden = true;
         elCfg.hidden = false;
+        // The page stops scrolling now: the configurator is exactly one
+        // window tall, the rail does its own scrolling, and there is nothing
+        // under the truck to reach. Set from here rather than in the markup
+        // on purpose -- if the catalog never arrives the page is a phone
+        // number and a footer, and that still has to scroll.
+        document.body.classList.add("cfg-locked");
         render();
         preload();
       })

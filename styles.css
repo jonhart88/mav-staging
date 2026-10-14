@@ -1066,6 +1066,24 @@ body.lb-lock { overflow: hidden; }
 
 .cfg-loading { padding: 80px var(--gut); color: var(--muted); }
 
+/* Locked, the way a car configurator is: the window holds the truck and the
+   rail, the rail scrolls inside itself, and the page behind them does not
+   move. Scrolling over the photograph does nothing, because there is nothing
+   under it to go to.
+
+   Only above the breakpoint. Stacked on a phone the page IS the scroll, and
+   locking it would strand everything below the picture.
+
+   The class is added by the engine once the catalog renders, so a page that
+   could not reach the catalog -- which falls back to a phone number and a
+   footer -- is still free to scroll. */
+@media (min-width: 1041px) {
+  body.cfg-locked { height: 100vh; overflow: hidden; }
+  /* Nothing below the fold to reach, so nothing below the fold. */
+  body.cfg-locked .band-last,
+  body.cfg-locked .footer { display: none; }
+}
+
 @media (max-width: 1040px) {
   /* One column: the truck on top, the questions under it, and the page
      itself does the scrolling. Nothing is a fixed height any more -- a
