@@ -170,7 +170,7 @@
             <li>MAV Badge and Appearance Package</li>
           </ul>
           <div class="tier-foot">
-            <p class="tier-price"><small>Starts at</small><strong>$183,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+            <p class="tier-price" data-tier-price="summit"><small>Starts at</small><strong>$207,017</strong><em>New 2027 Ford F-450 Lariat chassis, with California sales tax, license and fees included</em></p>
             <a href="build.html" class="btn btn-primary">Configure</a>
           </div>
           </div>
@@ -227,7 +227,7 @@
             <li>MAV Badge and Appearance Package</li>
           </ul>
           <div class="tier-foot">
-            <p class="tier-price"><small>Starts at</small><strong>$199,300</strong><em>New 2027 Ford F-450 Lariat chassis, plus tax, license &amp; freight</em></p>
+            <p class="tier-price" data-tier-price="apex"><small>Starts at</small><strong>$223,603</strong><em>New 2027 Ford F-450 Lariat chassis, with California sales tax, license and fees included</em></p>
             <a href="build.html" class="btn btn-primary">Configure</a>
           </div>
           </div>
@@ -886,6 +886,59 @@
         status.className = "lead-status is-bad";
       }).then(function () { send.disabled = false; });
     });
+  })();
+
+  // =========================================================================
+  // THE LINEUP'S "STARTS AT" FIGURES
+  //
+  // Same catalog the configurator reads, so the two pages cannot quote
+  // different prices for the same truck. They did: this page said Summit from
+  // $183,300 while the configurator made the cheapest one $207,017.
+  //
+  // "Starts at" means the cheapest honest configuration -- the lowest trim, a
+  // no-cost color, collected from us -- figured the same way the configurator
+  // figures it. The numbers in the HTML are the same ones as of the last
+  // edit, so a page that cannot reach the catalog still shows a price rather
+  // than a gap.
+  // =========================================================================
+  (function () {
+    var slots = document.querySelectorAll("[data-tier-price]");
+    if (!slots.length) return;
+
+    fetch("https://mav-crm-production.up.railway.app/api/configurator/catalog")
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (cat) {
+        // Cheapest trim, cheapest color: what "starts at" has to mean.
+        var trim = null, i;
+        for (i = 0; i < cat.trims.length; i++) {
+          if (!trim || cat.trims[i].msrpCents < trim.msrpCents) trim = cat.trims[i];
+        }
+        var upcharge = null;
+        for (i = 0; i < cat.colors.length; i++) {
+          if (cat.colors[i].trims.indexOf(trim.id) === -1) continue;
+          if (upcharge === null || cat.colors[i].upchargeCents < upcharge) {
+            upcharge = cat.colors[i].upchargeCents;
+          }
+        }
+        var sell = trim.msrpCents + (upcharge || 0) + cat.fees.sourcingFeeCents;
+        // Mirrors vehicleFees() in mav-crm/src/lib/configuratorCatalog.ts and
+        // the copy in build.html. Three places, one formula; if it moves,
+        // move all three.
+        var vehicle = sell + Math.round((sell * (cat.fees.shopRateBps + cat.fees.licenseBps)) / 10000)
+                    + cat.fees.docFeeCents;
+
+        Array.prototype.forEach.call(slots, function (slot) {
+          var want = slot.getAttribute("data-tier-price");
+          for (var j = 0; j < cat.tiers.length; j++) {
+            var t = cat.tiers[j];
+            if (t.tier.toLowerCase() !== want || t.platinum !== trim.platinum) continue;
+            var el = slot.querySelector("strong");
+            if (el) el.textContent = "$" + Math.round((vehicle + t.allInCents) / 100).toLocaleString("en-US");
+            return;
+          }
+        });
+      })
+      .catch(function () { /* the typed figures stand */ });
   })();
 </script>
 </body>

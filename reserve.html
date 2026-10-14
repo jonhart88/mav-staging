@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Tab icon: orange mark on a black tile. It reads at 16px where a hairline
+     mark on clear ground does not, and it looks the same whatever colour the
+     tab strip is. PNGs are the fallback for browsers without SVG favicons. -->
+<link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48.png">
+<title>Your Build — MAV Conversions</title>
+<meta name="description" content="Review what your MAV build costs and request a written quote.">
+
+<!-- STEP 2 OF THE CONFIGURATOR.
+     Shows the build spec'd on build.html and turns it into a CRM lead.
+
+     The numbers here are carried from the configurator rather than figured
+     again: that page read them from the catalog, and a second calculation
+     on a second page is a second thing to go wrong. The spec TEXT is
+     carried for the same reason -- it is what the customer was shown, and
+     it goes to the rep verbatim.
+
+     Landing here with an empty sessionStorage is normal (a bookmark, a
+     refresh after the tab was restored), so it is handled as a door back
+     to the configurator rather than an error. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="no-hero">
+
+<nav class="nav solid" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="MAV Conversions home">
+      <img class="nav-badge" src="media/badge-white.png" alt="">
+      <img class="nav-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#lineup">The Lineup</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="tel:+17606912588" class="btn btn-primary">(760) 691-2588</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <section class="band band-first">
+    <div class="shell">
+      <div class="panel panel-dark">
+        <p class="eyebrow on-dark">Your build</p>
+        <h1 class="panel-title panel-title-sm" id="rvTitle">Let&rsquo;s get it quoted</h1>
+        <p class="panel-sub" id="rvLede">
+          Here is what you spec&rsquo;d. Leave us a way to reach you and we&rsquo;ll put it in writing
+          &mdash; a real quote, figured at your own county&rsquo;s tax rate, usually the same week.
+        </p>
+
+        <div class="cfg-bill" id="rvBill"></div>
+
+        <!-- Same form as the contact panel on the home page, and the same
+             consent line: unticked by default, and the form submits either
+             way. Consent is a choice, not the price of asking for a quote. -->
+        <form class="lead-form" id="rvForm" novalidate>
+          <div class="lead-row">
+            <label>Name
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label>Phone
+              <input type="tel" name="phone" autocomplete="tel" inputmode="tel">
+            </label>
+          </div>
+          <div class="lead-row">
+            <label>Email
+              <input type="email" name="email" autocomplete="email">
+            </label>
+            <label>ZIP
+              <input type="text" name="zip" autocomplete="postal-code" inputmode="numeric" maxlength="10">
+            </label>
+          </div>
+          <label>When are you looking to order?
+            <select name="timeline">
+              <option value="">No particular hurry</option>
+              <option>As soon as possible</option>
+              <option>Within 3 months</option>
+              <option>Within 6 months</option>
+              <option>Just researching</option>
+            </select>
+          </label>
+          <label>Anything we should know? <span class="cfg-opt-label">Optional</span>
+            <textarea name="notes" rows="3" placeholder="What you tow, where you take it, anything you want on the truck that wasn&rsquo;t on the list."></textarea>
+          </label>
+          <div class="lead-trap" aria-hidden="true">
+            <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <label class="lead-consent">
+            <input type="checkbox" name="smsConsent" value="yes">
+            <span>I agree to receive text messages from MAV Conversions about my build.
+              Consent is not a condition of any purchase or service &mdash; if you prefer not to
+              receive texts, leave this unchecked and we will contact you another way. Message
+              frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for
+              help. <a href="privacy-policy.html">Privacy Policy</a> &middot;
+              <a href="sms-terms.html">SMS Terms</a>.</span>
+          </label>
+          <div class="actions actions-center">
+            <button type="submit" class="btn btn-primary btn-lg" id="rvSend">Send me the quote</button>
+            <a href="build.html" class="btn btn-ghost">Change the build</a>
+          </div>
+          <p class="lead-status" id="rvStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arriving here with nothing spec'd is a dead end, so it becomes a door
+       back to the configurator rather than an empty page. -->
+  <section class="band band-last" id="rvEmpty" hidden>
+    <div class="shell">
+      <div class="panel panel-center">
+        <h2 class="panel-title panel-title-sm">Nothing spec&rsquo;d yet</h2>
+        <p class="panel-sub">Build one first and the numbers will be waiting here.</p>
+        <div class="actions actions-center">
+          <a href="build.html" class="btn btn-primary btn-lg">Start a build</a>
+          <a href="tel:+17606912588" class="btn btn-outline">(760) 691-2588</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img class="footer-badge" src="media/badge-white.png" alt="">
+          <img class="footer-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+        </div>
+        <p>Custom lifted Ford F-450 luxury truck conversions, built in San Diego County.</p>
+        <p style="margin-top:14px">855 N Broadway<br>Escondido, CA 92025</p>
+        <p style="margin-top:14px"><a href="tel:+17606912588">(760) 691-2588</a></p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a href="index.html#lineup">Summit</a></li>
+          <li><a href="index.html#lineup">Apex</a></li>
+          <li><a href="build.html">Start a build</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#process">Process</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy-policy.html">Privacy policy</a></li>
+          <li><a href="sms-terms.html">SMS terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>&copy; 2026 MAV Conversions. Built in San Diego County.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add("js");
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  toggle.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { links.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
+  });
+
+  // A nav link pointing at the page you are already on is a reload, and
+  // browsers restore your scroll position across a reload -- so clicking
+  // START A BUILD dropped you back where you were (often the footer) instead of at
+  // the top. Scroll instead. Matching on the raw href attribute rather than
+  // the resolved URL, because how the host maps these paths is its business.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('a[href="build.html"]'), function (a) {
+      a.addEventListener("click", function (e) {
+        // Leave modified clicks alone so "open in a new tab" still works.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        // Drop any #section left in the URL, or a later refresh jumps back down.
+        if (location.hash) {
+          history.replaceState(null, "", location.pathname + location.search);
+        }
+        var jump = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: jump ? "auto" : "smooth" });
+      });
+    });
+
+  // Scroll position: a fresh click lands at the top, Back and Forward put you
+  // back where you were. The browser's own restoration cannot do the second
+  // part, because the gallery builds its tiles from JSON after load -- by the
+  // time that wall exists the browser has already restored into a page that
+  // was still empty, and the position is lost. So restoration is turned off
+  // and the position is kept by hand, per page, for this tab only. The same
+  // block is on every page so the whole site behaves one way.
+  var SCROLL_KEY = "mav:scroll:" + location.pathname + location.search;
+  // Was this a link click or a Back? performance.navigation claims to answer
+  // that, but inside the host's iframe it is not dependable -- a plain click on
+  // Start a Build could come back as a history move and restore the old
+  // position. So the answer is written down at the moment of the click instead,
+  // and the reading below only falls back to performance when there is no note.
+  var forward = false;
+  try {
+    forward = sessionStorage.getItem("mav:forward") === "1";
+    if (forward) sessionStorage.removeItem("mav:forward");
+  } catch (err) {}
+  var isBack = !forward && (function () {
+    var nav = window.performance && performance.getEntriesByType
+      && performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type) return nav.type === "back_forward";
+    var old = window.performance && performance.navigation;
+    return !!old && old.type === 2;
+  })();
+  // Bubble phase on purpose, so this runs AFTER the handlers on the links
+  // themselves and can see whether one of them cancelled the click. The
+  // same-page links (the logo here, GALLERY on the gallery) scroll instead of
+  // navigating; recording those as a move would leave a flag behind that makes
+  // the next Back land at the top instead of where you were.
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented) return;
+    var a = e.target && e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    // A bare #section or a tel:/mailto:/external link is not a move of ours.
+    if (!href || href.charAt(0) === "#" || /^[a-z]+:/i.test(href)) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    try { sessionStorage.setItem("mav:forward", "1"); } catch (err) {}
+  });
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  function rememberScroll() {
+    try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)); } catch (err) {}
+  }
+  // pagehide covers both leaving the page and it going into the back/forward
+  // cache; visibilitychange catches a tab closed without either firing.
+  window.addEventListener("pagehide", rememberScroll);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) rememberScroll();
+  });
+
+  // Exposed because the gallery has to call it again once its tiles exist:
+  // before that the page has no height to scroll into.
+  // If you start scrolling while the page is still loading, you win -- the
+  // load handler below must not yank you back. Listening for input rather than
+  // the scroll event, because our own scrollTo fires that too.
+  var userMoved = false;
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, function () { userMoved = true; }, { passive: true });
+  });
+
+  window.restoreScroll = function () {
+    if (location.hash || userMoved) return;   // a #section link, or you, asked
+    if (!isBack) { window.scrollTo(0, 0); return; }
+    var y = 0;
+    try { y = parseInt(sessionStorage.getItem(SCROLL_KEY), 10) || 0; } catch (err) {}
+    window.scrollTo(0, y);
+  };
+  window.restoreScroll();
+  window.addEventListener("load", window.restoreScroll);
+  // A page served from the back/forward cache never re-runs the script above.
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) { isBack = true; window.restoreScroll(); }
+  });
+
+  // =========================================================================
+  // THE RESERVE PAGE
+  //
+  // Reads the build out of sessionStorage, shows what it costs, and sends it
+  // to the CRM as a lead with the spec attached.
+  //
+  // The spec text was composed on the configurator rather than here, and is
+  // carried across whole: that page is the only one that knows what the
+  // customer was actually shown, and rebuilding the wording from a bag of ids
+  // is how the quote and the page come to describe different trucks.
+  // =========================================================================
+  (function () {
+    var form = document.getElementById("rvForm");
+    if (!form) return;
+    var elBill = document.getElementById("rvBill");
+    var elEmpty = document.getElementById("rvEmpty");
+    var elStatus = document.getElementById("rvStatus");
+    var elSend = document.getElementById("rvSend");
+    var ENDPOINT = "https://mav-crm-production.up.railway.app/api/configurator/lead";
+
+    var build = null;
+    try {
+      build = JSON.parse(sessionStorage.getItem("mav_cfg") || "null");
+    } catch (err) {}
+
+    // No build, no page. Sending a lead with no spec would put an empty
+    // enquiry in front of a rep with nothing to quote.
+    if (!build || !build.total) {
+      document.getElementById("rvTitle").textContent = "Nothing to quote yet";
+      document.getElementById("rvLede").textContent =
+        "This page shows the truck you spec'd on the configurator. It looks like you came straight here.";
+      elBill.hidden = true;
+      form.hidden = true;
+      elEmpty.hidden = false;
+      return;
+    }
+
+    function money(cents) {
+      return "$" + Math.round(cents / 100).toLocaleString("en-US");
+    }
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function row(k, v, cls) {
+      return (
+        '<div class="cfg-row' + (cls ? " " + cls : "") + '">' +
+        '<span class="k">' + k + '</span><span class="v">' + v + "</span></div>"
+      );
+    }
+
+    var html = "<h3>The truck</h3>";
+    html += row("2027 Ford F-450 Crew Cab " + esc(build.trim), money(build.vehicleAllIn));
+    html += row(esc(build.color) + " &middot; sourcing, tax, license &amp; fees included", "", "cfg-sub-row");
+    html += "<h3>The build</h3>";
+    html += row(esc(build.tier) + " package, incl. California sales tax", money(build.buildAllIn));
+    for (var i = 0; i < (build.addOns || []).length; i++) {
+      html += row(esc(build.addOns[i].name), "+" + money(build.addOns[i].cents), "cfg-sub-row");
+    }
+    html += row("Delivery &mdash; " + esc(build.delivery), build.delivery.indexOf("Pick up") === 0 ? "Included" : "Quoted");
+    html +=
+      '<div class="cfg-total"><span class="k">Estimated total</span>' +
+      '<span class="v">' + money(build.total) + "</span></div>";
+    html +=
+      '<p class="cfg-fine">An estimate, not a quote. Sales tax and registration are figured here at ' +
+      "Escondido rates; your written quote uses your own county&rsquo;s. Shipping, if you want it, " +
+      "is quoted to your ZIP.</p>";
+    elBill.innerHTML = html;
+
+    // -----------------------------------------------------------------------
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = new FormData(form);
+      var val = function (k) { return (d.get(k) || "").toString().trim(); };
+      var name = val("name");
+      var phone = val("phone");
+      var email = val("email");
+
+      if (!name) {
+        elStatus.textContent = "Please add your name.";
+        elStatus.className = "lead-status is-bad";
+        return;
+      }
+      if (!phone && !email) {
+        elStatus.textContent = "Leave a phone number or an email so we can send the quote.";
+        elStatus.className = "lead-status is-bad";
+        return;
+      }
+
+      elSend.disabled = true;
+      elStatus.textContent = "Sending…";
+      elStatus.className = "lead-status";
+
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          phone: phone,
+          email: email,
+          zip: val("zip"),
+          timeline: val("timeline"),
+          notes: val("notes"),
+          smsConsent: d.get("smsConsent") === "yes",
+          company: val("company"),
+          spec: build.spec
+        })
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.json();
+        })
+        .then(function (res) {
+          try {
+            sessionStorage.setItem("mav_ref", res.ref || "");
+            sessionStorage.setItem("mav_name", name.split(/\s+/)[0]);
+            sessionStorage.setItem("mav:forward", "1");
+          } catch (err) {}
+          window.location.href = "confirmation.html";
+        })
+        .catch(function () {
+          elSend.disabled = false;
+          elStatus.textContent =
+            "That did not go through. Please call (760) 691-2588 and we will pick it up there.";
+          elStatus.className = "lead-status is-bad";
+        });
+    });
+  })();
+</script>
+</body>
+</html>

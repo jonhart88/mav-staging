@@ -709,14 +709,14 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
   color: var(--muted-d); font-weight: 600;
 }
 .lead-form input[type="text"], .lead-form input[type="tel"],
-.lead-form input[type="email"], .lead-form textarea {
+.lead-form input[type="email"], .lead-form textarea, .lead-form select {
   display: block; width: 100%; margin-top: 7px; padding: 12px 14px;
   font: inherit; font-size: 15px; letter-spacing: normal; text-transform: none;
   color: #fff; background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
 }
 .lead-form textarea { resize: vertical; min-height: 84px; }
-.lead-form input:focus, .lead-form textarea:focus {
+.lead-form input:focus, .lead-form textarea:focus, .lead-form select:focus {
   outline: 2px solid var(--accent); outline-offset: 1px;
   background: rgba(255,255,255,.1); border-color: transparent;
 }
@@ -863,3 +863,138 @@ body.lb-lock { overflow: hidden; }
   .lb, .lb-img { transition: none; }
   .lb-spinner { animation: none; }
 }
+
+/* ===========================================================================
+   THE CONFIGURATOR
+   Two columns: the options you scroll, and a summary that does not move. On a
+   phone there is one column and the summary becomes a bar across the bottom,
+   because the price is the thing you want in view while you are choosing.
+   =========================================================================== */
+.cfg { display: grid; grid-template-columns: 1fr 360px; gap: var(--gap-col); align-items: start; }
+.cfg-opts { min-width: 0; }
+.cfg-sum {
+  position: sticky; top: calc(var(--nav-h) + 16px);
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px 22px 18px;
+}
+
+/* --- a question and its answers ----------------------------------------- */
+.cfg-sec { border-top: 1px solid var(--line); padding: 26px 0 4px; }
+.cfg-sec:first-child { border-top: none; padding-top: 8px; }
+.cfg { margin-top: var(--gap-col); }
+.cfg-sec h2 {
+  margin: 0 0 3px; font-size: 13px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink);
+}
+.cfg-sec .cfg-note { margin: 0 0 15px; font-size: 14px; color: var(--muted); }
+.cfg-list { display: grid; gap: 9px; }
+.cfg-list.cfg-two { grid-template-columns: 1fr 1fr; }
+
+.cfg-card {
+  display: flex; align-items: center; gap: 13px;
+  padding: 14px 16px; text-align: left;
+  width: 100%; font: inherit; color: inherit;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); cursor: pointer;
+}
+.cfg-card:hover { border-color: var(--muted-d); }
+.cfg-card.is-on { border-color: var(--ink); background: var(--paper-2); }
+.cfg-card.is-on::after {
+  content: ""; flex: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent);
+  /* The tick as a path rather than an icon font or two crossed gradients,
+     which is what this was and which read as an arrow. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.6 8.4l2.9 2.9 5.9-6.1' fill='none' stroke='%23fff' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 11px 11px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Locked: standard equipment, or an option this package already carries. It
+   is shown because the customer is getting it, and not clickable because
+   there is nothing to decide. */
+.cfg-card.is-locked { cursor: default; background: var(--paper-2); border-color: var(--line); }
+.cfg-card.is-locked:hover { border-color: var(--line); }
+.cfg-card[disabled] { opacity: .4; cursor: not-allowed; }
+.cfg-card[disabled]:hover { border-color: var(--line); }
+
+.cfg-body { flex: 1; min-width: 0; }
+.cfg-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.3; }
+.cfg-sub { display: block; margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.cfg-price { flex: none; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.cfg-card.is-on .cfg-price { color: var(--ink); }
+.cfg-swatch {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.18); box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
+}
+
+/* --- what you are getting ----------------------------------------------- */
+.cfg-incl { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; margin-top: 4px; }
+.cfg-incl h3 {
+  margin: 0 0 6px; font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.cfg-incl ul { margin: 0; padding: 0; list-style: none; }
+.cfg-incl li { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+
+/* --- the summary -------------------------------------------------------- */
+.cfg-sum h2 {
+  margin: 0 0 14px; font-size: 12px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.cfg-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 14px; }
+.cfg-row .k { color: var(--muted); }
+.cfg-row .v { font-weight: 600; text-align: right; }
+.cfg-row.cfg-sub-row .k, .cfg-row.cfg-sub-row .v { color: var(--muted); font-weight: 400; font-size: 13px; }
+.cfg-total {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  margin-top: 12px; padding-top: 14px; border-top: 1.5px solid var(--ink);
+}
+.cfg-total .k { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.cfg-total .v { font-size: 27px; font-weight: 700; letter-spacing: -.01em; }
+.cfg-fine { margin: 10px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.cfg-sum .btn { width: 100%; margin-top: 16px; }
+
+/* --- the breakdown on the reserve page ---------------------------------- */
+.cfg-bill { max-width: 620px; margin: 26px auto 0; text-align: left; }
+.cfg-bill h3 {
+  margin: 20px 0 4px; font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted-d);
+}
+.cfg-bill .cfg-row { border-bottom: 1px solid rgba(255,255,255,.1); }
+.cfg-bill .cfg-row .k { color: var(--muted-d); }
+.cfg-bill .cfg-row .v { color: #fff; }
+.cfg-bill .cfg-total { border-top-color: rgba(255,255,255,.4); }
+.cfg-bill .cfg-total .k, .cfg-bill .cfg-total .v { color: #fff; }
+.cfg-bill .cfg-fine { color: var(--muted-d); }
+
+@media (max-width: 1000px) {
+  .cfg { grid-template-columns: 1fr; }
+  /* The price belongs in view while you choose, so on a narrow screen the
+     summary leaves the column and becomes a bar at the bottom of the window.
+     Only the total and the button come along -- the itemised rows are on the
+     next page, and a tall bar would eat the options it is meant to serve. */
+  .cfg-sum {
+    position: fixed; inset: auto 0 0 0; top: auto; z-index: 40;
+    border: none; border-top: 1px solid var(--line);
+    border-radius: 0; padding: 12px var(--gut);
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 -6px 24px rgba(0,0,0,.1);
+  }
+  .cfg-sum h2, .cfg-sum .cfg-row, .cfg-sum .cfg-fine { display: none; }
+  .cfg-sum .cfg-total { flex: 1; margin: 0; padding: 0; border-top: none; }
+  .cfg-sum .cfg-total .v { font-size: 21px; }
+  .cfg-sum .btn { width: auto; margin: 0; flex: none; }
+  /* Clear the bar, so the last option is reachable. */
+  .cfg-opts { padding-bottom: 86px; }
+}
+@media (max-width: 620px) {
+  .cfg-list.cfg-two { grid-template-columns: 1fr; }
+  .cfg-incl { grid-template-columns: 1fr; }
+}
+
+/* A select inherits none of the above on its own, and a native dropdown on a
+   dark panel renders light-on-light in several browsers. */
+.lead-form select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+.lead-form select option { color: #111; background: #fff; }
+/* "Optional" beside a field label: present, but not shouting like the label. */
+.cfg-opt-label { font-weight: 400; text-transform: none; letter-spacing: normal; color: var(--muted-d); }
