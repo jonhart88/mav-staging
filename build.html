@@ -681,18 +681,29 @@
       // against a 4in lift on 44s.
       var p = pkg();
       if (p) {
-        // Grouped, because a section can hold more than one line -- the
-        // suspension is a lift AND a sway bar -- and printing the heading
-        // once per line would repeat it.
-        var fs = p.features || [];
-        for (i = 0; i < fs.length; ) {
-          var title = fs[i].section;
+        // Both options where the packages differ, with the one they are not
+        // getting greyed and named for the package that has it. A Summit
+        // buyer should be able to see the Apex rides on 44s without having
+        // to click Apex to find out.
+        var fs = cat.featureSections || [];
+        for (i = 0; i < fs.length; i++) {
           cards = [];
-          while (i < fs.length && fs[i].section === title) {
-            cards.push(card({ name: fs[i].name, price: "Included", on: true, locked: true }));
-            i++;
+          for (var fo = 0; fo < fs[i].options.length; fo++) {
+            var opt = fs[i].options[fo];
+            var mine = !opt.tier || opt.tier === pick.tier;
+            cards.push(
+              card({
+                name: opt.name,
+                // The greyed row says which package has it, which is the
+                // only thing worth knowing about a row you cannot pick.
+                price: mine ? "Included" : esc(opt.tier).toUpperCase(),
+                on: mine,
+                locked: mine,
+                disabled: !mine
+              })
+            );
           }
-          out += section(title, "", cards);
+          out += section(fs[i].section, "", cards);
         }
       }
 

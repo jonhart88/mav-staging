@@ -970,9 +970,17 @@ body.lb-lock { overflow: hidden; }
 .cfg-rail-body::-webkit-scrollbar { width: 0; height: 0; }
 
 .cfg-head { margin-bottom: 26px; }
+/* MAV SUMMIT, MAV APEX. The negative tracking is for lower case; set in
+   capitals it closes the letters up, so it goes back to neutral. */
 .cfg-head h1 {
-  margin: 0; font-size: 31px; font-weight: 700; letter-spacing: -.02em;
-  line-height: 1.1;
+  margin: 0; font-size: 31px; font-weight: 700; letter-spacing: 0;
+  line-height: 1.1; text-transform: uppercase;
+}
+
+/* The package names on their cards, to match the heading they set. Only the
+   tier cards -- every other card is a part name and reads as one. */
+.cfg-card[data-k="tier"] .cfg-name {
+  text-transform: uppercase; letter-spacing: .045em;
 }
 .cfg-head p { margin: 5px 0 0; font-size: 14px; color: var(--muted); }
 
