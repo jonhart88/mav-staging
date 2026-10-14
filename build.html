@@ -652,25 +652,33 @@
       );
 
 
-      // --- what is included ------------------------------------------------
+      // --- what the truck has, system by system ----------------------------
+      //
+      // One section per system with a single card in it, ticked and locked.
+      // The package price covers all of it, so there is nothing to choose --
+      // it is shown because the customer is getting it, and because the
+      // difference between the packages lives here: a 2in lift on 41s
+      // against a 4in lift on 44s.
       var p = pkg();
       if (p) {
-        var incl = "";
-        for (i = 0; i < p.equipment.length; i++) {
-          var g = p.equipment[i];
-          incl += "<div><h3>" + esc(g.title) + "</h3><ul>";
-          for (var j = 0; j < g.items.length; j++) incl += "<li>" + esc(g.items[j]) + "</li>";
-          incl += "</ul></div>";
+        for (i = 0; i < (p.features || []).length; i++) {
+          var ft = p.features[i];
+          out += section(ft.section, "", [
+            card({ name: ft.name, price: "Included", on: true, locked: true })
+          ]);
         }
-        out +=
-          '<section class="cfg-sec"><h2>Standard on the ' + esc(pick.tier) + "</h2>" +
-          '<p class="cfg-note">Included in the package price. Nothing here is an extra.</p>' +
-          '<div class="cfg-incl">' + incl + "</div></section>";
       }
 
       // --- add-ons ---------------------------------------------------------
       if (p) {
         cards = [];
+        // Fitted to every truck. Listed among the options so somebody
+        // scanning for what to add can see what they already have.
+        for (i = 0; i < (cat.standardExtras || []).length; i++) {
+          cards.push(
+            card({ name: cat.standardExtras[i], price: "Included", on: true, locked: true })
+          );
+        }
         for (i = 0; i < cat.addOns.length; i++) {
           var a = cat.addOns[i];
           var inc = included(a);
@@ -684,7 +692,7 @@
         }
         out += section(
           "Options",
-          "Each priced all-in &mdash; the part and the work to fit it.",
+          "Everything above is in the package price. These are the extras.",
           cards
         );
       }

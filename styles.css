@@ -1021,15 +1021,6 @@ body.lb-lock { overflow: hidden; }
   border: 1px solid rgba(0,0,0,.18); box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
 }
 
-/* --- what you are getting ----------------------------------------------- */
-.cfg-incl { display: grid; gap: 14px; margin-top: 4px; }
-.cfg-incl h3 {
-  margin: 0 0 5px; font-size: 10.5px; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-}
-.cfg-incl ul { margin: 0; padding: 0; list-style: none; }
-.cfg-incl li { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
-
 /* --- the summary -------------------------------------------------------- */
 .cfg-sum { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
 .cfg-sum h2 {
@@ -1107,9 +1098,6 @@ body.lb-lock { overflow: hidden; }
   }
   .cfg-bar .v { font-size: 21px; }
   .cfg-sum { padding-bottom: 78px; }
-}
-@media (max-width: 620px) {
-  .cfg-incl { grid-template-columns: 1fr; }
 }
 
 .cfg-bill { max-width: 620px; margin: 26px auto 0; text-align: left; }
