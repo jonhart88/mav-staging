@@ -382,8 +382,17 @@
           '<span class="v">' + v + "</span></div>";
       }
       if (pick.trim) {
-        row(esc("2027 F-450 " + pick.trim.name) + " &mdash; Ford MSRP", money(t.vehicleAllIn));
-        if (pick.color) row(esc(pick.color.name), pick.color.upchargeCents ? "included above" : "no cost", true);
+        // MSRP and the paint upcharge as two lines, not one sum. The printed
+        // sheet quotes the bare trim, and a customer holding it should find
+        // that number here rather than a larger one they have to account for.
+        row(esc("2027 F-450 " + pick.trim.name) + " &mdash; Ford MSRP", money(pick.trim.msrpCents));
+        if (pick.color) {
+          row(
+            esc(pick.color.name),
+            pick.color.upchargeCents ? "+" + money(pick.color.upchargeCents) : "no cost",
+            true
+          );
+        }
       }
       if (pick.tier) row(esc(pick.tier) + " conversion", money(t.buildAllIn));
       for (var i = 0; i < t.addOns.length; i++) {
@@ -606,8 +615,10 @@
       if (!p) return;
       var t = totals();
       var lines = [
-        "2027 Ford F-450 Crew Cab " + pick.trim.name,
-        "Color: " + pick.color.name + (pick.color.upchargeCents ? " (+" + money(pick.color.upchargeCents) + ")" : ""),
+        // Plain text: this becomes a message in the CRM thread, where an HTML
+        // entity would arrive as the literal characters "&mdash;".
+        "2027 Ford F-450 Crew Cab " + pick.trim.name + " — MSRP " + money(pick.trim.msrpCents),
+        "Color: " + pick.color.name + (pick.color.upchargeCents ? " +" + money(pick.color.upchargeCents) : " (no cost)"),
         pick.tier + " package (" + p.tier + " " + (p.platinum ? "Platinum" : "Non-Platinum") + ")"
       ];
       if (t.addOns.length) {
@@ -620,7 +631,7 @@
       }
       lines.push("Delivery: " + pick.delivery.name);
       lines.push("");
-      lines.push("Ford MSRP: " + money(t.vehicleAllIn));
+      lines.push("Ford chassis: " + money(t.vehicleAllIn));
       lines.push("Conversion: " + money(t.buildAllIn));
       if (t.addOnCents) lines.push("Options: " + money(t.addOnCents));
       lines.push("Total: " + money(t.total) + " plus sales tax, title and license");
@@ -630,7 +641,9 @@
           "mav_cfg",
           JSON.stringify({
             trim: pick.trim.name,
+            trimMsrp: pick.trim.msrpCents,
             color: pick.color.name,
+            colorUpcharge: pick.color.upchargeCents,
             tier: pick.tier,
             packageName: p.tier + " " + (p.platinum ? "Platinum" : "Non-Platinum"),
             addOns: t.addOns.map(function (a) { return { name: a.name, cents: a.addOnPriceCents }; }),

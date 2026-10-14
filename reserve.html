@@ -343,8 +343,16 @@
     }
 
     var html = "<h3>The truck</h3>";
-    html += row("2027 Ford F-450 Crew Cab " + esc(build.trim) + " &mdash; Ford MSRP", money(build.vehicleAllIn));
-    html += row(esc(build.color), "", "cfg-sub-row");
+    // Falls back to the combined figure for a build spec'd before the split.
+    html += row(
+      "2027 Ford F-450 Crew Cab " + esc(build.trim) + " &mdash; Ford MSRP",
+      money(build.trimMsrp != null ? build.trimMsrp : build.vehicleAllIn)
+    );
+    html += row(
+      esc(build.color),
+      build.colorUpcharge ? "+" + money(build.colorUpcharge) : "no cost",
+      "cfg-sub-row"
+    );
     html += "<h3>The build</h3>";
     html += row(esc(build.tier) + " conversion", money(build.buildAllIn));
     for (var i = 0; i < (build.addOns || []).length; i++) {
