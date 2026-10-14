@@ -413,6 +413,17 @@
       return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
+    /**
+     * What this colour costs on the chosen trim, or null if that trim cannot
+     * have it. Both answers come from the same lookup so they cannot
+     * disagree -- a colour with no price for a trim is not offered on it.
+     */
+    function colorPrice(c, trim) {
+      if (!c || !trim) return null;
+      var v = c.trims ? c.trims[trim.id] : undefined;
+      return typeof v === "number" ? v : null;
+    }
+
     /** Which of the four packages this tier means for the chosen trim. */
     function pkg() {
       if (!pick.tier || !pick.trim) return null;
@@ -435,7 +446,7 @@
       var p = pkg();
       var truckSell =
         (pick.trim ? pick.trim.msrpCents : 0) +
-        (pick.color ? pick.color.upchargeCents : 0) +
+        (colorPrice(pick.color, pick.trim) || 0) +
         cat.fees.sourcingFeeCents;
       var addOnCents = 0;
       var chosen = [];
@@ -475,9 +486,10 @@
         // that number here rather than a larger one they have to account for.
         row(esc("2027 F-450 " + pick.trim.name) + " &mdash; Ford MSRP", money(pick.trim.msrpCents));
         if (pick.color) {
+          var cp = colorPrice(pick.color, pick.trim);
           row(
             esc(pick.color.name),
-            pick.color.upchargeCents ? "+" + money(pick.color.upchargeCents) : "no cost",
+            cp ? "+" + money(cp) : "no cost",
             true
           );
         }
@@ -634,11 +646,12 @@
       cards = [];
       for (i = 0; i < cat.colors.length; i++) {
         var c = cat.colors[i];
-        var ok = !pick.trim || c.trims.indexOf(pick.trim.id) !== -1;
+        var cPrice = colorPrice(c, pick.trim);
+        var ok = !pick.trim || cPrice !== null;
         cards.push(
           card({
             k: "color", v: c.id, name: c.name, swatch: c.hex,
-            price: c.upchargeCents ? "+" + money(c.upchargeCents) : "Included",
+            price: cPrice ? "+" + money(cPrice) : "Included",
             on: !!pick.color && pick.color.id === c.id, disabled: !ok
           })
         );
@@ -661,11 +674,18 @@
       // against a 4in lift on 44s.
       var p = pkg();
       if (p) {
-        for (i = 0; i < (p.features || []).length; i++) {
-          var ft = p.features[i];
-          out += section(ft.section, "", [
-            card({ name: ft.name, price: "Included", on: true, locked: true })
-          ]);
+        // Grouped, because a section can hold more than one line -- the
+        // suspension is a lift AND a sway bar -- and printing the heading
+        // once per line would repeat it.
+        var fs = p.features || [];
+        for (i = 0; i < fs.length; ) {
+          var title = fs[i].section;
+          cards = [];
+          while (i < fs.length && fs[i].section === title) {
+            cards.push(card({ name: fs[i].name, price: "Included", on: true, locked: true }));
+            i++;
+          }
+          out += section(title, "", cards);
         }
       }
 
@@ -735,10 +755,10 @@
         // The chosen color may not exist on this trim any more. Falling back
         // to the first one that does beats leaving the page with no color and
         // a total that silently drops an upcharge.
-        if (pick.color && pick.color.trims.indexOf(pick.trim.id) === -1) pick.color = null;
+        if (colorPrice(pick.color, pick.trim) === null) pick.color = null;
         if (!pick.color) {
           for (i = 0; i < cat.colors.length; i++) {
-            if (cat.colors[i].trims.indexOf(pick.trim.id) !== -1) { pick.color = cat.colors[i]; break; }
+            if (colorPrice(cat.colors[i], pick.trim) !== null) { pick.color = cat.colors[i]; break; }
           }
         }
       }
@@ -783,7 +803,8 @@
         // Plain text: this becomes a message in the CRM thread, where an HTML
         // entity would arrive as the literal characters "&mdash;".
         "2027 Ford F-450 Crew Cab " + pick.trim.name + " — MSRP " + money(pick.trim.msrpCents),
-        "Color: " + pick.color.name + (pick.color.upchargeCents ? " +" + money(pick.color.upchargeCents) : " (no cost)"),
+        "Color: " + pick.color.name +
+          (colorPrice(pick.color, pick.trim) ? " +" + money(colorPrice(pick.color, pick.trim)) : " (no cost)"),
         pick.tier + " package (" + p.tier + " " + (p.platinum ? "Platinum" : "Non-Platinum") + ")"
       ];
       if (t.addOns.length) {
@@ -808,7 +829,7 @@
             trim: pick.trim.name,
             trimMsrp: pick.trim.msrpCents,
             color: pick.color.name,
-            colorUpcharge: pick.color.upchargeCents,
+            colorUpcharge: colorPrice(pick.color, pick.trim) || 0,
             tier: pick.tier,
             packageName: p.tier + " " + (p.platinum ? "Platinum" : "Non-Platinum"),
             addOns: t.addOns.map(function (a) { return { name: a.name, cents: a.addOnPriceCents }; }),

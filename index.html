@@ -912,12 +912,13 @@
         for (i = 0; i < cat.trims.length; i++) {
           if (!trim || cat.trims[i].msrpCents < trim.msrpCents) trim = cat.trims[i];
         }
+        // A colour's price belongs to the trim, and a colour with no price
+        // for a trim is one that trim cannot have.
         var upcharge = null;
         for (i = 0; i < cat.colors.length; i++) {
-          if (cat.colors[i].trims.indexOf(trim.id) === -1) continue;
-          if (upcharge === null || cat.colors[i].upchargeCents < upcharge) {
-            upcharge = cat.colors[i].upchargeCents;
-          }
+          var cp = cat.colors[i].trims ? cat.colors[i].trims[trim.id] : undefined;
+          if (typeof cp !== "number") continue;
+          if (upcharge === null || cp < upcharge) upcharge = cp;
         }
         var vehicle = trim.msrpCents + (upcharge || 0) + cat.fees.sourcingFeeCents;
 
