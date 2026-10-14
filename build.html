@@ -378,16 +378,19 @@
     // a refresh re-fetches the page but not necessarily its images, so one
     // package came back correct and the other did not, which looks like a
     // bug in the page rather than a stale file. A new URL cannot be stale.
-    var PHOTO_V = "?v=3";
+    var PHOTO_V = "?v=4";
 
+    // The walk round the truck: three-quarter, head-on, flank, back.
     var PHOTOS = {
       Summit: [
         { view: "Front", src: "media/configurator/summit-front.jpg" },
+        { view: "Head-on", src: "media/configurator/summit-nose.jpg" },
         { view: "Side", src: "media/configurator/summit-side.jpg" },
         { view: "Rear", src: "media/configurator/summit-rear.jpg" }
       ],
       Apex: [
         { view: "Front", src: "media/configurator/apex-front.jpg" },
+        { view: "Head-on", src: "media/configurator/apex-nose.jpg" },
         { view: "Side", src: "media/configurator/apex-side.jpg" },
         { view: "Rear", src: "media/configurator/apex-rear.jpg" }
       ]
