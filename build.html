@@ -609,6 +609,12 @@
         cards.push(
           card({
             k: "platform", v: pf.id, name: pf.name, sub: esc(pf.note),
+            // A greyed row elsewhere says what you would have to pick to get
+            // it. This one says the same thing: you cannot choose it here,
+            // you ring us. Without it the card is the only greyed box on the
+            // page with an empty right-hand column, which is what made it
+            // look like a different kind of grey rather than the same one.
+            price: pf.available ? "" : "CALL US",
             on: pick.platform === pf.id, disabled: !pf.available
           })
         );
