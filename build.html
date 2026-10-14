@@ -373,6 +373,13 @@
     //
     // Order is Jon's: front three-quarter, side, rear three-quarter.
     // ----------------------------------------------------------------------
+    // Bumped whenever the files behind these names change. Recropping them in
+    // place left browsers serving the old wide-margin versions from disk --
+    // a refresh re-fetches the page but not necessarily its images, so one
+    // package came back correct and the other did not, which looks like a
+    // bug in the page rather than a stale file. A new URL cannot be stale.
+    var PHOTO_V = "?v=2";
+
     var PHOTOS = {
       Summit: [
         { view: "Front", src: "media/configurator/summit-front.jpg" },
@@ -385,6 +392,9 @@
         { view: "Rear", src: "media/configurator/apex-rear.jpg" }
       ]
     };
+    for (var _pkg in PHOTOS) {
+      for (var _i = 0; _i < PHOTOS[_pkg].length; _i++) PHOTOS[_pkg][_i].src += PHOTO_V;
+    }
 
     var cat = null;
     var pick = { platform: null, trim: null, color: null, tier: null, delivery: null, addOns: {} };
