@@ -982,6 +982,20 @@ body.lb-lock { overflow: hidden; }
 .cfg-card[data-k="tier"] .cfg-name {
   text-transform: uppercase; letter-spacing: .045em;
 }
+/* The badge standing in for the word MAV. Only a white version exists, and
+   the nav already solves that the same way -- invert it. Sized against the
+   heading rather than fixed, so the two move together, and nudged down a
+   hair because the mark's optical centre sits above its box's. */
+.cfg-mark {
+  /* inline-block, against the sheet's global img{display:block} -- without
+     it the mark stacks above the name instead of standing beside it, and
+     vertical-align has nothing to act on. */
+  display: inline-block;
+  height: 1.5em; width: auto;
+  vertical-align: -.34em;
+  margin-right: .12em;
+  filter: invert(1);
+}
 .cfg-head p { margin: 5px 0 0; font-size: 14px; color: var(--muted); }
 
 /* --- a question and its answers ----------------------------------------- */
