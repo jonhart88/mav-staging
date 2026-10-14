@@ -893,7 +893,10 @@ body.lb-lock { overflow: hidden; }
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: 18px var(--gut) 20px;
+  /* A tighter gutter than the rest of the site uses. This page is full-bleed
+     and the truck is the content; 40px of site margin either side is 80px the
+     photograph does not get. */
+  padding: 14px clamp(12px, 1.5vw, 26px) 16px;
 }
 .cfg-frame {
   position: relative;
@@ -1069,7 +1072,11 @@ body.lb-lock { overflow: hidden; }
      100vh split on a phone leaves a letterbox to answer questions through. */
   .cfg { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
   .cfg-stage { padding: 10px var(--gut) 14px; }
-  .cfg-frame { flex: none; aspect-ratio: 3 / 2; }
+  /* No fixed shape here: the crops run from 1.8 to 2.8 and a 3:2 box would
+     letterbox every one of them. The picture sets its own height and the
+     truck gets the full width of the phone. */
+  .cfg-frame { flex: none; aspect-ratio: auto; }
+  .cfg-frame img { position: static; width: 100%; height: auto; }
   .cfg-rail { border-left: none; border-top: 1px solid var(--line); }
   .cfg-rail-body { overflow: visible; padding: 24px var(--gut) 24px; }
   .cfg-head h1 { font-size: 26px; }
@@ -1099,29 +1106,6 @@ body.lb-lock { overflow: hidden; }
 .cfg-bill .cfg-total .k, .cfg-bill .cfg-total .v { color: #fff; }
 .cfg-bill .cfg-fine { color: var(--muted-d); }
 
-@media (max-width: 1040px) {
-  /* One column: the truck on top, the questions under it. The stage stops
-     being sticky -- a picture pinned to the top of a phone screen leaves a
-     letterbox to answer questions through. */
-  .cfg { grid-template-columns: 1fr; }
-  .cfg-stage { position: static; max-height: none; display: block; }
-  .cfg-frame { aspect-ratio: 3 / 2; }
-  .cfg-rail { margin-top: 6px; }
-  /* The bar leaves the rail and spans the window, so the total is in view
-     on a phone the same way it is on a desktop. */
-  .cfg-bar {
-    position: fixed; inset: auto 0 0 0; margin: 0;
-    padding: 11px var(--gut); border-top: 1px solid var(--line);
-    box-shadow: 0 -6px 24px rgba(0, 0, 0, .1);
-  }
-  .cfg-bar .v { font-size: 21px; }
-  /* Clear the bar, so the last option is reachable. */
-  .cfg-sum { padding-bottom: 78px; }
-}
-@media (max-width: 620px) {
-  .cfg-list.cfg-two { grid-template-columns: 1fr; }
-  .cfg-incl { grid-template-columns: 1fr; }
-}
 
 /* A select inherits none of the above on its own, and a native dropdown on a
    dark panel renders light-on-light in several browsers. */
