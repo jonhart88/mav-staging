@@ -644,10 +644,12 @@
 
       // --- color -----------------------------------------------------------
       cards = [];
+      var greyed = 0;
       for (i = 0; i < cat.colors.length; i++) {
         var c = cat.colors[i];
         var cPrice = colorPrice(c, pick.trim);
         var ok = !pick.trim || cPrice !== null;
+        if (!ok) greyed++;
         cards.push(
           card({
             k: "color", v: c.id, name: c.name, swatch: c.hex,
@@ -658,8 +660,13 @@
       }
       out += section(
         "Exterior color",
-        "Greyed out means Ford does not offer it on the " +
-          esc(pick.trim ? pick.trim.name : "selected trim") + ".",
+        // Only worth saying when something IS greyed out. Every trim takes
+        // every colour today, so the note explained a thing that was not on
+        // the screen; it comes back by itself the day one of them stops.
+        greyed
+          ? "Greyed out means Ford does not offer it on the " +
+            esc(pick.trim ? pick.trim.name : "selected trim") + "."
+          : "",
         cards,
         true
       );
