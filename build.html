@@ -581,6 +581,29 @@
       }
       out += section("Chassis", "", cards);
 
+      // --- package ---------------------------------------------------------
+      cards = [];
+      var seen = {};
+      for (i = 0; i < cat.tiers.length; i++) {
+        var ti = cat.tiers[i];
+        // Four rows in the catalog, two choices on the page. The trim picks
+        // which half -- Platinum trucks take the Platinum parts list -- and
+        // since the two halves have cost the same since 2026-10-14 the card
+        // reads identically either way, which is why this can sit above the
+        // trim without the price moving under the customer.
+        if (!pick.trim || ti.platinum !== pick.trim.platinum) continue;
+        if (seen[ti.tier]) continue;
+        seen[ti.tier] = 1;
+        cards.push(
+          card({
+            k: "tier", v: ti.tier, name: ti.tier,
+            sub: ti.tier === "Summit" ? "2&Prime; lift &middot; 41&Prime; tires" : "4&Prime; lift &middot; 44&Prime; tires &middot; hydraulic steering",
+            price: money(ti.priceCents),
+            on: pick.tier === ti.tier
+          })
+        );
+      }
+      out += section("Build package", "Our conversion price, on top of the Ford. This is what changes the photograph.", cards, true);
       // --- trim ------------------------------------------------------------
       cards = [];
       for (i = 0; i < cat.trims.length; i++) {
@@ -615,26 +638,6 @@
         true
       );
 
-      // --- package ---------------------------------------------------------
-      cards = [];
-      var seen = {};
-      for (i = 0; i < cat.tiers.length; i++) {
-        var ti = cat.tiers[i];
-        // Four rows in the catalog, two choices on the page: the trim already
-        // decided which half applies, so only that half is offered.
-        if (!pick.trim || ti.platinum !== pick.trim.platinum) continue;
-        if (seen[ti.tier]) continue;
-        seen[ti.tier] = 1;
-        cards.push(
-          card({
-            k: "tier", v: ti.tier, name: ti.tier,
-            sub: ti.tier === "Summit" ? "2&Prime; lift &middot; 41&Prime; tires" : "4&Prime; lift &middot; 44&Prime; tires &middot; hydraulic steering",
-            price: money(ti.priceCents),
-            on: pick.tier === ti.tier
-          })
-        );
-      }
-      out += section("Build package", "Our conversion price. Ford&rsquo;s chassis is the line above.", cards, true);
 
       // --- what is included ------------------------------------------------
       var p = pkg();
