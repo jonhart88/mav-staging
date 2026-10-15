@@ -632,9 +632,12 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    own, which reads as a missing fourth number. This sits after the lineup's
    max-width:1100 rule, so it wins on order without needing its own query. */
 .tier-figures-3 { grid-template-columns: repeat(3, 1fr); }
-/* The brake panel's copy runs long; left-aligned and unconstrained it would
-   set a 70-character line inside a half-width panel. */
-.spec-body .panel-sub { max-width: 46ch; }
+/* These two panels are already half-width, so the measure caps the full-width
+   panels need only wrap the text early and leave a strip of paper down the
+   right-hand side -- and a taller box for the same words. The column IS the
+   measure here. */
+.spec-body .panel-sub { max-width: none; }
+.spec-body .panel-title { max-width: none; font-size: clamp(1.35rem, 2.3vw, 2.05rem); }
 
 /* ---------- Footer ---------- */
 /* Like the manifesto, the footer is not a .band, so it has to supply its own
