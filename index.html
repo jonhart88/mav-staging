@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 
@@ -36,6 +36,7 @@
     <div class="nav-links" id="navLinks">
       <a href="#lineup">The Lineup</a>
       <a href="gallery.html">Gallery</a>
+      <a href="#chassis">Chassis</a>
       <a href="#process">Process</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
@@ -283,6 +284,56 @@
     </div>
   </section>
 
+  <!-- Chassis: the two systems a buyer asks about once the truck has their
+       attention. Brakes carry measured numbers, so they get the photographs
+       and the figure row; the suspension is a description, so it gets the
+       list. Same .pair the lineup uses, so the two stretch to one height. -->
+  <section class="band" id="chassis">
+    <div class="shell">
+      <div class="pair">
+
+        <article class="panel spec-panel reveal">
+          <!-- Two frames from the studio shoot, cropped to the same 4:3 so the
+               pair reads as one strip rather than two unrelated pictures. -->
+          <div class="spec-shots">
+            <img src="media/brakes-front.jpg" width="1400" height="1050" loading="lazy"
+                 alt="Front SSBC Beast caliper behind a 44-inch Goodyear, with the red LiquidSpring strut alongside">
+            <img src="media/brakes-rear.jpg" width="1400" height="1050" loading="lazy"
+                 alt="Rear axle of a MAV build, both red calipers and both LiquidSpring struts visible">
+          </div>
+          <div class="spec-body">
+            <p class="eyebrow">Brakes</p>
+            <h2 class="panel-title panel-title-sm">Tested loaded, not empty</h2>
+            <p class="panel-sub panel-sub-left">Forty-four inch tires, four inches of lift and a conversion&rsquo;s worth of added weight all change how a truck stops. So we had it measured rather than assume. An independent lab ran a finished Apex through the federal dynamic brake procedure at a full 14,000 lb &mdash; its entire rated weight, not a curb-weight number. Six stops from 60 mph, and every one of them landed at least 20% shorter than the limit allows.</p>
+            <div class="tier-figures tier-figures-3">
+              <div><strong>229 ft</strong><span>60&#8209;0&nbsp;mph average</span></div>
+              <div><strong>310 ft</strong><span>Federal limit</span></div>
+              <div><strong>14,000 lb</strong><span>Weight as tested</span></div>
+            </div>
+            <p class="tier-figures-note">Measured by Dynamic Research, Inc. on a MAV Apex on 44&quot; tires, loaded to its full 14,000 lb GVWR, to the FMVSS&nbsp;105 dynamic brake procedure. A partial test, not a certification of compliance. Both packages carry the same SSBC Beast kit; the Summit&rsquo;s 41&quot; tires were not separately tested.</p>
+          </div>
+        </article>
+
+        <article class="panel spec-panel reveal">
+          <div class="spec-body spec-body-mid">
+            <p class="eyebrow">Ride and suspension</p>
+            <h2 class="panel-title panel-title-sm">A liquid spring at every corner</h2>
+            <p class="panel-sub panel-sub-left">LiquidSpring replaces the steel springs and the shocks with a compressible fluid that does both jobs in one strut, and a controller that changes how stiff each corner is while you are driving on it. Empty, it stays soft. Loaded, it holds the truck level instead of squatting onto the rear axle. Turn hard or get on the brakes and it firms up before the body has finished leaning.</p>
+            <p class="panel-sub panel-sub-left">It is why a truck standing this tall on tires this size rides the way it does &mdash; and why it still rides that way the day you hitch a trailer to it.</p>
+            <ul class="specs">
+              <li>Compressible-liquid struts front and rear &mdash; spring and damper in one unit</li>
+              <li>Stiffness set at each wheel independently, and reset continuously as you drive</li>
+              <li>Levels itself to the load, so ride height and ride quality stay where they were</li>
+              <li>Firms under cornering and hard braking to keep the body flat</li>
+              <li>Two inches of lift on the Summit, four on the Apex, front and rear</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
   <!-- Process -->
   <section class="band" id="process">
     <div class="shell">
@@ -430,6 +481,7 @@
         <h4>Company</h4>
         <ul>
           <li><a href="#about">About</a></li>
+          <li><a href="#chassis">Chassis</a></li>
           <li><a href="#process">Process</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="#contact">Contact</a></li>

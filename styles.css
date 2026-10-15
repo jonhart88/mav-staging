@@ -607,6 +607,35 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
 .stat strong { display: block; font-size: 1.75rem; font-weight: 600; letter-spacing: -.025em; }
 .stat span { font-size: 12px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
 
+/* ---------- Chassis band (brakes / suspension) ---------- */
+/* Same shape as a tier box: the panel keeps no padding of its own so the
+   photographs reach its edges and are clipped by its radius, and the padding
+   moves to the body. Both panels take this class, including the one with no
+   photographs, so the two bodies get identical insets and the headings line
+   up across the gutter. */
+.spec-panel { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.spec-body { padding: clamp(26px, 3vw, 44px); display: flex; flex-direction: column; flex: 1; }
+/* The suspension panel has no photographs above it, so its copy would start
+   at the top of a box whose neighbor starts a third of the way down. Centered
+   in its own column, the two read as a pair rather than as one panel that
+   failed to load an image. */
+.spec-body-mid { justify-content: center; }
+
+/* Two frames, one strip, no gap between them -- the seam is the only thing
+   that says they are two pictures, and at 4:3 each they fill the panel width
+   without either being the larger. */
+.spec-shots { display: grid; grid-template-columns: 1fr 1fr; }
+.spec-shots img { display: block; width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* Three figures, not the lineup's four, and they stay three the whole way
+   down: at two columns a set of three orphans the last one on a row of its
+   own, which reads as a missing fourth number. This sits after the lineup's
+   max-width:1100 rule, so it wins on order without needing its own query. */
+.tier-figures-3 { grid-template-columns: repeat(3, 1fr); }
+/* The brake panel's copy runs long; left-aligned and unconstrained it would
+   set a 70-character line inside a half-width panel. */
+.spec-body .panel-sub { max-width: 46ch; }
+
 /* ---------- Footer ---------- */
 /* Like the manifesto, the footer is not a .band, so it has to supply its own
    half of the gap or it sits closer to the last panel than the panels sit to
