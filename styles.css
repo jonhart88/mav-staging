@@ -639,6 +639,41 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
 .spec-body .panel-sub { max-width: none; }
 .spec-body .panel-title { max-width: none; font-size: clamp(1.35rem, 2.3vw, 2.05rem); }
 
+/* Two columns because the content is in pairs, not because two happen to
+   fit: .pair's auto-fit answers three on a wide screen once there are four
+   panels, stranding the last one. One column once a half-width panel would be
+   narrower than its own photo strip wants to be. */
+.pair-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 760px) { .pair-2 { grid-template-columns: 1fr; } }
+
+/* Clips instead of stills, cropped to 4:3 like the photographs, and each
+   one captioned, because two
+   dashboards side by side say nothing about which truck is which. The caption
+   sits under its own clip rather than over it -- the thing being read in these
+   frames is a small LCD, and an overlay would land on top of it. */
+.spec-clips figure { margin: 0; display: flex; flex-direction: column; }
+.spec-clips video {
+  display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+  background: var(--ink);
+}
+.spec-clips figcaption {
+  padding: 9px 10px 10px; text-align: center;
+  font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--line);
+}
+/* The caption strip is a band across the panel, so the seam between the two
+   captions wants to line up with the seam between the two clips. */
+.spec-clips figure + figure figcaption { border-left: 1px solid var(--line); }
+
+/* One above the other on a phone. Two across puts the meter at about 51px,
+   and the meter is the whole argument -- the brake photographs are pictures
+   and survive being small, but a number has to be legible or it is decoration.
+   The divider goes back to being horizontal when they stack. */
+@media (max-width: 560px) {
+  .spec-clips { grid-template-columns: 1fr; }
+  .spec-clips figure + figure figcaption { border-left: 0; }
+}
+
 /* ---------- Footer ---------- */
 /* Like the manifesto, the footer is not a .band, so it has to supply its own
    half of the gap or it sits closer to the last panel than the panels sit to

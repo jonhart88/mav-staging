@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
 
@@ -290,7 +290,7 @@
        list. Same .pair the lineup uses, so the two stretch to one height. -->
   <section class="band" id="chassis">
     <div class="shell">
-      <div class="pair">
+      <div class="pair pair-2">
 
         <article class="panel spec-panel reveal">
           <!-- Two frames from the studio shoot, cropped to the same 4:3 so the
@@ -327,6 +327,51 @@
               <li>Levels itself to the load, so ride height and ride quality stay where they were</li>
               <li>Firms under cornering and hard braking to keep the body flat</li>
               <li>Two inches of lift on the Summit, four on the Apex, front and rear</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="panel spec-panel reveal">
+          <!-- Same strip as the brake photographs, but 16:9 because that is
+               what came off the phone, and each clip carries a caption: two
+               dashboards side by side are unreadable without being told which
+               truck is which. Muted and silent in the file itself -- the audio
+               tracks are stripped, not just turned down, so nothing can
+               surprise a quiet room. -->
+          <div class="spec-shots spec-clips">
+            <figure>
+              <video src="media/noise-summit.mp4?v=2" poster="media/noise-summit.jpg?v=2"
+                     muted loop playsinline preload="metadata"
+                     aria-label="Sound meter in a MAV Summit at 70 mph"></video>
+              <figcaption>MAV Summit &middot; 41&quot; Goodyears</figcaption>
+            </figure>
+            <figure>
+              <video src="media/noise-tundra.mp4?v=2" poster="media/noise-tundra.jpg?v=2"
+                     muted loop playsinline preload="metadata"
+                     aria-label="Sound meter in a 2023 Toyota Tundra SR5 at 70 mph"></video>
+              <figcaption>Toyota Tundra SR5 &middot; 29&quot; tires</figcaption>
+            </figure>
+          </div>
+          <div class="spec-body">
+            <p class="eyebrow">Cabin noise</p>
+            <h2 class="panel-title panel-title-sm">As quiet as a half-ton</h2>
+            <p class="panel-sub panel-sub-left">A military tread on a 41-inch tire is supposed to roar at you the whole way home. So we put a sound meter on the dash and drove. At seventy on the highway a Summit read about 72&nbsp;dB inside the cab. A 2023 Toyota Tundra SR5 on ordinary 29-inch tires, same meter, same speed, came in within a decibel of it.</p>
+            <p class="panel-sub panel-sub-left">That is not luck. The Goodyear G275 and the pressures we set it at were chosen for exactly this &mdash; a truck that looks like it should shout at you, and instead lets you hold a conversation at highway speed.</p>
+            <p class="tier-figures-note">Filmed in each cab with the same handheld meter at the same indicated speed, on separate roads. A measurement, not a laboratory test &mdash; road surface moves a reading as much as a tire does.</p>
+          </div>
+        </article>
+
+        <article class="panel spec-panel reveal">
+          <div class="spec-body spec-body-mid">
+            <p class="eyebrow">PSC Big Bore XD hydro-assist</p>
+            <h2 class="panel-title panel-title-sm">Steering that forgets the tires</h2>
+            <p class="panel-sub panel-sub-left">A 44-inch tire is a lever, and at a standstill the steering box has to fight every inch of it. The Big Bore XD puts a hydraulic ram on the axle working alongside the box, so the pump carries that load instead of your shoulders &mdash; and instead of the steering components.</p>
+            <p class="panel-sub panel-sub-left">Lock to lock in a parking lot stops being an event. For a truck this tall on tires this size, it is the difference between driving it every day and only taking it out when you mean it.</p>
+            <ul class="specs">
+              <li>Hydraulic assist ram at the axle, working with the steering box</li>
+              <li>Takes the load off the box and the sector shaft, where these trucks wear</li>
+              <li>Full lock to lock without fighting the tire</li>
+              <li>Standard on the Apex, available on the Summit</li>
             </ul>
           </div>
         </article>
@@ -698,6 +743,27 @@
       });
     }, { threshold: 0.35 });
     watch.observe(film);
+  }
+
+  // The two noise clips. Simpler than the film: no controls, no sound to
+  // manage (the files carry no audio track at all), so this is only "run
+  // while you can see it". Nothing autoplays on load -- two videos starting
+  // behind four screens of page is bandwidth nobody asked for.
+  var clips = document.querySelectorAll(".spec-clips video");
+  if (clips.length) {
+    var stillClips = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var clipWatch = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var v = entry.target;
+        if (entry.isIntersecting) {
+          v.preload = "auto";
+          if (!stillClips) { v.play().catch(function () {}); }
+        } else if (!v.paused) {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.3 });
+    Array.prototype.forEach.call(clips, function (v) { clipWatch.observe(v); });
   }
 
   // A nav link pointing at the page you are already on is a reload, and
