@@ -380,8 +380,11 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
 .ba-shots figure img { aspect-ratio: 3 / 2; }
 /* Same chip as the cabin-noise clips carry, for the same reason: side by
    side, a label underneath reads as though it could belong to either. */
+/* Top left, not bottom: at the bottom the chip sat over the front wheel and
+   bumper, which is the part of the truck worth looking at. It also matches
+   .tier-tag, which is where every other label on a photograph here sits. */
 .ba-shots figcaption, .tt-shots figcaption {
-  position: absolute; left: clamp(14px, 1.6vw, 20px); bottom: clamp(14px, 1.6vw, 20px);
+  position: absolute; left: clamp(14px, 1.6vw, 20px); top: clamp(14px, 1.6vw, 20px);
   padding: 6px 12px; border-radius: 999px;
   background: rgba(10, 12, 15, 0.72);
   font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
