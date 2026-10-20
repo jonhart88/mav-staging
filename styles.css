@@ -376,11 +376,11 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    change is the ratio: .spec-shots is 4:3 for the detail shots, and these
    are 3:2, so at full width each cell is exactly the shape of its photo and
    nothing is cropped. */
-.ba-shots figure { position: relative; margin: 0; }
+.ba-shots figure, .tt-shots figure { position: relative; margin: 0; }
 .ba-shots figure img { aspect-ratio: 3 / 2; }
 /* Same chip as the cabin-noise clips carry, for the same reason: side by
    side, a label underneath reads as though it could belong to either. */
-.ba-shots figcaption {
+.ba-shots figcaption, .tt-shots figcaption {
   position: absolute; left: clamp(14px, 1.6vw, 20px); bottom: clamp(14px, 1.6vw, 20px);
   padding: 6px 12px; border-radius: 999px;
   background: rgba(10, 12, 15, 0.72);
@@ -420,7 +420,8 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    Both classes, because .spec-shots sets the columns further down the file
    and would otherwise win on order. */
 @media (max-width: 760px) {
-  .ba-shots.spec-shots { grid-template-columns: 1fr; }
+  .ba-shots.spec-shots,
+  .tt-shots.spec-shots { grid-template-columns: 1fr; }
 }
 
 /* ---------- Tier boxes ---------- */
