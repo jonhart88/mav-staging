@@ -371,37 +371,36 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
 .panel-media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- Before and after ---------- */
-/* Two frames of one truck, side by side on the media half of the lead. The
-   images keep their own 3:2 rather than filling the column the way a single
-   lead photo does: stretched to the column they would be cropped to nearly
-   square and lose the nose and the tail of the truck, which is most of what
-   a before-and-after is for. */
-.ba-pair {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; align-content: center;
-  padding: clamp(20px, 2.4vw, 40px); padding-left: 0;
-  min-height: 0;
-}
-.ba-pair figure { position: relative; margin: 0; border-radius: 6px; overflow: hidden; }
-.panel-media.ba-pair img {
-  display: block; width: 100%; height: auto;
-  aspect-ratio: 3 / 2; object-fit: cover;
-}
-/* Same chip as the cabin-noise clips carry, for the same reason. */
-.ba-pair figcaption {
-  position: absolute; left: 10px; bottom: 10px;
-  padding: 5px 10px; border-radius: 999px;
+/* Rides on .spec-shots, so the two frames sit flush to the panel's edges
+   with only a seam between them, like every other photo strip here. The one
+   change is the ratio: .spec-shots is 4:3 for the detail shots, and these
+   are 3:2, so at full width each cell is exactly the shape of its photo and
+   nothing is cropped. */
+.ba-shots figure { position: relative; margin: 0; }
+.ba-shots figure img { aspect-ratio: 3 / 2; }
+/* Same chip as the cabin-noise clips carry, for the same reason: side by
+   side, a label underneath reads as though it could belong to either. */
+.ba-shots figcaption {
+  position: absolute; left: clamp(14px, 1.6vw, 20px); bottom: clamp(14px, 1.6vw, 20px);
+  padding: 6px 12px; border-radius: 999px;
   background: rgba(10, 12, 15, 0.72);
-  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
   font-weight: 700; color: #fff;
 }
-/* On a phone the two columns draw 151px each, which is too small to compare
-   anything -- so they stack and each gets the full width instead. */
+/* .spec-body drops the measure and shrinks the title, which is right for
+   the half-width panels in the pair below -- there the column is the
+   measure. This lead is full width, where the same rules give a 1700px line
+   and a page heading smaller than the h2s beneath it. It takes the panel
+   defaults back. */
+.spec-body.ba-lead .panel-title { font-size: clamp(1.9rem, 4vw, 3.2rem); max-width: 22ch; }
+.spec-body.ba-lead .panel-sub { max-width: 68ch; }
+
+/* On a phone two columns draw 172px each, too small to compare anything.
+   Both classes, because .spec-shots sets the columns further down the file
+   and would otherwise win on order. */
 @media (max-width: 760px) {
-  .ba-pair {
-    grid-template-columns: 1fr;
-    padding: 0 clamp(16px, 4vw, 30px) clamp(24px, 5vw, 36px);
-  }
+  .ba-shots.spec-shots { grid-template-columns: 1fr; }
+}
 }
 
 /* ---------- Tier boxes ---------- */
