@@ -644,6 +644,32 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    panels, stranding the last one. One column once a half-width panel would be
    narrower than its own photo strip wants to be. */
 .pair-2 { grid-template-columns: repeat(2, 1fr); }
+/* A strip under the lineup pair, pointing at the F-550 page. Padding is well
+   under .panel's clamp(30px, 4vw, 64px) and the margin is --gap-col rather
+   than --gap, both on purpose: the F-550 is the same Summit and Apex builds
+   on a bigger chassis, not a third model, so this has to read as a footnote
+   to the two panels rather than a third box beside them. */
+.lineup-more {
+  margin-top: var(--gap-col);
+  padding: clamp(20px, 2.2vw, 30px) clamp(22px, 2.6vw, 38px);
+  display: flex; align-items: center;
+  gap: clamp(18px, 2.4vw, 40px);
+}
+.lineup-more-copy { flex: 1 1 auto; }
+.lineup-more .eyebrow { margin-bottom: 7px; }
+/* No max-width. The strip is the full width of the pair, and capping the
+   sentence left ~800px of nothing between it and the button. */
+.lineup-more-line {
+  font-size: 0.95rem; line-height: 1.5; color: var(--muted);
+  /* At widths where it does wrap, keep the last line from being one word. */
+  text-wrap: pretty;
+}
+/* The button holds its width; the sentence is what gives way. */
+.lineup-more .btn { flex: 0 0 auto; }
+@media (max-width: 760px) {
+  .lineup-more { flex-direction: column; align-items: flex-start; }
+}
+
 @media (max-width: 760px) { .pair-2 { grid-template-columns: 1fr; } }
 
 /* Clips instead of stills, cropped to 4:3 like the photographs, and each
@@ -651,23 +677,36 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    dashboards side by side say nothing about which truck is which. The caption
    sits under its own clip rather than over it -- the thing being read in these
    frames is a small LCD, and an overlay would land on top of it. */
-/* One above the other, always. Side by side these sat half the height of
-   the brake panel beside them and the row looked unfinished; stacked, the
-   two panels come out level. It also doubles the size the meter is read at,
-   which was the argument for stacking them on a phone in the first place. */
-.spec-clips { grid-template-columns: 1fr; }
+/* Two across, matching the photo strip. They stack on a phone, where half
+   of 343px would put the meter at 43px and nothing could be read. */
+.spec-clips { grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .spec-clips { grid-template-columns: 1fr; } }
 .spec-clips figure { margin: 0; display: flex; flex-direction: column; }
+/* 4:3, the same shape as the brake photographs beside them, so the two
+   panels carry media blocks of identical size. Side by side each clip draws
+   332px rather than 664, so both crops are framed to land the meter at about
+   85px -- just over the width it needs to be read. */
 .spec-clips video {
   display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
   background: var(--ink);
 }
+/* The label sits ON its clip rather than in a row beneath it. Two caption
+   rows cost 60px this panel does not have, and with the frames stacked a
+   caption underneath reads as if it could belong to either one. */
+.spec-clips figure { position: relative; }
 .spec-clips figcaption {
-  padding: 9px 10px 10px; text-align: center;
-  font-size: 10.5px; letter-spacing: .11em; text-transform: uppercase;
-  color: var(--muted); border-bottom: 1px solid var(--line);
+  position: absolute; left: 10px; bottom: 10px;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(10, 12, 15, 0.72);
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700; color: #fff;
 }
-/* Stacked, so the caption divider is horizontal like every other one. */
-.spec-clips figure + figure figcaption { border-left: 0; }
+/* Side by side, so the divider is vertical; it turns horizontal when they
+   stack on a phone. */
+.spec-clips figure + figure { border-left: 1px solid var(--line); }
+@media (max-width: 560px) {
+  .spec-clips figure + figure { border-left: 0; border-top: 1px solid var(--line); }
+}
 
 /* One above the other on a phone. Two across puts the meter at about 51px,
    and the meter is the whole argument -- the brake photographs are pictures
@@ -679,8 +718,38 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
 /* Two photographs filling a tall copy column. One landscape frame beside a
    long block of text leaves the same gap lower down; two stacked fill it. */
 .panel-media-stack { display: grid; grid-template-rows: 1fr 1fr; }
+.panel-media-stack > img { min-height: 0; }
 .panel-media-stack img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 700px) { .panel-media-stack { grid-template-rows: auto auto; } }
+
+/* A content panel padded like the lead panel and the spec panels -- 44px at
+   a wide viewport rather than .panel's own 64. Used on the pages where those
+   sit together, because a 64px box directly under a 44px one reads as a
+   mistake. The dark call-to-action keeps the roomier default. */
+.panel-tight { padding: clamp(26px, 3vw, 44px); }
+
+/* The lead panel at the top of a page: tighter than the About-style split
+   it inherits from, and weighted towards the photograph.
+   Padding matches .spec-body (43.2px at 1440) so the eyebrow sits the same
+   distance down as it does in the panels below -- .panel-copy's own 57.6px
+   left a visibly bigger gap at the top of the page than anywhere under it.
+   Columns declared rather than auto-fit, which was producing two empty
+   0px tracks alongside the two real ones. */
+.panel-split-lead { grid-template-columns: 1fr 1.25fr; }
+.panel-split-lead .panel-copy { padding: clamp(26px, 3vw, 44px); }
+/* The copy sets the height, not the photograph.
+   An <img> in a grid cell contributes its intrinsic height, and at a wide
+   viewport this one was taller than the words beside it -- 670px against
+   461 -- so the panel grew to the picture and the copy floated in the middle
+   of it. Out of the flow it contributes nothing, the row is the copy plus
+   its padding, and the photograph crops to fit. */
+.panel-split-lead .panel-media { position: relative; min-height: 300px; overflow: hidden; }
+.panel-split-lead .panel-media > img,
+.panel-split-lead .panel-media > .panel-media-stack {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.panel-split-lead .panel-media > img { object-fit: cover; }
+@media (max-width: 760px) { .panel-split-lead { grid-template-columns: 1fr; } }
 
 /* Three photographs across under a panel heading, one column on a phone.
    Its own rule rather than .spec-shots, which is a flush two-up strip bolted
