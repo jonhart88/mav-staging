@@ -393,14 +393,34 @@ html:not(.js) .hero-media img:first-child { opacity: 1; }
    and a page heading smaller than the h2s beneath it. It takes the panel
    defaults back. */
 .spec-body.ba-lead .panel-title { font-size: clamp(1.9rem, 4vw, 3.2rem); max-width: 22ch; }
-.spec-body.ba-lead .panel-sub { max-width: 68ch; }
+
+/* The copy runs the full width of the box rather than stacking down the
+   left of it. Not as one column -- at 1717px that is about 100 characters a
+   line, past the point where the eye reliably finds the next one -- but as
+   three, so each paragraph sits near 65 and the box stops being mostly
+   empty paper. */
+.ba-lead-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) 1.1fr 1.1fr;
+  gap: clamp(26px, 2.8vw, 52px);
+  align-items: start;
+}
+.spec-body.ba-lead .panel-sub { max-width: none; margin-top: 0; }
+.ba-lead-head .actions { margin-top: clamp(22px, 2vw, 30px); }
+/* Below this the three columns are narrower than the measure wants, so the
+   copy goes back to a single column with a cap on the line. */
+@media (max-width: 1100px) {
+  .ba-lead-grid { grid-template-columns: 1fr; gap: 0; }
+  .spec-body.ba-lead .panel-sub { max-width: 68ch; margin-top: 20px; }
+  .ba-lead-head { display: contents; }
+  .ba-lead-head .actions { order: 9; }
+}
 
 /* On a phone two columns draw 172px each, too small to compare anything.
    Both classes, because .spec-shots sets the columns further down the file
    and would otherwise win on order. */
 @media (max-width: 760px) {
   .ba-shots.spec-shots { grid-template-columns: 1fr; }
-}
 }
 
 /* ---------- Tier boxes ---------- */
