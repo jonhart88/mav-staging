@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="media/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="media/favicon-48.png">
+<title>LiquidSpring Suspension Installation | MAV Conversions</title>
+<link rel="canonical" href="https://mavconversions.com/liquidspring-suspension.html">
+<meta name="description" content="LiquidSpring smart hydraulic suspension on every MAV build — Ford F-250 through F-600 and RAM 4500/5500. What it does, and the hours it actually takes to fit.">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="MAV Conversions">
+<meta property="og:title" content="LiquidSpring Suspension Installation">
+<meta property="og:description" content="LiquidSpring smart hydraulic suspension fitted to Ford F-250 through F-600 and RAM 4500/5500, in Escondido, California.">
+<meta property="og:url" content="https://mavconversions.com/liquidspring-suspension.html">
+<meta property="og:image" content="https://mavconversions.com/media/brakes-rear.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Written for someone searching the PRODUCT rather than the brand: people
+     who have read about LiquidSpring and want to know whether it is worth it
+     and who will fit it. That is a different reader from the one who lands on
+     the home page, and it is a query with its own traffic that nothing on
+     this site answered.
+
+     The application table and the labour hours are read off the parts
+     catalog, not estimated -- front 16-20h, rear 24-34h, sway bar 2h. Those
+     hours are the most useful thing on the page: they are the honest answer
+     to "why does this cost what it costs", and no competitor publishes them.
+
+     How the system works is from LiquidSpring's own published description --
+     compressible fluid doing spring and damper in one strut, per-wheel
+     control, self-levelling. Deliberately no control-loop frequency: that
+     figure is quoted all over the internet and I could not source it. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=10">
+
+<!-- Generated from the questions on this page by a script. Two copies of
+     the same answers drift, and markup that says something the page does
+     not is what Google penalises FAQ markup for. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is LiquidSpring suspension?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A suspension that replaces the steel springs and the shock absorbers with a compressible fluid doing both jobs in a single strut, controlled electronically. The controller varies stiffness at each wheel while the truck is moving, levels the truck to whatever load is on it, and firms up through corners and under braking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which trucks does it go on?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ford F-250, F-350 and F-450 pickups, Ford F-350 through F-600 cab chassis, and RAM 4500 and 5500 cab chassis. Two or four inches of lift, front and rear specified separately. It is fitted as part of a complete MAV build rather than on its own."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the installation take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Between 40 and 56 hours of shop time depending on the truck and the lift \u2014 16 to 20 hours at the front, 24 to 34 at the rear, and two for the sway bar kit. A four-wheel alignment follows, and it is not optional."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it ride better than a lift kit with steel springs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It does a different thing. A spring is one rate and it is the rate you chose; this changes rate continuously and per wheel, which is why an empty truck is not harsh and a loaded one does not sag. It is also why the truck does not ride differently the day you hitch a trailer to it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need the sway bar kit as well?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We fit it. It is two hours alongside a job already measured in days, and it is the cheapest part of keeping the body flat on a truck that now sits higher."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body class="no-hero">
+
+<nav class="nav solid" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="MAV Conversions home">
+      <img class="nav-badge" src="media/badge-white.png" alt="">
+      <img class="nav-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#lineup">The Lineup</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="tel:+17606912588" class="btn btn-ghost nav-call">(760) 691-2588</a>
+      <a href="build.html" class="btn btn-primary">Start a Build</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<section class="band band-first">
+  <div class="shell">
+    <div class="panel panel-split">
+      <div class="panel-copy">
+        <p class="eyebrow">Smart hydraulic suspension</p>
+        <h1 class="panel-title panel-title-sm">LiquidSpring installation</h1>
+        <p class="panel-sub panel-sub-left">LiquidSpring replaces the steel springs and the shocks with a compressible fluid that does both jobs in one strut, and a controller that changes how stiff each corner is while you are driving on it. Empty, it stays soft. Loaded, it holds the truck level instead of squatting onto the rear axle. Turn hard or get on the brakes and it firms up before the body has finished leaning.</p>
+        <p class="panel-sub panel-sub-left">It goes on every truck we build, and it is the single biggest reason a MAV rides the way it does. We fit it across Ford F-250 through F-600 and RAM 4500 and 5500 cab chassis, in two and four inch lifts, front and rear &mdash; as part of a complete build, with the truck sourced, converted and road tested on our own floor.</p>
+        <div class="actions">
+          <a href="build.html" class="btn btn-primary">Start a build</a>
+          <a href="index.html#chassis" class="btn btn-outline">See it on our trucks</a>
+        </div>
+      </div>
+      <!-- The two photographs on this site that are actually OF the thing:
+           the rear axle with a strut each side, and a front strut beside the
+           caliper. Stacked, because the copy column is tall and one landscape
+           frame beside it would leave the same hole in a different place. -->
+      <div class="panel-media panel-media-stack">
+        <img src="media/brakes-rear.jpg?v=2" width="1400" height="1050"
+             alt="Rear axle of a MAV build with a LiquidSpring strut on each side">
+        <img src="media/brakes-front.jpg?v=2" width="1400" height="1050"
+             alt="Front LiquidSpring strut and boot alongside the brake caliper on a lifted Ford F-450">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="shell">
+    <div class="pair pair-2">
+
+      <article class="panel spec-panel">
+        <div class="spec-body">
+          <p class="eyebrow">What it actually does</p>
+          <h2 class="panel-title panel-title-sm">One strut, both jobs</h2>
+          <ul class="specs">
+            <li><strong>Spring and damper in one unit.</strong> A compressible fluid provides both, so there is no steel spring and no separate shock</li>
+            <li><strong>Set per wheel.</strong> Stiffness is controlled at each corner independently, and reset continuously as you drive</li>
+            <li><strong>Levels to the load.</strong> Ride height stays where it was whether the truck is empty or hitched to something</li>
+            <li><strong>Firms under load transfer.</strong> It stiffens through a corner and under braking to keep the body flat</li>
+            <li><strong>Lift is part of it.</strong> Two or four inches, front and rear specified separately</li>
+          </ul>
+          <p class="tier-figures-note">We also fit the matching sway bar kit &mdash; the 1-1/2&quot; Ford kit, or the heavy-duty RS4 rear bar on RAM.</p>
+        </div>
+      </article>
+
+      <article class="panel spec-panel">
+        <div class="spec-body spec-body-mid">
+          <p class="eyebrow">What it takes to fit</p>
+          <h2 class="panel-title panel-title-sm">Forty to fifty-six hours</h2>
+          <p class="panel-sub panel-sub-left">This is the number nobody publishes, and it is the honest answer to why a conversion costs what it does. These are the hours we actually quote against, off our own build catalog.</p>
+          <div class="tier-figures tier-figures-3">
+            <div><strong>16&ndash;20 h</strong><span>Front axle</span></div>
+            <div><strong>24&ndash;34 h</strong><span>Rear axle</span></div>
+            <div><strong>2 h</strong><span>Sway bar kit</span></div>
+          </div>
+          <p class="panel-sub panel-sub-left">A pickup rear at four inches is the long one at 34 hours; a cab chassis front is the short one at 16. That is most of a week of the build, before the wheels, brakes, bumpers or bodywork.</p>
+          <p class="tier-figures-note">Hours are per axle for the install itself and exclude the alignment, which every truck gets afterwards. Quoted hours, not a guess &mdash; they come from the same catalog every MAV build is priced from.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="shell">
+    <div class="panel">
+      <p class="eyebrow">What we fit it to</p>
+      <h2 class="panel-title panel-title-sm">Ford and RAM, pickup and cab chassis</h2>
+      <div class="steps">
+        <div class="step">
+          <p class="step-n">FORD PICKUP</p>
+          <h3>F-250, F-350, F-450</h3>
+          <p>Front and rear, two or four inch lift. The rear is the bigger job at 34 hours; the front runs 20.</p>
+        </div>
+        <div class="step">
+          <p class="step-n">FORD CAB CHASSIS</p>
+          <h3>F-350, F-450, F-550, F-600</h3>
+          <p>Front at two inches, rear at two or four. Front and rear are specified separately because what sits on the back changes the answer.</p>
+        </div>
+        <div class="step">
+          <p class="step-n">RAM CAB CHASSIS</p>
+          <h3>RAM 4500, 5500</h3>
+          <p>Front at two inches, rear at two or four, with the heavy-duty RS4 rear sway bar.</p>
+        </div>
+        <div class="step">
+          <p class="step-n">SWAY BAR</p>
+          <h3>Fitted alongside</h3>
+          <p>A 1-1/2&quot; kit on Ford, the RS4 heavy-duty rear bar on RAM. Two hours, and it goes on with the rest.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="shell">
+    <div class="panel">
+      <p class="eyebrow">Questions we get</p>
+      <h2 class="panel-title panel-title-sm">LiquidSpring, answered</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>What is LiquidSpring suspension?</h3>
+          <p>A suspension that replaces the steel springs and the shock absorbers with a compressible fluid doing both jobs in a single strut, controlled electronically. The controller varies stiffness at each wheel while the truck is moving, levels the truck to whatever load is on it, and firms up through corners and under braking.</p>
+        </div>
+        <div class="step">
+          <h3>Which trucks does it go on?</h3>
+          <p>Ford F-250, F-350 and F-450 pickups, Ford F-350 through F-600 cab chassis, and RAM 4500 and 5500 cab chassis. Two or four inches of lift, front and rear specified separately. It is fitted as part of a complete MAV build rather than on its own.</p>
+        </div>
+        <div class="step">
+          <h3>How long does the installation take?</h3>
+          <p>Between 40 and 56 hours of shop time depending on the truck and the lift &mdash; 16 to 20 hours at the front, 24 to 34 at the rear, and two for the sway bar kit. A four-wheel alignment follows, and it is not optional.</p>
+        </div>
+        <div class="step">
+          <h3>Does it ride better than a lift kit with steel springs?</h3>
+          <p>It does a different thing. A spring is one rate and it is the rate you chose; this changes rate continuously and per wheel, which is why an empty truck is not harsh and a loaded one does not sag. It is also why the truck does not ride differently the day you hitch a trailer to it.</p>
+        </div>
+        <div class="step">
+          <h3>Do I need the sway bar kit as well?</h3>
+          <p>We fit it. It is two hours alongside a job already measured in days, and it is the cheapest part of keeping the body flat on a truck that now sits higher.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-last">
+  <div class="shell">
+    <div class="panel panel-dark panel-center">
+      <h2 class="panel-title panel-title-sm">On every truck we build.</h2>
+      <p class="panel-sub">Sourced, converted and road tested in Escondido, California, on our own floor.</p>
+      <div class="actions actions-center">
+        <a href="build.html" class="btn btn-primary">Start a build</a>
+        <a href="super-single-conversions.html" class="btn btn-ghost">Full conversions</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img class="footer-badge" src="media/badge-white.png" alt="">
+          <img class="footer-wordmark" src="media/wordmark-white.png" alt="MAV Conversions">
+        </div>
+        <p>Custom lifted Ford F-450 luxury truck conversions, built in San Diego County.</p>
+        <p style="margin-top:14px">855 N Broadway<br>Escondido, CA 92025</p>
+        <p style="margin-top:14px"><a href="tel:+17606912588">(760) 691-2588</a></p>
+      </div>
+      <div>
+        <h4>Lineup</h4>
+        <ul>
+          <li><a href="index.html#lineup">Summit</a></li>
+          <li><a href="index.html#lineup">Apex</a></li>
+          <li><a href="build.html">Start a build</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="super-single-conversions.html">Super single conversions</a></li>
+          <li><a href="f550-conversions.html">F-550 conversions</a></li>
+          <li><a href="liquidspring-suspension.html">LiquidSpring suspension</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#process">Process</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy-policy.html">Privacy policy</a></li>
+          <li><a href="sms-terms.html">SMS terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>&copy; 2026 MAV Conversions. Built in San Diego County.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add("js");
+  var toggle = document.getElementById("navToggle");
+  var links = document.getElementById("navLinks");
+  toggle.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { links.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); }
+  });
+</script>
+</body>
+</html>
